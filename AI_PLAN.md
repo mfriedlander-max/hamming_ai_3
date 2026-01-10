@@ -74,10 +74,93 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
+| `feature/phase-6-reminders-polish` | in-progress | Reminders, logos, user name, polish |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
 **Note:** Remove merged/abandoned branches from this table after archiving. History lives in Archive section.
+
+---
+
+## Branch: feature/phase-6-reminders-polish
+
+### Goal
+Complete reminders feature with calendar view, add service logos, collect user name for greeting, and polish the entire app (loading states, error handling, visual refinement, mobile responsiveness).
+
+### Scope
+**Included:**
+- Reminders CRUD with calendar view
+- Set Reminder modal from dashboard
+- User name collection in onboarding + dashboard greeting
+- 15 static service logos
+- Skeleton loaders for all pages
+- Error states with retry buttons
+- Mobile responsive sidebar (hamburger menu)
+- Responsive grids and touch-friendly calendar
+- Visual polish (hover states, consistent spacing)
+
+**Excluded:**
+- Email/push notifications for reminders (future)
+- Reminder frequency options (one-time only for MVP)
+- Savings calculator on dashboard (already on recommendations page)
+
+### Tasks
+- [ ] Create `src/lib/types/reminder.ts` with Reminder interface
+- [ ] Create `GET/POST /api/reminders` endpoint
+- [ ] Create `DELETE /api/reminders/[id]` endpoint
+- [ ] Create SetReminderModal component (TDD)
+- [ ] Create ReminderCalendar component (TDD)
+- [ ] Create ReminderDetails component (TDD)
+- [ ] Create RemindersClient component (TDD)
+- [ ] Update reminders page with calendar view
+- [ ] Enable "Set Reminder" button in SubscriptionCard
+- [ ] Add `name` column to profiles table (migration)
+- [ ] Update WelcomeStep to collect user name
+- [ ] Add greeting to dashboard header
+- [ ] Add 15 service logo SVGs to `/public/logos/`
+- [ ] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
+- [ ] Create Skeleton component
+- [ ] Add skeleton loaders to Dashboard, Recommendations, Reminders
+- [ ] Add error banners with retry to all pages
+- [ ] Update sidebar for mobile (hamburger + drawer)
+- [ ] Make grids responsive (3→2→1 columns)
+- [ ] Make calendar touch-friendly
+- [ ] Add hover animations to buttons and cards
+- [ ] Audit spacing consistency across all pages
+- [ ] E2E: Set reminder → appears in calendar → delete reminder
+- [ ] E2E: Name collected → greeting shown
+- [ ] E2E: Mobile sidebar, grids, calendar work
+
+### Files
+| File | Owner |
+|------|-------|
+| `src/lib/types/reminder.ts` | Phase-6-Agent |
+| `src/app/api/reminders/route.ts` | Phase-6-Agent |
+| `src/app/api/reminders/[id]/route.ts` | Phase-6-Agent |
+| `src/components/reminders/*` | Phase-6-Agent |
+| `src/app/(app)/reminders/page.tsx` | Phase-6-Agent |
+| `src/components/subscriptions/SubscriptionCard.tsx` | Phase-6-Agent |
+| `src/components/subscriptions/DashboardClient.tsx` | Phase-6-Agent |
+| `src/components/onboarding/WelcomeStep.tsx` | Phase-6-Agent |
+| `src/app/(app)/dashboard/page.tsx` | Phase-6-Agent |
+| `public/logos/*.svg` | Phase-6-Agent |
+| `supabase/migrations/003_add_profile_name.sql` | Phase-6-Agent |
+| `src/components/ui/skeleton.tsx` | Phase-6-Agent |
+| `src/components/layout/sidebar.tsx` | Phase-6-Agent |
+
+### Verification
+```bash
+npm run lint && npx tsc --noEmit && npm test && npm run build
+```
+
+### Definition of Done
+- [ ] All tasks complete
+- [ ] All tests pass (target: 180+ tests)
+- [ ] E2E: Reminders flow works end-to-end
+- [ ] E2E: User name flow works end-to-end
+- [ ] E2E: Mobile responsive verified
+- [ ] Results written to AI_SCRATCHPAD.md
+- [ ] Branch section moved to Archive
 
 ---
 
