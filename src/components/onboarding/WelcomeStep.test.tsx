@@ -16,17 +16,37 @@ describe('WelcomeStep', () => {
     expect(screen.getByRole('button', { name: /get started/i })).toBeInTheDocument()
   })
 
-  it('calls onNext when Get Started button is clicked', () => {
+  it('calls onNext with empty string when Get Started button is clicked without name', () => {
     const onNext = vi.fn()
     render(<WelcomeStep onNext={onNext} />)
 
     fireEvent.click(screen.getByRole('button', { name: /get started/i }))
     expect(onNext).toHaveBeenCalledTimes(1)
+    expect(onNext).toHaveBeenCalledWith('')
   })
 
   it('displays welcome message', () => {
     render(<WelcomeStep onNext={vi.fn()} />)
 
     expect(screen.getByText(/welcome/i)).toBeInTheDocument()
+  })
+
+  it('renders name input field with label', () => {
+    render(<WelcomeStep onNext={vi.fn()} />)
+
+    expect(screen.getByLabelText(/what should we call you/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/your name/i)).toBeInTheDocument()
+  })
+
+  it('calls onNext with entered name when Get Started button is clicked', () => {
+    const onNext = vi.fn()
+    render(<WelcomeStep onNext={onNext} />)
+
+    const nameInput = screen.getByPlaceholderText(/your name/i)
+    fireEvent.change(nameInput, { target: { value: 'John' } })
+    fireEvent.click(screen.getByRole('button', { name: /get started/i }))
+
+    expect(onNext).toHaveBeenCalledTimes(1)
+    expect(onNext).toHaveBeenCalledWith('John')
   })
 })
