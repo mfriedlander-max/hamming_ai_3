@@ -121,7 +121,7 @@ export function RecommendationsClient({ initialServices }: RecommendationsClient
       />
 
       {isLoading ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
@@ -130,7 +130,7 @@ export function RecommendationsClient({ initialServices }: RecommendationsClient
           ))}
         </div>
       ) : recommendations.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {recommendations.map((rec) => {
             const service = serviceMap.get(rec.service_id)
             if (!service) return null
