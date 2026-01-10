@@ -105,18 +105,18 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - Savings calculator on dashboard (already on recommendations page)
 
 ### Tasks
-- [ ] Create `src/lib/types/reminder.ts` with Reminder interface
-- [ ] Create `GET/POST /api/reminders` endpoint
-- [ ] Create `DELETE /api/reminders/[id]` endpoint
-- [ ] Create SetReminderModal component (TDD)
-- [ ] Create ReminderCalendar component (TDD)
-- [ ] Create ReminderDetails component (TDD)
-- [ ] Create RemindersClient component (TDD)
-- [ ] Update reminders page with calendar view
-- [ ] Enable "Set Reminder" button in SubscriptionCard
-- [ ] Add `name` column to profiles table (migration)
-- [ ] Update WelcomeStep to collect user name
-- [ ] Add greeting to dashboard header
+- [x] Create `src/lib/types/reminder.ts` with Reminder interface
+- [x] Create `GET/POST /api/reminders` endpoint
+- [x] Create `DELETE /api/reminders/[id]` endpoint
+- [x] Create SetReminderModal component (TDD) - 13 tests
+- [x] Create ReminderCalendar component (TDD) - 14 tests
+- [x] Create ReminderDetails component (TDD) - 7 tests
+- [x] Create RemindersClient component (TDD) - 8 tests
+- [x] Update reminders page with calendar view
+- [x] Enable "Set Reminder" button in SubscriptionCard
+- [x] Add `name` column to profiles table (migration)
+- [x] Update WelcomeStep to collect user name
+- [x] Add greeting to dashboard header
 - [ ] Add 15 service logo SVGs to `/public/logos/`
 - [ ] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
 - [ ] Create Skeleton component

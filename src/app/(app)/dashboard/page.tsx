@@ -8,6 +8,13 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Fetch user's profile to get their name
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('name')
+    .eq('id', user?.id)
+    .single()
+
   // Fetch user's subscriptions with service data
   const { data: subscriptions, error: subscriptionsError } = await supabase
     .from('subscriptions')
@@ -78,7 +85,9 @@ export default async function DashboardPage() {
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">My Subscriptions</h1>
-          <p className="text-gray-600">Welcome back, {user?.email}</p>
+          <p className="text-gray-600">
+            Welcome back{profile?.name ? `, ${profile.name}` : ''}
+          </p>
         </div>
         {typedSubscriptions.length > 0 && (
           <div className="text-right">
