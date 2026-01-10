@@ -74,6 +74,8 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
+| `feature/phase-4-content` | in-progress | TMDB content intelligence |
+| `feature/phase-5-recommendations` | in-progress | Claude AI recommendations |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
@@ -119,6 +121,107 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 - [ ] Results written to AI_SCRATCHPAD.md
 - [ ] Branch section moved to Archive
 ```
+
+---
+
+## Branch: feature/phase-4-content
+
+### Goal
+Fetch upcoming content from TMDB for user's subscribed services and match to user taste with scoring.
+
+### Scope
+**Included:**
+- TMDB API client and types
+- Matching algorithm (genre + favorite show title matching)
+- Content sync and matches API endpoints
+- Content caching in database (24hr TTL)
+
+**Excluded:**
+- AI recommendations (Phase 5)
+- UI components (Phase 5)
+
+### Tasks
+- [ ] Create shared types in `src/lib/types/content.ts`
+- [ ] Create TMDB client with auth header (TDD)
+- [ ] Create TMDB response types
+- [ ] Create matching.ts with score calculation (TDD)
+- [ ] Create `/api/content/sync` route (POST)
+- [ ] Create `/api/content/matches` route (GET)
+
+### Files
+| File | Owner |
+|------|-------|
+| `src/lib/types/content.ts` | Phase-4-Agent |
+| `src/lib/tmdb/client.ts` | Phase-4-Agent |
+| `src/lib/tmdb/types.ts` | Phase-4-Agent |
+| `src/lib/tmdb/matching.ts` | Phase-4-Agent |
+| `src/app/api/content/sync/route.ts` | Phase-4-Agent |
+| `src/app/api/content/matches/route.ts` | Phase-4-Agent |
+
+### Verification
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+### Definition of Done
+- [ ] All tasks complete
+- [ ] All tests pass (matching tests)
+- [ ] API returns scored content per service
+- [ ] Results written to AI_SCRATCHPAD.md
+- [ ] Branch section moved to Archive
+
+---
+
+## Branch: feature/phase-5-recommendations
+
+### Goal
+Claude-powered recommendations with actionable output and UI integration.
+
+### Scope
+**Included:**
+- Claude API client and prompt templates
+- Recommendations API endpoint with caching
+- RecommendationBadge, RecommendationCard, RecommendationsSummary components
+- /recommendations page with loading/empty states
+- Dashboard integration (badge slot, quick pause action)
+- Toast notification for pause with auto-reminder
+
+**Excluded:**
+- TMDB integration (Phase 4)
+- Reminders page CRUD (Phase 6)
+
+### Tasks
+- [ ] Create Claude client with auth (TDD)
+- [ ] Create prompt templates
+- [ ] Create `/api/recommendations` route (POST)
+- [ ] Create RecommendationBadge component (TDD)
+- [ ] Create RecommendationCard component (TDD)
+- [ ] Create RecommendationsSummary component (TDD)
+- [ ] Create /recommendations page
+- [ ] Update SubscriptionCard with badge slot
+- [ ] Add quick pause action with toast + auto-reminder
+
+### Files
+| File | Owner |
+|------|-------|
+| `src/lib/claude/client.ts` | Phase-5-Agent |
+| `src/lib/claude/prompts.ts` | Phase-5-Agent |
+| `src/app/api/recommendations/route.ts` | Phase-5-Agent |
+| `src/components/recommendations/*` | Phase-5-Agent |
+| `src/app/(app)/recommendations/page.tsx` | Phase-5-Agent |
+
+### Verification
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+### Definition of Done
+- [ ] All tasks complete
+- [ ] All tests pass (component tests)
+- [ ] Recommendations page works
+- [ ] Dashboard shows badges
+- [ ] Results written to AI_SCRATCHPAD.md
+- [ ] Branch section moved to Archive
 
 ---
 
