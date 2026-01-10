@@ -4,10 +4,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Home, Bell, LogOut } from "lucide-react";
+import { Home, Bell, LogOut, Sparkles } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/recommendations", label: "AI Recommendations", icon: Sparkles },
   { href: "/reminders", label: "Reminders", icon: Bell },
 ];
 
