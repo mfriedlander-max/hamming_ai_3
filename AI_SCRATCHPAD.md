@@ -186,3 +186,42 @@ Append-only log of completed work. Never rewrite history.
 **Ready for:** Task 22+ (Audit spacing consistency)
 
 ---
+
+## 2026-01-10: Task 22 - Audit Spacing Consistency Complete
+
+**Branch:** `feature/phase-6-reminders-polish` (in-progress)
+
+**Task:** Audit spacing consistency across all pages
+
+**What was audited:**
+- Dashboard page (`src/app/(app)/dashboard/page.tsx`)
+- Recommendations page (`src/app/(app)/recommendations/page.tsx`)
+- Reminders page (`src/app/(app)/reminders/page.tsx`)
+- Onboarding page (`src/app/(app)/onboarding/page.tsx`)
+
+**Findings:**
+All pages follow consistent spacing standards:
+- Page padding: All use `p-8` ✓
+- Header margin: All use `mb-8` ✓
+- Text colors for headings: All use `text-gray-900` ✓
+- Text colors for body: All use `text-gray-600` ✓
+
+**Issues found and fixed:**
+1. Onboarding page step indicator text used `text-gray-500` instead of standard `text-gray-400` for muted text
+   - Fixed: Changed line 75 from `text-gray-500` to `text-gray-400`
+
+**Implementation approach:**
+- Reviewed each page line-by-line for spacing consistency
+- Identified muted text color inconsistency
+- Applied fix to normalize to design system standard
+
+**Verification:**
+- Build: PASS
+- All 4 pages compile successfully with no errors
+
+**Files changed:**
+- `src/app/(app)/onboarding/page.tsx` - Fixed muted text color (1 line)
+
+**Ready for:** Task 23 (E2E testing)
+
+---
