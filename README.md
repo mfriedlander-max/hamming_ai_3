@@ -9,19 +9,19 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 ## TODO
 
 - [x] Phase 1: Foundation (auth, database, UI shell)
-- [ ] Phase 2: Onboarding (service selection, taste quiz)
-- [ ] Phase 3: Dashboard (subscription list with actions)
+- [x] Phase 2: Onboarding (service selection, taste quiz)
+- [x] Phase 3: Dashboard (subscription list with actions)
 - [ ] Phase 4: Content Intelligence (TMDB integration)
 - [ ] Phase 5: AI Recommendations (Claude-powered advice)
 - [ ] Phase 6: Reminders & Polish
 
 ## Current Status
 
-Phase 1 in progress.
+Phases 1-3 complete. Ready for Phase 4 (Content Intelligence) or Phase 5 (AI Recommendations).
 
 ## Tech Stack
 
-- **Framework:** Next.js 14 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Styling:** Tailwind + shadcn/ui
 - **Database:** Supabase (Postgres + Auth)
 - **Content API:** TMDB
