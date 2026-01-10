@@ -1,16 +1,106 @@
-export default function OnboardingPage() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to SubCycle</h1>
-      <p className="text-gray-600 mb-8">
-        Let&apos;s set up your subscription tracker.
-      </p>
+'use client'
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <p className="text-gray-500">
-          Onboarding flow coming in Phase 2.
-        </p>
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { WelcomeStep, ServiceSelector, TasteQuiz } from '@/components/onboarding'
+
+interface SelectedService {
+  service_id: string
+  monthly_cost: number
+}
+
+export default function OnboardingPage() {
+  const router = useRouter()
+  const [step, setStep] = useState(1)
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([])
+  const [favoriteShows, setFavoriteShows] = useState('')
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleComplete = async () => {
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/onboarding/complete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          services: selectedServices,
+          taste: {
+            favorite_shows: favoriteShows
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean),
+            genres: selectedGenres,
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to complete onboarding')
+      }
+
+      router.push('/dashboard')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="p-8 max-w-4xl mx-auto">
+      {/* Progress indicator */}
+      <div className="mb-8">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          {[1, 2, 3].map((s) => (
+            <div
+              key={s}
+              className={`w-3 h-3 rounded-full ${
+                s === step
+                  ? 'bg-primary'
+                  : s < step
+                  ? 'bg-primary/50'
+                  : 'bg-gray-200'
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-center text-sm text-gray-500">Step {step} of 3</p>
       </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {error}
+        </div>
+      )}
+
+      {step === 1 && <WelcomeStep onNext={() => setStep(2)} />}
+
+      {step === 2 && (
+        <ServiceSelector
+          onNext={() => setStep(3)}
+          onBack={() => setStep(1)}
+          selectedServices={selectedServices}
+          onServicesChange={setSelectedServices}
+        />
+      )}
+
+      {step === 3 && (
+        <TasteQuiz
+          onComplete={handleComplete}
+          onBack={() => setStep(2)}
+          favoriteShows={favoriteShows}
+          onFavoriteShowsChange={setFavoriteShows}
+          selectedGenres={selectedGenres}
+          onGenresChange={setSelectedGenres}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </div>
-  );
+  )
 }
