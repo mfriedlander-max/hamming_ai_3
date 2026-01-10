@@ -24,7 +24,8 @@ describe('Sidebar', () => {
   it('renders SubCycle branding', () => {
     render(<Sidebar />)
 
-    expect(screen.getByText('SubCycle')).toBeInTheDocument()
+    // SubCycle appears in both mobile header and desktop sidebar
+    expect(screen.getAllByText('SubCycle').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText(/smart subscription manager/i)).toBeInTheDocument()
   })
 

@@ -122,8 +122,8 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - [x] Create Skeleton component
 - [x] Add skeleton loaders to Dashboard, Recommendations, Reminders
 - [x] Add error banners with retry to all pages
-- [ ] Update sidebar for mobile (hamburger + drawer)
-- [ ] Make grids responsive (3→2→1 columns)
+- [x] Update sidebar for mobile (hamburger + drawer)
+- [x] Make grids responsive (3→2→1 columns)
 - [ ] Make calendar touch-friendly
 - [ ] Add hover animations to buttons and cards
 - [ ] Audit spacing consistency across all pages
