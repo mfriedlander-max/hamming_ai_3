@@ -1,5 +1,6 @@
 export { StatusBadge, type SubscriptionStatus } from './StatusBadge'
 export { SubscriptionCard } from './SubscriptionCard'
+export { SubscriptionCardSkeleton } from './SubscriptionCardSkeleton'
 export { SubscriptionList } from './SubscriptionList'
 export { AddSubscriptionModal } from './AddSubscriptionModal'
 export { DashboardClient } from './DashboardClient'
