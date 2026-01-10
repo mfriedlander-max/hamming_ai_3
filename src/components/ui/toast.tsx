@@ -68,7 +68,7 @@ function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   if (toasts.length === 0) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
       {toasts.map((toast) => (
         <Toast
           key={toast.id}
@@ -98,14 +98,14 @@ export function Toast({ message, type = 'info', onDismiss }: ToastProps) {
     <div
       role="alert"
       className={cn(
-        'px-4 py-3 rounded-lg border shadow-lg min-w-[300px] flex items-center justify-between',
+        'px-4 py-3 rounded-lg border shadow-lg min-w-[300px] flex items-center justify-between animate-in slide-in-from-right-5 duration-300 pointer-events-auto',
         typeStyles[type]
       )}
     >
       <span>{message}</span>
       <button
         onClick={onDismiss}
-        className="ml-4 text-current opacity-50 hover:opacity-100"
+        className="ml-4 text-current opacity-50 hover:opacity-100 transition-opacity"
         aria-label="Dismiss"
       >
         &times;

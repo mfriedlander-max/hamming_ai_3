@@ -124,7 +124,7 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - [x] Add error banners with retry to all pages
 - [x] Update sidebar for mobile (hamburger + drawer)
 - [x] Make grids responsive (3→2→1 columns)
-- [ ] Make calendar touch-friendly
+- [x] Make calendar touch-friendly
 - [ ] Add hover animations to buttons and cards
 - [ ] Audit spacing consistency across all pages
 - [ ] E2E: Set reminder → appears in calendar → delete reminder
