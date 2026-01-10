@@ -12,6 +12,7 @@ interface SelectedService {
 export default function OnboardingPage() {
   const router = useRouter()
   const [step, setStep] = useState(1)
+  const [userName, setUserName] = useState('')
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([])
   const [favoriteShows, setFavoriteShows] = useState('')
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
@@ -29,6 +30,7 @@ export default function OnboardingPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: userName,
           services: selectedServices,
           taste: {
             favorite_shows: favoriteShows
@@ -79,7 +81,7 @@ export default function OnboardingPage() {
         </div>
       )}
 
-      {step === 1 && <WelcomeStep onNext={() => setStep(2)} />}
+      {step === 1 && <WelcomeStep onNext={(name) => { setUserName(name); setStep(2); }} />}
 
       {step === 2 && (
         <ServiceSelector

@@ -12,6 +12,7 @@ interface TasteProfile {
 }
 
 interface OnboardingRequest {
+  name?: string
   services: ServiceSelection[]
   taste: TasteProfile
 }
@@ -32,6 +33,12 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body: OnboardingRequest = await request.json()
+
+    // Update profile name if provided
+    if (body.name) {
+      await supabase.from('profiles').update({ name: body.name }).eq('id', user.id)
+    }
+
     const { services, taste } = body
 
     // Validate services array
