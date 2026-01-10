@@ -74,7 +74,6 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
-| `feature/phase-1-foundation` | in-progress | Project setup, auth, database, UI shell |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
@@ -123,71 +122,6 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ---
 
-## Branch: feature/phase-1-foundation
-
-### Goal
-Initialize SubCycle project with Next.js 14, Supabase auth, database schema, and basic UI shell.
-
-### Scope
-**Included:**
-- Next.js 14 + Tailwind + shadcn/ui setup
-- Supabase project with all tables + RLS policies
-- Auth pages (login, signup)
-- App layout with sidebar navigation
-- Route protection middleware
-- Seed data for streaming services
-
-**Excluded:**
-- Onboarding flow (Phase 2)
-- Dashboard functionality (Phase 3)
-- TMDB integration (Phase 4)
-- AI recommendations (Phase 5)
-
-### Tasks
-- [ ] Initialize Next.js 14 project with Tailwind
-- [ ] Install and configure shadcn/ui (button, card, input, dialog, badge)
-- [ ] Create Supabase project and configure environment variables
-- [ ] Create database tables: profiles, taste_profiles, services, subscriptions, reminders, content
-- [ ] Set up RLS policies for all tables
-- [ ] Seed services table with top 15 streaming services
-- [ ] Create /login page with Supabase Auth
-- [ ] Create /signup page with Supabase Auth
-- [ ] Create app layout with sidebar navigation
-- [ ] Create auth middleware for route protection
-- [ ] Add .gitignore for Node/Next.js
-
-### Files
-| File | Owner |
-|------|-------|
-| `app/(auth)/*` | Agent |
-| `app/(app)/layout.tsx` | Agent |
-| `lib/supabase/*` | Agent |
-| `middleware.ts` | Agent |
-| `supabase/migrations/*` | Agent |
-
-### Verification
-```bash
-# Dev server runs
-npm run dev
-
-# Can access login page
-# Can sign up new user
-# Can log in
-# Protected routes redirect when logged out
-# Database tables exist in Supabase dashboard
-```
-
-### Definition of Done
-- [ ] All tasks complete
-- [ ] All tests pass
-- [ ] User can sign up, log in, log out
-- [ ] Protected routes work correctly
-- [ ] Database schema matches plan
-- [ ] Results written to AI_SCRATCHPAD.md
-- [ ] Branch section moved to Archive
-
----
-
 ## Archive
 
 Merged branch sections are moved here for reference. To edit a feature, create a new branch and reference the archived section.
@@ -199,4 +133,9 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** <key files changed>
 **Summary:** <brief description of what was done>
 ```
+
+### feature/phase-1-foundation (merged 2026-01-09)
+**Goal:** Initialize SubCycle with Next.js, Supabase auth, database schema, and UI shell
+**Files:** app/(auth)/*, app/(app)/*, lib/supabase/*, middleware.ts, supabase/migrations/*, components/ui/*, components/layout/*
+**Summary:** Set up project foundation with Next.js 16 + Tailwind + shadcn/ui, Supabase auth (login/signup), 6-table database schema with RLS, 15 streaming services seeded, sidebar navigation, route protection middleware, and 10 component tests.
 
