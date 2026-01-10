@@ -148,3 +148,41 @@ Append-only log of completed work. Never rewrite history.
 **Next:** Task 16+ (Add skeleton loaders to pages)
 
 ---
+
+## 2026-01-10: Task 21 - Add Hover Animations Complete
+
+**Branch:** `feature/phase-6-reminders-polish` (in-progress)
+
+**Task:** Add subtle hover animations for better visual feedback
+
+**What was implemented:**
+- **Card component hover animation**: Added `transition-shadow hover:shadow-md` classes to base Card component
+  - Creates subtle shadow lift on hover for better visual feedback
+  - Applied to all cards (SubscriptionCard, RecommendationCard, etc.) via inheritance
+- **Toast slide-in animation**: Added smooth slide-in animation to Toast component
+  - Uses `animate-in slide-in-from-right-5 duration-300` for smooth 300ms entry animation
+  - Added `pointer-events-none` to container, `pointer-events-auto` to individual toasts for proper event handling
+  - Added `transition-opacity` to Toast dismiss button for smooth opacity changes on hover
+- **Button component**: Verified already has `transition-all` class (no changes needed)
+  - All button variants inherit the smooth transition behavior
+
+**Implementation approach:**
+- Updated Card component base classes
+- Updated Toast and ToastContainer components with animations
+- Added pointer-events adjustments for proper interaction
+- Verified all transitions use Tailwind's default 150ms timing (smooth and responsive)
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 200/200 PASS (no test changes needed - animations are CSS-based)
+- Build: PASS
+
+**Files changed:**
+- `src/components/ui/card.tsx` - Added hover shadow animation
+- `src/components/ui/toast.tsx` - Added slide-in animation and improved dismiss button
+- `AI_PLAN.md` - Marked task complete
+
+**Ready for:** Task 22+ (Audit spacing consistency)
+
+---
