@@ -100,17 +100,18 @@ export function ReminderCalendar({
   return (
     <div className="w-full bg-white rounded-lg border">
       {/* Header with month/year and navigation */}
-      <div className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center justify-between p-3 sm:p-4 border-b">
         <Button
           variant="ghost"
           size="icon"
           onClick={handlePreviousMonth}
           aria-label="Previous month"
+          className="min-h-[44px] min-w-[44px] sm:min-h-auto sm:min-w-auto"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-base sm:text-lg font-semibold">
           {MONTHS[currentMonth]} {currentYear}
         </h2>
 
@@ -119,6 +120,7 @@ export function ReminderCalendar({
           size="icon"
           onClick={handleNextMonth}
           aria-label="Next month"
+          className="min-h-[44px] min-w-[44px] sm:min-h-auto sm:min-w-auto"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -129,7 +131,7 @@ export function ReminderCalendar({
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className="p-2 text-center text-sm font-medium text-gray-500"
+            className="p-1 sm:p-2 text-center text-xs sm:text-sm font-medium text-gray-500"
           >
             {day}
           </div>
@@ -140,7 +142,7 @@ export function ReminderCalendar({
       <div className="grid grid-cols-7">
         {calendarCells.map((day, index) => {
           if (day === null) {
-            return <div key={`empty-${index}`} className="min-h-[80px] p-1" />
+            return <div key={`empty-${index}`} className="min-h-[44px] sm:min-h-[80px] p-1" />
           }
 
           const dateString = formatDateString(currentYear, currentMonth, day)
@@ -154,15 +156,15 @@ export function ReminderCalendar({
               data-testid={`calendar-day-${day}`}
               onClick={() => handleDayClick(day)}
               className={`
-                min-h-[80px] p-1 border-b border-r
+                min-h-[44px] sm:min-h-[80px] p-1 sm:p-2 border-b border-r
                 ${hasReminder ? 'cursor-pointer hover:bg-gray-50' : ''}
                 ${isSelected ? 'ring-2 ring-blue-500 ring-inset' : ''}
               `}
             >
-              <div className="text-sm text-gray-700">{day}</div>
+              <div className="text-xs sm:text-sm text-gray-700">{day}</div>
 
               {/* Reminder indicators */}
-              <div className="mt-1 space-y-1">
+              <div className="mt-0.5 sm:mt-1 space-y-0.5 sm:space-y-1">
                 {dayReminders.map((reminder) => (
                   <div
                     key={reminder.id}
