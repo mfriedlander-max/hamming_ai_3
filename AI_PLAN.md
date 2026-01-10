@@ -44,7 +44,7 @@ This project uses the **superpowers** skill system. Skills are mandatory, not op
 
 ### Testing Requirements
 - **Unit tests:** Strict TDD (RED → GREEN → REFACTOR)
-- **E2E tests:** Verification gate before merge. Use MCP Playwright tools (`browser_navigate`, `browser_snapshot`, `browser_click`, etc.) to navigate the app, inspect/critique the UI, compare against other UIs for inspiration, and validate critical user-facing flows.
+- **E2E tests:** Verification gate before merge. Use MCP Playwright tools (`browser_navigate`, `browser_snapshot`, `browser_click`, etc.) to navigate the app, inspect/critique the UI, compare against other UIs for inspiration, and validate critical user-facing flows. Feel free to test E2E without MCP, it is not required if it doesn't make sense.  
 
 ### Token Optimization
 | Task Type | Strategy |
@@ -52,7 +52,7 @@ This project uses the **superpowers** skill system. Skills are mandatory, not op
 | Exploration/search | `Explore` subagent |
 | Simple mechanical tasks | `model: "haiku"` |
 | Implementation | Fresh agent per task |
-| Complex reasoning | Full context (Sonnet/Opus) |
+| Complex reasoning/planning | Full context (Sonnet/Opus) |
 
 ### Parallel Work Patterns
 - **Pattern A (multiple branches):** Independent features → separate `feature/*` branches via worktrees
@@ -74,6 +74,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
+| `feature/phase-1-foundation` | in-progress | Project setup, auth, database, UI shell |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
@@ -119,6 +120,71 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 - [ ] Results written to AI_SCRATCHPAD.md
 - [ ] Branch section moved to Archive
 ```
+
+---
+
+## Branch: feature/phase-1-foundation
+
+### Goal
+Initialize SubCycle project with Next.js 14, Supabase auth, database schema, and basic UI shell.
+
+### Scope
+**Included:**
+- Next.js 14 + Tailwind + shadcn/ui setup
+- Supabase project with all tables + RLS policies
+- Auth pages (login, signup)
+- App layout with sidebar navigation
+- Route protection middleware
+- Seed data for streaming services
+
+**Excluded:**
+- Onboarding flow (Phase 2)
+- Dashboard functionality (Phase 3)
+- TMDB integration (Phase 4)
+- AI recommendations (Phase 5)
+
+### Tasks
+- [ ] Initialize Next.js 14 project with Tailwind
+- [ ] Install and configure shadcn/ui (button, card, input, dialog, badge)
+- [ ] Create Supabase project and configure environment variables
+- [ ] Create database tables: profiles, taste_profiles, services, subscriptions, reminders, content
+- [ ] Set up RLS policies for all tables
+- [ ] Seed services table with top 15 streaming services
+- [ ] Create /login page with Supabase Auth
+- [ ] Create /signup page with Supabase Auth
+- [ ] Create app layout with sidebar navigation
+- [ ] Create auth middleware for route protection
+- [ ] Add .gitignore for Node/Next.js
+
+### Files
+| File | Owner |
+|------|-------|
+| `app/(auth)/*` | Agent |
+| `app/(app)/layout.tsx` | Agent |
+| `lib/supabase/*` | Agent |
+| `middleware.ts` | Agent |
+| `supabase/migrations/*` | Agent |
+
+### Verification
+```bash
+# Dev server runs
+npm run dev
+
+# Can access login page
+# Can sign up new user
+# Can log in
+# Protected routes redirect when logged out
+# Database tables exist in Supabase dashboard
+```
+
+### Definition of Done
+- [ ] All tasks complete
+- [ ] All tests pass
+- [ ] User can sign up, log in, log out
+- [ ] Protected routes work correctly
+- [ ] Database schema matches plan
+- [ ] Results written to AI_SCRATCHPAD.md
+- [ ] Branch section moved to Archive
 
 ---
 
