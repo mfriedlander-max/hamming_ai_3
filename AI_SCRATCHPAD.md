@@ -225,3 +225,63 @@ All pages follow consistent spacing standards:
 **Ready for:** Task 23 (E2E testing)
 
 ---
+
+## 2026-01-10: Phase 6 Implementation Tasks Complete (22/25)
+
+**Branch:** `feature/phase-6-reminders-polish` (in-progress)
+
+**What was built across all implementation tasks:**
+
+### Reminders Feature (Tasks 1-9)
+- `src/lib/types/reminder.ts`: Reminder, ReminderWithSubscription, CreateReminderInput types
+- `src/app/api/reminders/route.ts`: GET (fetch with subscription/service joins), POST (create)
+- `src/app/api/reminders/[id]/route.ts`: DELETE with ownership verification
+- `src/components/reminders/SetReminderModal.tsx`: Date picker modal, auto-infers type (13 tests)
+- `src/components/reminders/ReminderCalendar.tsx`: Full calendar grid with month navigation (14 tests)
+- `src/components/reminders/ReminderDetails.tsx`: Selected date details with delete (7 tests)
+- `src/components/reminders/RemindersClient.tsx`: State management composing calendar + details (8 tests)
+- `src/app/(app)/reminders/page.tsx`: Calendar view implementation
+- `src/components/subscriptions/SubscriptionCard.tsx`: Set Reminder button enabled
+- `src/components/subscriptions/DashboardClient.tsx`: SetReminderModal integration
+
+### User Name & Greeting (Tasks 10-12)
+- `supabase/migrations/003_add_profile_name.sql`: Added name column to profiles
+- `src/components/onboarding/WelcomeStep.tsx`: Name input field with label
+- `src/app/api/onboarding/complete/route.ts`: Saves name to profiles table
+- `src/app/(app)/dashboard/page.tsx`: "Welcome back, {name}" greeting
+
+### Service Logos (Tasks 13-14)
+- `public/logos/*.svg`: 15 placeholder SVGs with brand colors (netflix, hulu, disney-plus, etc.)
+- Updated SubscriptionCard, ServiceSelector, AddSubscriptionModal to display logos
+
+### Polish - Loading & Error States (Tasks 15-17)
+- `src/components/ui/skeleton.tsx`: Reusable skeleton component (11 tests)
+- `src/components/ui/error-banner.tsx`: Error banner with retry button (10 tests)
+- Added skeleton loaders to Dashboard, Recommendations, Reminders pages
+
+### Polish - Mobile Responsiveness (Tasks 18-20)
+- `src/components/layout/sidebar.tsx`: Hamburger menu + slide-out drawer for mobile
+- Responsive grids (3→2→1 columns) on Dashboard, Recommendations, Reminders
+- Touch-friendly calendar (min-h-[44px] for tap targets)
+
+### Polish - Visual Refinement (Tasks 21-22)
+- Card hover: `transition-shadow hover:shadow-md`
+- Toast: `animate-in slide-in-from-right-5 duration-300`
+- Audited spacing: All pages use p-8 padding, mb-8 header margin, consistent text colors
+
+**Tests:** 200 passing (target was 180+)
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 200/200 PASS
+- Build: PASS
+
+**Remaining (E2E tests):**
+- [ ] E2E: Set reminder → appears in calendar → delete reminder
+- [ ] E2E: Name collected → greeting shown
+- [ ] E2E: Mobile sidebar, grids, calendar work
+
+**Ready for:** Session resume to complete E2E tests
+
+---
