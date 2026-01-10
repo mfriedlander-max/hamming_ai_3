@@ -72,7 +72,7 @@ export default function OnboardingPage() {
             />
           ))}
         </div>
-        <p className="text-center text-sm text-gray-500">Step {step} of 3</p>
+        <p className="text-center text-sm text-gray-400">Step {step} of 3</p>
       </div>
 
       {error && (
