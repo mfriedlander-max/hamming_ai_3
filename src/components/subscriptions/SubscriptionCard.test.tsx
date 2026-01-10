@@ -133,4 +133,30 @@ describe('SubscriptionCard', () => {
     expect(reminderButton).toBeInTheDocument()
     expect(reminderButton).toBeDisabled()
   })
+
+  it('renders recommendation badge when provided', () => {
+    render(
+      <SubscriptionCard
+        subscription={mockActiveSubscription}
+        onStatusChange={vi.fn()}
+        onSetReminder={vi.fn()}
+        recommendationBadge={<span data-testid="rec-badge">Keep</span>}
+      />
+    )
+
+    expect(screen.getByTestId('rec-badge')).toBeInTheDocument()
+    expect(screen.getByText('Keep')).toBeInTheDocument()
+  })
+
+  it('does not render recommendation badge slot when not provided', () => {
+    render(
+      <SubscriptionCard
+        subscription={mockActiveSubscription}
+        onStatusChange={vi.fn()}
+        onSetReminder={vi.fn()}
+      />
+    )
+
+    expect(screen.queryByTestId('rec-badge')).not.toBeInTheDocument()
+  })
 })

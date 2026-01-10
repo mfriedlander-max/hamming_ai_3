@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { StatusBadge, type SubscriptionStatus } from './StatusBadge'
@@ -9,12 +10,14 @@ interface SubscriptionCardProps {
   subscription: SubscriptionWithService
   onStatusChange: (id: string, status: SubscriptionStatus) => void
   onSetReminder: (id: string) => void
+  recommendationBadge?: ReactNode
 }
 
 export function SubscriptionCard({
   subscription,
   onStatusChange,
   onSetReminder,
+  recommendationBadge,
 }: SubscriptionCardProps) {
   const { id, status, monthly_cost, service } = subscription
   const isActive = status === 'active'
@@ -28,7 +31,10 @@ export function SubscriptionCard({
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{service.name}</CardTitle>
-          <StatusBadge status={status} />
+          <div className="flex items-center gap-2">
+            {recommendationBadge}
+            <StatusBadge status={status} />
+          </div>
         </div>
       </CardHeader>
       <CardContent>

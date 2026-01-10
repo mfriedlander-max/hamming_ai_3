@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
+import { ToastProviderWrapper } from "@/components/providers/ToastProviderWrapper";
 
 export default async function AppLayout({
   children,
@@ -39,11 +40,13 @@ export default async function AppLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1 bg-gray-50">
-        {children}
-      </main>
-    </div>
+    <ToastProviderWrapper>
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <main className="flex-1 bg-gray-50">
+          {children}
+        </main>
+      </div>
+    </ToastProviderWrapper>
   );
 }
