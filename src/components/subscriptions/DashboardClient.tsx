@@ -3,6 +3,8 @@
 import { useState, useCallback } from 'react'
 import { SubscriptionList } from './SubscriptionList'
 import { AddSubscriptionModal } from './AddSubscriptionModal'
+import { SetReminderModal } from '@/components/reminders'
+import { useToast } from '@/components/ui/toast'
 import type { SubscriptionStatus } from './StatusBadge'
 import type { SubscriptionWithService, Service } from './types'
 
@@ -14,7 +16,10 @@ interface DashboardClientProps {
 export function DashboardClient({ initialSubscriptions, availableServices }: DashboardClientProps) {
   const [subscriptions, setSubscriptions] = useState<SubscriptionWithService[]>(initialSubscriptions)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [reminderModalOpen, setReminderModalOpen] = useState(false)
+  const [selectedSubscriptionForReminder, setSelectedSubscriptionForReminder] = useState<SubscriptionWithService | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
   const loading = false // Can be used for refresh functionality later
 
   // Services that user doesn't have yet
@@ -47,9 +52,42 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
   }, [])
 
   const handleSetReminder = useCallback((id: string) => {
-    // Phase 6 functionality - currently disabled
-    console.log('Set reminder for subscription:', id)
-  }, [])
+    const subscription = subscriptions.find((sub) => sub.id === id)
+    if (subscription) {
+      setSelectedSubscriptionForReminder(subscription)
+      setReminderModalOpen(true)
+    }
+  }, [subscriptions])
+
+  const handleReminderSubmit = useCallback(
+    async (data: { subscription_id: string; type: 'cancel' | 'resubscribe'; trigger_date: string }) => {
+      try {
+        const response = await fetch('/api/reminders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Failed to create reminder')
+        }
+
+        toast({
+          message: 'Reminder set successfully!',
+          type: 'success',
+        })
+        setReminderModalOpen(false)
+        setSelectedSubscriptionForReminder(null)
+      } catch (err) {
+        toast({
+          message: err instanceof Error ? err.message : 'Failed to create reminder',
+          type: 'error',
+        })
+      }
+    },
+    [toast]
+  )
 
   const handleAddSubscription = useCallback(
     async (data: { service_id: string; monthly_cost: number }) => {
@@ -99,6 +137,22 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
       />
+
+      {selectedSubscriptionForReminder && (
+        <SetReminderModal
+          subscription={{
+            id: selectedSubscriptionForReminder.id,
+            service_name: selectedSubscriptionForReminder.service.name,
+            status: selectedSubscriptionForReminder.status,
+          }}
+          open={reminderModalOpen}
+          onClose={() => {
+            setReminderModalOpen(false)
+            setSelectedSubscriptionForReminder(null)
+          }}
+          onSubmit={handleReminderSubmit}
+        />
+      )}
     </div>
   )
 }

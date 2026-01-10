@@ -54,7 +54,6 @@ export function SubscriptionCard({
         <Button
           variant="ghost"
           size="sm"
-          disabled
           onClick={() => onSetReminder(id)}
         >
           Set Reminder

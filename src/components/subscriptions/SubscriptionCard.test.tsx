@@ -120,18 +120,22 @@ describe('SubscriptionCard', () => {
     expect(onStatusChange).toHaveBeenCalledWith('2', 'active')
   })
 
-  it('renders disabled Set Reminder button', () => {
+  it('renders Set Reminder button and calls onSetReminder when clicked', () => {
+    const onSetReminder = vi.fn()
     render(
       <SubscriptionCard
         subscription={mockActiveSubscription}
         onStatusChange={vi.fn()}
-        onSetReminder={vi.fn()}
+        onSetReminder={onSetReminder}
       />
     )
 
     const reminderButton = screen.getByRole('button', { name: /set reminder/i })
     expect(reminderButton).toBeInTheDocument()
-    expect(reminderButton).toBeDisabled()
+    expect(reminderButton).not.toBeDisabled()
+
+    fireEvent.click(reminderButton)
+    expect(onSetReminder).toHaveBeenCalledWith('1')
   })
 
   it('renders recommendation badge when provided', () => {
