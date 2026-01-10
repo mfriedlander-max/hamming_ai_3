@@ -117,8 +117,8 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - [x] Add `name` column to profiles table (migration)
 - [x] Update WelcomeStep to collect user name
 - [x] Add greeting to dashboard header
-- [ ] Add 15 service logo SVGs to `/public/logos/`
-- [ ] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
+- [x] Add 15 service logo SVGs to `/public/logos/`
+- [x] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
 - [ ] Create Skeleton component
 - [ ] Add skeleton loaders to Dashboard, Recommendations, Reminders
 - [ ] Add error banners with retry to all pages

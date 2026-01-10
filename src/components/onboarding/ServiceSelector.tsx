@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -34,6 +35,11 @@ export function ServiceSelector({
 }: ServiceSelectorProps) {
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
+  const [logoErrors, setLogoErrors] = useState<Set<string>>(new Set())
+
+  const handleLogoError = (slug: string) => {
+    setLogoErrors((prev) => new Set(prev).add(slug))
+  }
 
   useEffect(() => {
     async function fetchServices() {
@@ -115,6 +121,20 @@ export function ServiceSelector({
                   onChange={() => handleToggleService(service)}
                   className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary"
                 />
+                {logoErrors.has(service.slug) ? (
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                    {service.name.charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <Image
+                    src={`/logos/${service.slug}.svg`}
+                    alt={service.name}
+                    width={32}
+                    height={32}
+                    className="rounded-full flex-shrink-0"
+                    onError={() => handleLogoError(service.slug)}
+                  />
+                )}
                 <div>
                   <CardTitle className="text-base">{service.name}</CardTitle>
                   <CardDescription className="text-sm">
