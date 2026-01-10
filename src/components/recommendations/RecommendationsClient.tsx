@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { RecommendationCard, RecommendationsSummary } from '.'
 import { useToast } from '@/components/ui/toast'
+import { ErrorBanner } from '@/components/ui/error-banner'
 import type { Recommendation } from '@/lib/types/content'
 
 interface ServiceInfo {
@@ -105,15 +106,7 @@ export function RecommendationsClient({ initialServices }: RecommendationsClient
   if (error) {
     return (
       <div className="p-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
-          <button
-            onClick={() => fetchRecommendations()}
-            className="mt-2 text-red-600 underline hover:text-red-800"
-          >
-            Try again
-          </button>
-        </div>
+        <ErrorBanner message={error} onRetry={() => fetchRecommendations()} />
       </div>
     )
   }

@@ -120,8 +120,8 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - [x] Add 15 service logo SVGs to `/public/logos/`
 - [x] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
 - [x] Create Skeleton component
-- [ ] Add skeleton loaders to Dashboard, Recommendations, Reminders
-- [ ] Add error banners with retry to all pages
+- [x] Add skeleton loaders to Dashboard, Recommendations, Reminders
+- [x] Add error banners with retry to all pages
 - [ ] Update sidebar for mobile (hamburger + drawer)
 - [ ] Make grids responsive (3→2→1 columns)
 - [ ] Make calendar touch-friendly
@@ -146,6 +146,7 @@ Complete reminders feature with calendar view, add service logos, collect user n
 | `public/logos/*.svg` | Phase-6-Agent |
 | `supabase/migrations/003_add_profile_name.sql` | Phase-6-Agent |
 | `src/components/ui/skeleton.tsx` | Phase-6-Agent |
+| `src/components/ui/error-banner.tsx` | Phase-6-Agent |
 | `src/components/layout/sidebar.tsx` | Phase-6-Agent |
 
 ### Verification

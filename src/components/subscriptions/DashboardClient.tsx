@@ -5,6 +5,7 @@ import { SubscriptionList } from './SubscriptionList'
 import { AddSubscriptionModal } from './AddSubscriptionModal'
 import { SetReminderModal } from '@/components/reminders'
 import { useToast } from '@/components/ui/toast'
+import { ErrorBanner } from '@/components/ui/error-banner'
 import type { SubscriptionStatus } from './StatusBadge'
 import type { SubscriptionWithService, Service } from './types'
 
@@ -115,11 +116,15 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
     []
   )
 
+  const handleRetry = useCallback(() => {
+    setError(null)
+  }, [])
+
   return (
     <div>
       {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-          {error}
+        <div className="mb-4">
+          <ErrorBanner message={error} onRetry={handleRetry} />
         </div>
       )}
 
