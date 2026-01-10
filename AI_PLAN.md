@@ -119,7 +119,7 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - [x] Add greeting to dashboard header
 - [x] Add 15 service logo SVGs to `/public/logos/`
 - [x] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
-- [ ] Create Skeleton component
+- [x] Create Skeleton component
 - [ ] Add skeleton loaders to Dashboard, Recommendations, Reminders
 - [ ] Add error banners with retry to all pages
 - [ ] Update sidebar for mobile (hamburger + drawer)
