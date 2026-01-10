@@ -11,13 +11,13 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 1: Foundation (auth, database, UI shell)
 - [x] Phase 2: Onboarding (service selection, taste quiz)
 - [x] Phase 3: Dashboard (subscription list with actions)
-- [ ] Phase 4: Content Intelligence (TMDB integration)
-- [ ] Phase 5: AI Recommendations (Claude-powered advice)
+- [x] Phase 4: Content Intelligence (TMDB integration)
+- [x] Phase 5: AI Recommendations (Claude-powered advice)
 - [ ] Phase 6: Reminders & Polish
 
 ## Current Status
 
-Phases 1-3 complete. Ready for Phase 4 (Content Intelligence) or Phase 5 (AI Recommendations).
+Phases 1-5 complete. Ready for Phase 6 (Reminders & Polish).
 
 ## Tech Stack
 

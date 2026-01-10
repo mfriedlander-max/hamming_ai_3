@@ -68,3 +68,45 @@ Append-only log of completed work. Never rewrite history.
 **Next:** Phase 4 (Content Intelligence) or Phase 5 (AI Recommendations)
 
 ---
+
+## 2026-01-10: Phases 4 & 5 Complete (Parallel Execution)
+
+**Branches:** `feature/phase-4-content` and `feature/phase-5-recommendations` → merged to `dev`
+
+**Approach:** Used `dispatching-parallel-agents` skill to run both phases concurrently via git worktrees. Shared types defined upfront in `src/lib/types/content.ts`. Zero file overlap allowed clean parallel development.
+
+### Phase 4: Content Intelligence
+**What was built:**
+- TMDB client with Bearer token auth and error handling
+- TMDB response types and genre/provider ID mappings
+- Matching algorithm: +20 per genre overlap (max 60), +40 for favorite show title match, capped at 100
+- `/api/content/sync` POST endpoint (fetch & cache from TMDB, 24hr TTL)
+- `/api/content/matches` GET endpoint (retrieve cached matched content per service)
+- 20 new tests
+
+### Phase 5: AI Recommendations
+**What was built:**
+- Claude client with auth header and error handling
+- Prompt templates for recommendation generation with response parsing/validation
+- `/api/recommendations` POST endpoint with 1hr cache TTL
+- RecommendationBadge component (keep=green, pause=amber, consider=gray)
+- RecommendationCard component with verdict, matches, reason, quick pause action
+- RecommendationsSummary component (savings display + refresh button)
+- RecommendationsClient for state management
+- `/recommendations` page with loading/empty states
+- Toast notification system for quick actions
+- SubscriptionCard updated with badge slot
+- Sidebar navigation updated with AI Recommendations link
+- 48 new tests
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 135/135 PASS
+- Build: PASS
+
+**Merge order:** Phase 4 first (provides content data), then Phase 5 rebased onto updated dev
+
+**Next:** Phase 6 (Reminders & Polish)
+
+---

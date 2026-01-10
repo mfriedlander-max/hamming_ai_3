@@ -74,8 +74,6 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
-| `feature/phase-4-content` | in-progress | TMDB content intelligence |
-| `feature/phase-5-recommendations` | in-progress | Claude AI recommendations |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
@@ -124,107 +122,6 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ---
 
-## Branch: feature/phase-4-content
-
-### Goal
-Fetch upcoming content from TMDB for user's subscribed services and match to user taste with scoring.
-
-### Scope
-**Included:**
-- TMDB API client and types
-- Matching algorithm (genre + favorite show title matching)
-- Content sync and matches API endpoints
-- Content caching in database (24hr TTL)
-
-**Excluded:**
-- AI recommendations (Phase 5)
-- UI components (Phase 5)
-
-### Tasks
-- [ ] Create shared types in `src/lib/types/content.ts`
-- [ ] Create TMDB client with auth header (TDD)
-- [ ] Create TMDB response types
-- [ ] Create matching.ts with score calculation (TDD)
-- [ ] Create `/api/content/sync` route (POST)
-- [ ] Create `/api/content/matches` route (GET)
-
-### Files
-| File | Owner |
-|------|-------|
-| `src/lib/types/content.ts` | Phase-4-Agent |
-| `src/lib/tmdb/client.ts` | Phase-4-Agent |
-| `src/lib/tmdb/types.ts` | Phase-4-Agent |
-| `src/lib/tmdb/matching.ts` | Phase-4-Agent |
-| `src/app/api/content/sync/route.ts` | Phase-4-Agent |
-| `src/app/api/content/matches/route.ts` | Phase-4-Agent |
-
-### Verification
-```bash
-npm run lint && npm run typecheck && npm test && npm run build
-```
-
-### Definition of Done
-- [ ] All tasks complete
-- [ ] All tests pass (matching tests)
-- [ ] API returns scored content per service
-- [ ] Results written to AI_SCRATCHPAD.md
-- [ ] Branch section moved to Archive
-
----
-
-## Branch: feature/phase-5-recommendations
-
-### Goal
-Claude-powered recommendations with actionable output and UI integration.
-
-### Scope
-**Included:**
-- Claude API client and prompt templates
-- Recommendations API endpoint with caching
-- RecommendationBadge, RecommendationCard, RecommendationsSummary components
-- /recommendations page with loading/empty states
-- Dashboard integration (badge slot, quick pause action)
-- Toast notification for pause with auto-reminder
-
-**Excluded:**
-- TMDB integration (Phase 4)
-- Reminders page CRUD (Phase 6)
-
-### Tasks
-- [ ] Create Claude client with auth (TDD)
-- [ ] Create prompt templates
-- [ ] Create `/api/recommendations` route (POST)
-- [ ] Create RecommendationBadge component (TDD)
-- [ ] Create RecommendationCard component (TDD)
-- [ ] Create RecommendationsSummary component (TDD)
-- [ ] Create /recommendations page
-- [ ] Update SubscriptionCard with badge slot
-- [ ] Add quick pause action with toast + auto-reminder
-
-### Files
-| File | Owner |
-|------|-------|
-| `src/lib/claude/client.ts` | Phase-5-Agent |
-| `src/lib/claude/prompts.ts` | Phase-5-Agent |
-| `src/app/api/recommendations/route.ts` | Phase-5-Agent |
-| `src/components/recommendations/*` | Phase-5-Agent |
-| `src/app/(app)/recommendations/page.tsx` | Phase-5-Agent |
-
-### Verification
-```bash
-npm run lint && npm run typecheck && npm test && npm run build
-```
-
-### Definition of Done
-- [ ] All tasks complete
-- [ ] All tests pass (component tests)
-- [ ] Recommendations page works
-- [ ] Dashboard shows badges
-- [ ] Results written to AI_SCRATCHPAD.md
-- [ ] Branch section moved to Archive
-
----
-
 ## Archive
 
 Merged branch sections are moved here for reference. To edit a feature, create a new branch and reference the archived section.
@@ -251,4 +148,14 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Subscription dashboard with status management
 **Files:** components/subscriptions/*, app/(app)/dashboard/page.tsx, app/api/subscriptions/route.ts, app/api/subscriptions/[id]/route.ts
 **Summary:** Built StatusBadge, SubscriptionCard, SubscriptionList, AddSubscriptionModal, and DashboardClient components. CRUD API endpoints for subscriptions. Dashboard shows monthly spend, allows add/pause/resume actions. 26 new tests (67 total across codebase).
+
+### feature/phase-4-content (merged 2026-01-10)
+**Goal:** TMDB content intelligence with taste matching
+**Files:** lib/tmdb/*, lib/types/content.ts, app/api/content/*
+**Summary:** Built TMDB client with auth, response types, and genre/provider mappings. Matching algorithm scores content: +20 per genre overlap (max 60), +40 for favorite show title match (capped at 100). /api/content/sync fetches and caches content (24hr TTL), /api/content/matches returns scored content per service. 20 new tests (87 total).
+
+### feature/phase-5-recommendations (merged 2026-01-10)
+**Goal:** Claude-powered AI recommendations with UI
+**Files:** lib/claude/*, components/recommendations/*, app/(app)/recommendations/page.tsx, app/api/recommendations/route.ts, components/ui/toast.tsx
+**Summary:** Built Claude client with auth and prompt templates. RecommendationBadge (keep=green, pause=amber, consider=gray), RecommendationCard with verdict/matches/reason/actions, RecommendationsSummary with savings display. /recommendations page with loading/empty states. Toast notification system. SubscriptionCard updated with badge slot. Sidebar navigation updated. 48 new tests (135 total).
 
