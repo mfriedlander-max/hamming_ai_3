@@ -30,3 +30,41 @@ Append-only log of completed work. Never rewrite history.
 **Next:** Phase 2 (Onboarding flow)
 
 ---
+
+## 2026-01-10: Phases 2 & 3 Complete (Parallel Execution)
+
+**Branches:** `feature/phase-2-onboarding` and `feature/phase-3-dashboard` → merged to `dev`
+
+**Approach:** Used `dispatching-parallel-agents` skill to run both phases concurrently via git worktrees. Zero file overlap allowed clean parallel development.
+
+### Phase 2: Onboarding Flow
+**What was built:**
+- WelcomeStep component with SubCycle branding
+- ServiceSelector with service grid and price inputs (fetches from Supabase)
+- TasteQuiz with favorite shows input and genre multi-select
+- 3-step onboarding page with progress indicator
+- `/api/onboarding/complete` endpoint (saves subscriptions + taste profile)
+- Layout redirect logic (new users → onboarding)
+- 31 new tests
+
+### Phase 3: Dashboard
+**What was built:**
+- StatusBadge component (active/paused variants)
+- SubscriptionCard with service info, price, status, and actions
+- SubscriptionList with responsive grid and empty state
+- AddSubscriptionModal for new subscription creation
+- DashboardClient for state management
+- `/api/subscriptions` endpoints (GET, POST)
+- `/api/subscriptions/[id]` endpoints (PATCH, DELETE)
+- 26 new tests
+
+**Verification:**
+- Lint: PASS
+- Build: PASS
+- Tests: 67/67 PASS
+
+**Merge order:** Phase 3 first (no layout changes), then Phase 2 rebased onto updated dev
+
+**Next:** Phase 4 (Content Intelligence) or Phase 5 (AI Recommendations)
+
+---
