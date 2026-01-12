@@ -81,6 +81,43 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ---
 
+## Phases 7-14 Roadmap
+
+**Status:** Phases 1-6 complete (200 tests). Ready for Phase 7.
+
+### Overview
+
+| Phase | Feature | Depends On | Execution |
+|-------|---------|------------|-----------|
+| 7a | Editable Taste Profile | - | Sequential (first) |
+| 7b | Account Linking (Email Detection) | 7a | Sequential (after 7a) |
+| 8 | Kanban Board View | - | Wave 2 (parallel with 9) |
+| 9 | Content Calendar | - | Wave 2 (parallel with 8) |
+| 10 | Subscription Optimizer | 7a, 9 | Wave 3 (sequential) |
+| 11 | Binge Planner | 10 | Wave 3 (sequential) |
+| 12 | Smart Notifications | 10, 11 | Wave 3 (sequential) |
+| 13a | Household Mode | 10 | Wave 4 (parallel with 13b) |
+| 13b | Social/Friends | 10 | Wave 4 (parallel with 13a) |
+| ~~14~~ | ~~Deal Tracker~~ | - | **SKIPPED** |
+
+### Execution Waves
+
+**Wave 1 (Sequential):** 7a → 7b (Settings infrastructure)
+**Wave 2 (Parallel):** 8 + 9 (New views: Kanban, Calendar)
+**Wave 3 (Sequential):** 10 → 11 → 12 (Core intelligence)
+**Wave 4 (Parallel):** 13a + 13b (Social features)
+
+### Key Decisions
+- Phase 7b: Build fully (OAuth verification is deployment concern)
+- Wave 1: Sequential to avoid Settings page conflicts
+- Test targets: Guidelines, not hard requirements
+- Phase 14: Skipped for now
+
+### Full Specifications
+See `docs/PHASES_7-14_PLAN.md` for complete task lists, file ownership, and database migrations.
+
+---
+
 ## Branch Template
 
 > Copy this template when creating a new feature branch section. Do not edit the template itself.

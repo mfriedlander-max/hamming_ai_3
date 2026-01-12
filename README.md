@@ -14,6 +14,15 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 4: Content Intelligence (TMDB integration)
 - [x] Phase 5: AI Recommendations (Claude-powered advice)
 - [x] Phase 6: Reminders & Polish (25/25 tasks complete)
+- [ ] Phase 7a: Editable Taste Profile
+- [ ] Phase 7b: Account Linking (Email Detection)
+- [ ] Phase 8: Kanban Board View
+- [ ] Phase 9: Content Calendar
+- [ ] Phase 10: Subscription Optimizer
+- [ ] Phase 11: Binge Planner
+- [ ] Phase 12: Smart Notifications + Auto-Remind
+- [ ] Phase 13a: Household Mode
+- [ ] Phase 13b: Social/Friends
 
 ## Current Status
 
