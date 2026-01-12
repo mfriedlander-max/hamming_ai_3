@@ -1,5 +1,7 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardClient } from '@/components/subscriptions/DashboardClient'
+import { Button } from '@/components/ui/button'
 import type { SubscriptionWithService, Service } from '@/components/subscriptions/types'
 
 export default async function DashboardPage() {
@@ -89,14 +91,19 @@ export default async function DashboardPage() {
             Welcome back{profile?.name ? `, ${profile.name}` : ''}
           </p>
         </div>
-        {typedSubscriptions.length > 0 && (
-          <div className="text-right">
-            <p className="text-sm text-gray-500">Monthly Spend</p>
-            <p className="text-2xl font-bold text-gray-900">
-              ${totalMonthlyCost.toFixed(2)}
-            </p>
-          </div>
-        )}
+        <div className="flex items-center gap-4">
+          <Button variant="outline" asChild>
+            <Link href="/settings">Edit Preferences</Link>
+          </Button>
+          {typedSubscriptions.length > 0 && (
+            <div className="text-right">
+              <p className="text-sm text-gray-500">Monthly Spend</p>
+              <p className="text-2xl font-bold text-gray-900">
+                ${totalMonthlyCost.toFixed(2)}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       <DashboardClient

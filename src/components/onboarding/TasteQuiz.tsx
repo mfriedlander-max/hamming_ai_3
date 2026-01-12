@@ -3,17 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-
-const GENRES = [
-  'Action',
-  'Comedy',
-  'Drama',
-  'Horror',
-  'Sci-Fi',
-  'Documentary',
-  'Romance',
-  'Thriller',
-] as const
+import { GENRES } from '@/lib/constants'
 
 interface TasteQuizProps {
   onComplete: () => void

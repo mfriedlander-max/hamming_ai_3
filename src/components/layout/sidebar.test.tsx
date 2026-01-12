@@ -48,4 +48,11 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /dashboard/i })).toHaveAttribute('href', '/dashboard')
     expect(screen.getByRole('link', { name: /reminders/i })).toHaveAttribute('href', '/reminders')
   })
+
+  it('renders Settings link', () => {
+    render(<Sidebar />)
+
+    expect(screen.getByRole('link', { name: /settings/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /settings/i })).toHaveAttribute('href', '/settings')
+  })
 })

@@ -20,6 +20,10 @@ function setCachedRecommendations(userId: string, data: Recommendation[]): void 
   cache.set(userId, { data, timestamp: Date.now() })
 }
 
+export function clearCachedRecommendations(userId: string): void {
+  cache.delete(userId)
+}
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
