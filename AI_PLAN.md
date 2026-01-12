@@ -83,7 +83,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ## Phases 7-14 Roadmap
 
-**Status:** Phases 1-6 complete (200 tests). Ready for Phase 7.
+**Status:** Phases 1-6 + 7a complete (217 tests). Ready for Phase 7b.
 
 ### Overview
 
@@ -200,4 +200,9 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Complete reminders feature, service logos, user name collection, and polish
 **Files:** lib/types/reminder.ts, app/api/reminders/*, components/reminders/*, components/subscriptions/*, components/onboarding/WelcomeStep.tsx, app/(app)/dashboard/page.tsx, public/logos/*.svg, components/ui/skeleton.tsx, components/ui/error-banner.tsx, components/layout/sidebar.tsx
 **Summary:** Built reminders CRUD with calendar view (SetReminderModal, ReminderCalendar, ReminderDetails, RemindersClient). Added user name collection in onboarding with dashboard greeting. Created 15 service logo SVGs. Added skeleton loaders and error banners. Made sidebar mobile responsive with hamburger menu and drawer. Responsive grids (3→2→1 cols), touch-friendly calendar, hover animations. E2E verified with Playwright. 65 new tests (200 total).
+
+### feature/phase-7a-editable-taste (merged 2026-01-12)
+**Goal:** Allow users to edit taste profile (genres, favorite shows) from Settings page
+**Files:** app/(app)/settings/page.tsx, components/settings/TasteProfileEditor.tsx, app/api/taste-profile/route.ts, lib/constants.ts, lib/errors.ts, components/layout/sidebar.tsx, app/(app)/dashboard/page.tsx, components/onboarding/TasteQuiz.tsx, app/api/recommendations/route.ts
+**Summary:** Built Settings page with TasteProfileEditor component. Genre chips (toggle on/off) and comma-separated favorite shows input. GET/PATCH /api/taste-profile API with cache invalidation. Extracted GENRES to shared constants, created ApiError/errorResponse helpers. Added Settings link to sidebar and "Edit Preferences" button to dashboard. E2E verified with Playwright. 17 new tests (217 total).
 

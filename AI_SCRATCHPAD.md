@@ -333,3 +333,73 @@ All pages follow consistent spacing standards:
 **Phase 6 Complete!** All 25 tasks done. Ready for branch merge.
 
 ---
+
+## 2026-01-12: Phase 7a Complete - Editable Taste Profile
+
+**Branch:** `feature/phase-7a-editable-taste` → merged to `dev`
+
+**What was built:**
+
+### Settings Page Infrastructure
+- `src/app/(app)/settings/page.tsx`: Settings page with TasteProfileEditor
+- `src/components/settings/TasteProfileEditor.tsx`: Genre chips + favorite shows text input (9 tests)
+- `src/app/api/taste-profile/route.ts`: GET/PATCH endpoints (7 tests)
+
+### Shared Utilities
+- `src/lib/constants.ts`: Extracted GENRES array for reuse
+- `src/lib/errors.ts`: ApiError class + errorResponse helper
+
+### Navigation Updates
+- Sidebar: Added Settings link with Settings icon
+- Dashboard: Added "Edit Preferences" button in header
+
+### Cache Invalidation
+- `clearCachedRecommendations(userId)` exported from recommendations route
+- PATCH /api/taste-profile calls it on successful save
+
+**Tests:** 217 passing (+17 new)
+- TasteProfileEditor.test.tsx: 9 tests
+- route.test.ts (taste-profile): 7 tests
+- sidebar.test.tsx: 1 new test
+
+**TDD Approach:**
+- RED: Wrote tests first, verified they failed
+- GREEN: Implemented minimal code to pass
+- REFACTOR: Extracted shared constants
+
+**E2E Verification (Playwright MCP):**
+1. Logged into app
+2. Verified sidebar has "Settings" link
+3. Verified dashboard has "Edit Preferences" button
+4. Clicked Settings link → Settings page loaded
+5. Saw existing taste profile (genres checked, shows populated)
+6. Toggled Comedy genre on
+7. Added "The Office" to favorite shows
+8. Clicked Save → success toast appeared with "View updated recommendations?" link
+9. Clicked link → navigated to recommendations page
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 217/217 PASS
+- Build: PASS
+
+**Files created:**
+- src/app/(app)/settings/page.tsx
+- src/components/settings/TasteProfileEditor.tsx
+- src/components/settings/TasteProfileEditor.test.tsx
+- src/app/api/taste-profile/route.ts
+- src/app/api/taste-profile/route.test.ts
+- src/lib/constants.ts
+- src/lib/errors.ts
+
+**Files modified:**
+- src/components/layout/sidebar.tsx (Settings link)
+- src/components/layout/sidebar.test.tsx (Settings test)
+- src/app/(app)/dashboard/page.tsx (Edit Preferences button)
+- src/components/onboarding/TasteQuiz.tsx (import GENRES from constants)
+- src/app/api/recommendations/route.ts (export clearCachedRecommendations)
+
+**Next:** Phase 7b (Account Linking / Email Detection)
+
+---

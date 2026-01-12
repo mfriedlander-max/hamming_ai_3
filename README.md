@@ -14,7 +14,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 4: Content Intelligence (TMDB integration)
 - [x] Phase 5: AI Recommendations (Claude-powered advice)
 - [x] Phase 6: Reminders & Polish (25/25 tasks complete)
-- [ ] Phase 7a: Editable Taste Profile
+- [x] Phase 7a: Editable Taste Profile
 - [ ] Phase 7b: Account Linking (Email Detection)
 - [ ] Phase 8: Kanban Board View
 - [ ] Phase 9: Content Calendar
@@ -26,7 +26,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 
 ## Current Status
 
-Phase 6 complete! 200 tests passing. All E2E verification tests passed.
+Phase 7a complete! 217 tests passing. Settings page allows editing taste profile (genres, favorite shows). Ready for Phase 7b.
 
 ## Tech Stack
 
