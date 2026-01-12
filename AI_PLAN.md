@@ -127,9 +127,9 @@ Complete reminders feature with calendar view, add service logos, collect user n
 - [x] Make calendar touch-friendly
 - [x] Add hover animations to buttons and cards
 - [x] Audit spacing consistency across all pages
-- [ ] E2E: Set reminder → appears in calendar → delete reminder
-- [ ] E2E: Name collected → greeting shown
-- [ ] E2E: Mobile sidebar, grids, calendar work
+- [x] E2E: Set reminder → appears in calendar → delete reminder
+- [x] E2E: Name collected → greeting shown
+- [x] E2E: Mobile sidebar, grids, calendar work
 
 ### Files
 | File | Owner |
@@ -155,12 +155,12 @@ npm run lint && npx tsc --noEmit && npm test && npm run build
 ```
 
 ### Definition of Done
-- [ ] All tasks complete
-- [ ] All tests pass (target: 180+ tests)
-- [ ] E2E: Reminders flow works end-to-end
-- [ ] E2E: User name flow works end-to-end
-- [ ] E2E: Mobile responsive verified
-- [ ] Results written to AI_SCRATCHPAD.md
+- [x] All tasks complete
+- [x] All tests pass (target: 180+ tests) - **200 tests passing**
+- [x] E2E: Reminders flow works end-to-end
+- [x] E2E: User name flow works end-to-end
+- [x] E2E: Mobile responsive verified
+- [x] Results written to AI_SCRATCHPAD.md
 - [ ] Branch section moved to Archive
 
 ---

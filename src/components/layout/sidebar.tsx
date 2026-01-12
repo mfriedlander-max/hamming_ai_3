@@ -13,23 +13,14 @@ const navItems = [
   { href: "/reminders", label: "Reminders", icon: Bell },
 ];
 
-export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
+interface NavContentProps {
+  pathname: string;
+  onNavClick: () => void;
+  onSignOut: () => void;
+}
 
-  const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
-  };
-
-  const handleNavClick = () => {
-    setIsOpen(false);
-  };
-
-  const NavContent = () => (
+function NavContent({ pathname, onNavClick, onSignOut }: NavContentProps) {
+  return (
     <>
       <div className="p-6">
         <h1 className="text-xl font-bold text-gray-900">SubCycle</h1>
@@ -45,7 +36,7 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  onClick={handleNavClick}
+                  onClick={onNavClick}
                   className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
                       ? "bg-gray-100 text-gray-900"
@@ -65,7 +56,7 @@ export function Sidebar() {
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-600 hover:text-gray-900"
-          onClick={handleSignOut}
+          onClick={onSignOut}
         >
           <LogOut className="h-5 w-5 mr-3" />
           Sign out
@@ -73,6 +64,23 @@ export function Sidebar() {
       </div>
     </>
   );
+}
+
+export function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
+
+  const handleNavClick = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -104,14 +112,14 @@ export function Sidebar() {
             >
               <X className="h-5 w-5 text-gray-600" />
             </button>
-            <NavContent />
+            <NavContent pathname={pathname} onNavClick={handleNavClick} onSignOut={handleSignOut} />
           </aside>
         </div>
       )}
 
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-64 bg-white border-r border-gray-200 flex-col">
-        <NavContent />
+        <NavContent pathname={pathname} onNavClick={handleNavClick} onSignOut={handleSignOut} />
       </aside>
     </>
   );
