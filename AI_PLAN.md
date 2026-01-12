@@ -74,94 +74,10 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
-| `feature/phase-6-reminders-polish` | in-progress | Reminders, logos, user name, polish |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
 **Note:** Remove merged/abandoned branches from this table after archiving. History lives in Archive section.
-
----
-
-## Branch: feature/phase-6-reminders-polish
-
-### Goal
-Complete reminders feature with calendar view, add service logos, collect user name for greeting, and polish the entire app (loading states, error handling, visual refinement, mobile responsiveness).
-
-### Scope
-**Included:**
-- Reminders CRUD with calendar view
-- Set Reminder modal from dashboard
-- User name collection in onboarding + dashboard greeting
-- 15 static service logos
-- Skeleton loaders for all pages
-- Error states with retry buttons
-- Mobile responsive sidebar (hamburger menu)
-- Responsive grids and touch-friendly calendar
-- Visual polish (hover states, consistent spacing)
-
-**Excluded:**
-- Email/push notifications for reminders (future)
-- Reminder frequency options (one-time only for MVP)
-- Savings calculator on dashboard (already on recommendations page)
-
-### Tasks
-- [x] Create `src/lib/types/reminder.ts` with Reminder interface
-- [x] Create `GET/POST /api/reminders` endpoint
-- [x] Create `DELETE /api/reminders/[id]` endpoint
-- [x] Create SetReminderModal component (TDD) - 13 tests
-- [x] Create ReminderCalendar component (TDD) - 14 tests
-- [x] Create ReminderDetails component (TDD) - 7 tests
-- [x] Create RemindersClient component (TDD) - 8 tests
-- [x] Update reminders page with calendar view
-- [x] Enable "Set Reminder" button in SubscriptionCard
-- [x] Add `name` column to profiles table (migration)
-- [x] Update WelcomeStep to collect user name
-- [x] Add greeting to dashboard header
-- [x] Add 15 service logo SVGs to `/public/logos/`
-- [x] Display logos in SubscriptionCard, ServiceSelector, AddSubscriptionModal
-- [x] Create Skeleton component
-- [x] Add skeleton loaders to Dashboard, Recommendations, Reminders
-- [x] Add error banners with retry to all pages
-- [x] Update sidebar for mobile (hamburger + drawer)
-- [x] Make grids responsive (3→2→1 columns)
-- [x] Make calendar touch-friendly
-- [x] Add hover animations to buttons and cards
-- [x] Audit spacing consistency across all pages
-- [x] E2E: Set reminder → appears in calendar → delete reminder
-- [x] E2E: Name collected → greeting shown
-- [x] E2E: Mobile sidebar, grids, calendar work
-
-### Files
-| File | Owner |
-|------|-------|
-| `src/lib/types/reminder.ts` | Phase-6-Agent |
-| `src/app/api/reminders/route.ts` | Phase-6-Agent |
-| `src/app/api/reminders/[id]/route.ts` | Phase-6-Agent |
-| `src/components/reminders/*` | Phase-6-Agent |
-| `src/app/(app)/reminders/page.tsx` | Phase-6-Agent |
-| `src/components/subscriptions/SubscriptionCard.tsx` | Phase-6-Agent |
-| `src/components/subscriptions/DashboardClient.tsx` | Phase-6-Agent |
-| `src/components/onboarding/WelcomeStep.tsx` | Phase-6-Agent |
-| `src/app/(app)/dashboard/page.tsx` | Phase-6-Agent |
-| `public/logos/*.svg` | Phase-6-Agent |
-| `supabase/migrations/003_add_profile_name.sql` | Phase-6-Agent |
-| `src/components/ui/skeleton.tsx` | Phase-6-Agent |
-| `src/components/ui/error-banner.tsx` | Phase-6-Agent |
-| `src/components/layout/sidebar.tsx` | Phase-6-Agent |
-
-### Verification
-```bash
-npm run lint && npx tsc --noEmit && npm test && npm run build
-```
-
-### Definition of Done
-- [x] All tasks complete
-- [x] All tests pass (target: 180+ tests) - **200 tests passing**
-- [x] E2E: Reminders flow works end-to-end
-- [x] E2E: User name flow works end-to-end
-- [x] E2E: Mobile responsive verified
-- [x] Results written to AI_SCRATCHPAD.md
-- [ ] Branch section moved to Archive
 
 ---
 
@@ -242,4 +158,9 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Claude-powered AI recommendations with UI
 **Files:** lib/claude/*, components/recommendations/*, app/(app)/recommendations/page.tsx, app/api/recommendations/route.ts, components/ui/toast.tsx
 **Summary:** Built Claude client with auth and prompt templates. RecommendationBadge (keep=green, pause=amber, consider=gray), RecommendationCard with verdict/matches/reason/actions, RecommendationsSummary with savings display. /recommendations page with loading/empty states. Toast notification system. SubscriptionCard updated with badge slot. Sidebar navigation updated. 48 new tests (135 total).
+
+### feature/phase-6-reminders-polish (merged 2026-01-11)
+**Goal:** Complete reminders feature, service logos, user name collection, and polish
+**Files:** lib/types/reminder.ts, app/api/reminders/*, components/reminders/*, components/subscriptions/*, components/onboarding/WelcomeStep.tsx, app/(app)/dashboard/page.tsx, public/logos/*.svg, components/ui/skeleton.tsx, components/ui/error-banner.tsx, components/layout/sidebar.tsx
+**Summary:** Built reminders CRUD with calendar view (SetReminderModal, ReminderCalendar, ReminderDetails, RemindersClient). Added user name collection in onboarding with dashboard greeting. Created 15 service logo SVGs. Added skeleton loaders and error banners. Made sidebar mobile responsive with hamburger menu and drawer. Responsive grids (3→2→1 cols), touch-friendly calendar, hover animations. E2E verified with Playwright. 65 new tests (200 total).
 
