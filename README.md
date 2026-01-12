@@ -15,7 +15,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 5: AI Recommendations (Claude-powered advice)
 - [x] Phase 6: Reminders & Polish (25/25 tasks complete)
 - [x] Phase 7a: Editable Taste Profile
-- [ ] Phase 7b: Account Linking (Email Detection)
+- [x] Phase 7b: Account Linking (Email Detection)
 - [ ] Phase 8: Kanban Board View
 - [ ] Phase 9: Content Calendar
 - [ ] Phase 10: Subscription Optimizer
@@ -26,7 +26,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 
 ## Current Status
 
-Phase 7a complete! 217 tests passing. Settings page allows editing taste profile (genres, favorite shows). Ready for Phase 7b.
+Phase 7b complete! 275 tests passing. Settings page has tabbed interface (Profile | Connected Accounts) with Gmail connection and subscription detection (mock mode for dev). Ready for Phase 8.
 
 ## Tech Stack
 

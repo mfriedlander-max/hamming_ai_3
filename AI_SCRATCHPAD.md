@@ -403,3 +403,87 @@ All pages follow consistent spacing standards:
 **Next:** Phase 7b (Account Linking / Email Detection)
 
 ---
+
+## 2026-01-12: Phase 7b Complete - Account Linking (Email Detection)
+
+**Branch:** `dev` (direct commit, small feature)
+
+**What was built:**
+
+### Database Migration
+- `supabase/migrations/004_user_emails.sql`: user_emails table with RLS policies
+
+### Email Library (TDD)
+- `src/lib/email/types.ts`: ConnectedEmail, DetectedSubscription, EmailScanResult, ServiceEmailPattern types
+- `src/lib/email/patterns.ts`: Regex patterns for 15 streaming services, matchServiceFromEmail/matchServiceFromEmails functions (11 tests)
+- `src/lib/email/gmail-client.ts`: GmailClient class with mock mode for dev, isRealGmailConfigured check (10 tests)
+- `src/lib/email/detector.ts`: detectSubscriptions, filterExistingSubscriptions functions (7 tests)
+
+### API Routes (TDD)
+- `src/app/api/auth/gmail/route.ts`: GET (list), POST (connect/mock), DELETE (disconnect) (9 tests)
+- `src/app/api/subscriptions/detect/route.ts`: POST scan for subscriptions, filters existing (5 tests)
+
+### Settings UI (TDD)
+- `src/components/ui/tabs.tsx`: Added via shadcn
+- `src/components/settings/EmailAccountsManager.tsx`: Connect/disconnect Gmail accounts (7 tests)
+- `src/components/settings/SubscriptionDetector.tsx`: Scan button, checklist, bulk approve (9 tests)
+- `src/app/(app)/settings/SettingsClient.tsx`: Tabbed interface (Profile | Connected Accounts)
+- Updated `src/app/(app)/settings/page.tsx` to use SettingsClient with tabs
+
+### Mock Mode
+- Mock emails return detections for: netflix, hulu, disney-plus, hbo-max, amazon-prime
+- Real Gmail OAuth deferred to deployment (requires Google verification)
+
+**Tests:** 275 passing (+58 new)
+- patterns.test.ts: 11 tests
+- gmail-client.test.ts: 10 tests
+- detector.test.ts: 7 tests
+- gmail/route.test.ts: 9 tests
+- detect/route.test.ts: 5 tests
+- EmailAccountsManager.test.tsx: 7 tests
+- SubscriptionDetector.test.tsx: 9 tests
+
+**TDD Approach:**
+- RED: Wrote tests first for each module
+- GREEN: Implemented minimal code to pass
+- REFACTOR: Cleaned up types and shared utilities
+
+**E2E Verification (Playwright MCP):**
+1. Navigated to Settings page
+2. Verified tabs present: "Profile" and "Connected Accounts"
+3. Clicked "Connected Accounts" tab
+4. Verified EmailAccountsManager shows "Connect Gmail" button
+5. (Connect fails as expected - migration not applied to live DB)
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 275/275 PASS
+- Build: PASS
+
+**Files created:**
+- supabase/migrations/004_user_emails.sql
+- src/lib/email/types.ts
+- src/lib/email/patterns.ts
+- src/lib/email/patterns.test.ts
+- src/lib/email/gmail-client.ts
+- src/lib/email/gmail-client.test.ts
+- src/lib/email/detector.ts
+- src/lib/email/detector.test.ts
+- src/app/api/auth/gmail/route.ts
+- src/app/api/auth/gmail/route.test.ts
+- src/app/api/subscriptions/detect/route.ts
+- src/app/api/subscriptions/detect/route.test.ts
+- src/components/ui/tabs.tsx
+- src/components/settings/EmailAccountsManager.tsx
+- src/components/settings/EmailAccountsManager.test.tsx
+- src/components/settings/SubscriptionDetector.tsx
+- src/components/settings/SubscriptionDetector.test.tsx
+- src/app/(app)/settings/SettingsClient.tsx
+
+**Files modified:**
+- src/app/(app)/settings/page.tsx (now uses SettingsClient with tabs)
+
+**Next:** Wave 2 (Phases 8 + 9 in parallel)
+
+---
