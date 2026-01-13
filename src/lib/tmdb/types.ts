@@ -1,5 +1,19 @@
 // TMDB API response types
 
+// Detailed TV show info (from /tv/{series_id})
+export interface TMDBShowDetails {
+  id: number
+  name: string
+  number_of_episodes: number
+  number_of_seasons: number
+  episode_run_time: number[] // minutes per episode
+  status: string // "Returning Series" | "Ended" | "Canceled" | etc.
+  first_air_date: string
+  poster_path: string | null
+  overview: string
+  genres: { id: number; name: string }[]
+}
+
 export interface TMDBMovie {
   id: number
   title: string

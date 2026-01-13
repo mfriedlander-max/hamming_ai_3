@@ -9,19 +9,23 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Bell, X } from 'lucide-react'
+import { Bell, X, PlayCircle } from 'lucide-react'
 import type { ContentRelease } from '@/lib/calendar/types'
 
 export interface ContentDetailModalProps {
   release: ContentRelease
+  serviceId: string
   onClose: () => void
   onSetReminder: (release: ContentRelease) => void
+  onPlanBinge?: (release: ContentRelease, serviceId: string) => void
 }
 
 export function ContentDetailModal({
   release,
+  serviceId,
   onClose,
   onSetReminder,
+  onPlanBinge,
 }: ContentDetailModalProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString + 'T00:00:00')
@@ -92,6 +96,12 @@ export function ContentDetailModal({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
+          {release.type === 'tv' && onPlanBinge && (
+            <Button variant="outline" onClick={() => onPlanBinge(release, serviceId)}>
+              <PlayCircle className="h-4 w-4 mr-2" />
+              Plan Binge
+            </Button>
+          )}
           <Button onClick={() => onSetReminder(release)}>
             <Bell className="h-4 w-4 mr-2" />
             Set Reminder

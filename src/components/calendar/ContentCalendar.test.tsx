@@ -7,6 +7,14 @@ import type { CalendarResponse } from '@/lib/calendar/types'
 const mockFetch = vi.fn()
 global.fetch = mockFetch
 
+// Mock next/navigation
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}))
+
 // Mock useToast
 vi.mock('@/components/ui/toast', () => ({
   useToast: () => ({

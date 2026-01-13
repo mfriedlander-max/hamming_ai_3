@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ServiceLane } from './ServiceLane'
@@ -13,18 +14,24 @@ import {
 } from '@/lib/calendar/utils'
 import type { ContentRelease, CalendarMonth } from '@/lib/calendar/types'
 
+interface SelectedContent {
+  release: ContentRelease
+  serviceId: string
+}
+
 export interface ContentCalendarProps {
   initialMonth?: string
 }
 
 export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
+  const router = useRouter()
   const [currentMonth, setCurrentMonth] = useState(
     initialMonth ?? getCurrentMonthString()
   )
   const [calendarData, setCalendarData] = useState<CalendarMonth | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedRelease, setSelectedRelease] = useState<ContentRelease | null>(
+  const [selectedContent, setSelectedContent] = useState<SelectedContent | null>(
     null
   )
 
@@ -80,18 +87,28 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
     setCurrentMonth(getCurrentMonthString())
   }
 
-  const handleSelectRelease = (release: ContentRelease) => {
-    setSelectedRelease(release)
+  const handleSelectRelease = (release: ContentRelease, serviceId: string) => {
+    setSelectedContent({ release, serviceId })
   }
 
   const handleCloseModal = () => {
-    setSelectedRelease(null)
+    setSelectedContent(null)
   }
 
   const handleSetReminder = (release: ContentRelease) => {
     // TODO: Implement reminder creation
     console.log('Set reminder for:', release.title)
-    setSelectedRelease(null)
+    setSelectedContent(null)
+  }
+
+  const handlePlanBinge = (release: ContentRelease, serviceId: string) => {
+    // Navigate to binge planner with query params
+    const params = new URLSearchParams({
+      tmdb_id: release.tmdb_id.toString(),
+      service_id: serviceId,
+      release_date: release.release_date,
+    })
+    router.push(`/binge?${params.toString()}`)
   }
 
   if (loading) {
@@ -217,6 +234,7 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
         {calendarData.services.map((service) => (
           <ServiceLane
             key={service.service_id}
+            serviceId={service.service_id}
             serviceName={service.service_name}
             releases={service.releases}
             monthStart={currentMonth}
@@ -238,11 +256,13 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
       </div>
 
       {/* Content detail modal */}
-      {selectedRelease && (
+      {selectedContent && (
         <ContentDetailModal
-          release={selectedRelease}
+          release={selectedContent.release}
+          serviceId={selectedContent.serviceId}
           onClose={handleCloseModal}
           onSetReminder={handleSetReminder}
+          onPlanBinge={handlePlanBinge}
         />
       )}
     </div>

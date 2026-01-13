@@ -1,4 +1,4 @@
-import type { TMDBMovieResponse, TMDBTVResponse } from './types'
+import type { TMDBMovieResponse, TMDBTVResponse, TMDBShowDetails } from './types'
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
 
@@ -7,6 +7,7 @@ export interface TMDBClient {
   getUpcomingTVShows(): Promise<TMDBTVResponse>
   getMoviesByProvider(providerId: number): Promise<TMDBMovieResponse>
   getTVShowsByProvider(providerId: number): Promise<TMDBTVResponse>
+  getShowDetails(seriesId: number): Promise<TMDBShowDetails>
 }
 
 export function createTMDBClient(apiKey: string): TMDBClient {
@@ -58,6 +59,10 @@ export function createTMDBClient(apiKey: string): TMDBClient {
         sort_by: 'popularity.desc',
       })
       return fetchFromTMDB(`/discover/tv?${params}`)
+    },
+
+    async getShowDetails(seriesId: number): Promise<TMDBShowDetails> {
+      return fetchFromTMDB(`/tv/${seriesId}?language=en-US`)
     },
   }
 }

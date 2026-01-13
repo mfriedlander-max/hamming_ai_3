@@ -16,6 +16,7 @@ describe('ContentDetailModal', () => {
 
   const defaultProps = {
     release: mockRelease,
+    serviceId: 'service-123',
     onClose: vi.fn(),
     onSetReminder: vi.fn(),
   }
@@ -79,5 +80,59 @@ describe('ContentDetailModal', () => {
     render(<ContentDetailModal {...defaultProps} release={tvRelease} />)
 
     expect(screen.getByText('TV Show')).toBeInTheDocument()
+  })
+
+  it('shows Plan Binge button for TV shows when handler is provided', () => {
+    const tvRelease: ContentRelease = {
+      ...mockRelease,
+      type: 'tv',
+      title: 'Test Show',
+    }
+    const handlePlanBinge = vi.fn()
+
+    render(
+      <ContentDetailModal
+        {...defaultProps}
+        release={tvRelease}
+        onPlanBinge={handlePlanBinge}
+      />
+    )
+
+    expect(screen.getByRole('button', { name: /plan binge/i })).toBeInTheDocument()
+  })
+
+  it('does not show Plan Binge button for movies', () => {
+    const handlePlanBinge = vi.fn()
+
+    render(
+      <ContentDetailModal
+        {...defaultProps}
+        release={mockRelease}
+        onPlanBinge={handlePlanBinge}
+      />
+    )
+
+    expect(screen.queryByRole('button', { name: /plan binge/i })).not.toBeInTheDocument()
+  })
+
+  it('calls onPlanBinge with release and serviceId when clicked', () => {
+    const tvRelease: ContentRelease = {
+      ...mockRelease,
+      type: 'tv',
+      title: 'Test Show',
+    }
+    const handlePlanBinge = vi.fn()
+
+    render(
+      <ContentDetailModal
+        {...defaultProps}
+        release={tvRelease}
+        onPlanBinge={handlePlanBinge}
+      />
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /plan binge/i }))
+
+    expect(handlePlanBinge).toHaveBeenCalledWith(tvRelease, 'service-123')
   })
 })

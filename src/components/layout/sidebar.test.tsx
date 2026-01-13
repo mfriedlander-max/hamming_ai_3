@@ -69,4 +69,11 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /optimizer/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /optimizer/i })).toHaveAttribute('href', '/optimizer')
   })
+
+  it('renders Binge Planner link', () => {
+    render(<Sidebar />)
+
+    expect(screen.getByRole('link', { name: /binge planner/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /binge planner/i })).toHaveAttribute('href', '/binge')
+  })
 })
