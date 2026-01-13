@@ -1,5 +1,7 @@
 import type { SubscriptionStatus } from './StatusBadge'
 
+export type BoardColumn = 'active' | 'consider' | 'paused' | 'scheduled'
+
 export interface Service {
   id: string
   name: string
@@ -17,6 +19,7 @@ export interface Subscription {
   status: SubscriptionStatus
   monthly_cost: number
   created_at: string
+  board_column?: BoardColumn
 }
 
 export interface SubscriptionWithService extends Subscription {

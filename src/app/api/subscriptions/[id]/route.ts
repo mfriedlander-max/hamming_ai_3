@@ -5,6 +5,9 @@ interface RouteParams {
   params: Promise<{ id: string }>
 }
 
+const VALID_STATUSES = ['active', 'paused']
+const VALID_BOARD_COLUMNS = ['active', 'consider', 'paused', 'scheduled']
+
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
     const supabase = await createClient()
@@ -20,11 +23,37 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const body = await request.json()
-    const { status } = body
+    const { status, board_column } = body
 
-    if (!status || !['active', 'paused'].includes(status)) {
+    // Build update object based on provided fields
+    const updateData: { status?: string; board_column?: string } = {}
+
+    // Validate status if provided
+    if (status !== undefined) {
+      if (!VALID_STATUSES.includes(status)) {
+        return NextResponse.json(
+          { error: 'status must be either "active" or "paused"' },
+          { status: 400 }
+        )
+      }
+      updateData.status = status
+    }
+
+    // Validate board_column if provided
+    if (board_column !== undefined) {
+      if (!VALID_BOARD_COLUMNS.includes(board_column)) {
+        return NextResponse.json(
+          { error: 'board_column must be one of: active, consider, paused, scheduled' },
+          { status: 400 }
+        )
+      }
+      updateData.board_column = board_column
+    }
+
+    // Require at least one field to update
+    if (Object.keys(updateData).length === 0) {
       return NextResponse.json(
-        { error: 'status must be either "active" or "paused"' },
+        { error: 'At least one of status or board_column must be provided' },
         { status: 400 }
       )
     }
@@ -32,7 +61,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Verify ownership and update
     const { data: subscription, error } = await supabase
       .from('subscriptions')
-      .update({ status })
+      .update(updateData)
       .eq('id', id)
       .eq('user_id', user.id) // Ensure user owns this subscription
       .select(
@@ -43,6 +72,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         status,
         monthly_cost,
         created_at,
+        board_column,
         service:services (
           id,
           name,

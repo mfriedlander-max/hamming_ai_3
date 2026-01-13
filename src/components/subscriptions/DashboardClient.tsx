@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { SubscriptionList } from './SubscriptionList'
+import { SubscriptionBoard } from '@/components/board'
 import { AddSubscriptionModal } from './AddSubscriptionModal'
 import { SetReminderModal } from '@/components/reminders'
 import { useToast } from '@/components/ui/toast'
 import { ErrorBanner } from '@/components/ui/error-banner'
+import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-react'
 import type { SubscriptionStatus } from './StatusBadge'
-import type { SubscriptionWithService, Service } from './types'
+import type { SubscriptionWithService, Service, BoardColumn } from './types'
 
 interface DashboardClientProps {
   initialSubscriptions: SubscriptionWithService[]
@@ -21,7 +23,6 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
   const [selectedSubscriptionForReminder, setSelectedSubscriptionForReminder] = useState<SubscriptionWithService | null>(null)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
-  const loading = false // Can be used for refresh functionality later
 
   // Services that user doesn't have yet
   const unsubscribedServices = availableServices.filter(
@@ -120,6 +121,34 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
     setError(null)
   }, [])
 
+  const handleBoardColumnChange = useCallback(async (id: string, column: BoardColumn) => {
+    setError(null)
+    try {
+      const response = await fetch(`/api/subscriptions/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ board_column: column }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to update subscription')
+      }
+
+      const updatedSubscription = await response.json()
+      setSubscriptions((prev) =>
+        prev.map((sub) => (sub.id === id ? updatedSubscription : sub))
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+      toast({
+        message: err instanceof Error ? err.message : 'Failed to move subscription',
+        type: 'error',
+      })
+      throw err // Re-throw for optimistic update revert
+    }
+  }, [toast])
+
   return (
     <div>
       {error && (
@@ -128,12 +157,18 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
         </div>
       )}
 
-      <SubscriptionList
+      <div className="mb-4 flex justify-end">
+        <Button onClick={() => setIsAddModalOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Subscription
+        </Button>
+      </div>
+
+      <SubscriptionBoard
         subscriptions={subscriptions}
         onStatusChange={handleStatusChange}
         onSetReminder={handleSetReminder}
-        onAdd={() => setIsAddModalOpen(true)}
-        loading={loading}
+        onBoardColumnChange={handleBoardColumnChange}
       />
 
       <AddSubscriptionModal

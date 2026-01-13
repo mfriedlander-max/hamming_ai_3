@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardClient } from '@/components/subscriptions/DashboardClient'
 import { Button } from '@/components/ui/button'
-import type { SubscriptionWithService, Service } from '@/components/subscriptions/types'
+import type { SubscriptionWithService, Service, BoardColumn } from '@/components/subscriptions/types'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -28,6 +28,7 @@ export default async function DashboardPage() {
       status,
       monthly_cost,
       created_at,
+      board_column,
       service:services (
         id,
         name,
@@ -64,6 +65,7 @@ export default async function DashboardPage() {
     status: sub.status as 'active' | 'paused',
     monthly_cost: sub.monthly_cost,
     created_at: sub.created_at,
+    board_column: (sub.board_column as BoardColumn) || 'active',
     service: sub.service as unknown as Service,
   }))
 
