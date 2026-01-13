@@ -62,4 +62,11 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /content calendar/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /content calendar/i })).toHaveAttribute('href', '/calendar')
   })
+
+  it('renders Optimizer link', () => {
+    render(<Sidebar />)
+
+    expect(screen.getByRole('link', { name: /optimizer/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /optimizer/i })).toHaveAttribute('href', '/optimizer')
+  })
 })

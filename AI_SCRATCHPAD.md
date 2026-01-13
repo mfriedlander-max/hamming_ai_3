@@ -575,3 +575,80 @@ All pages follow consistent spacing standards:
 **Next:** Wave 3 (Phases 10-12) or Wave 4 (Phases 13a-13b)
 
 ---
+
+## 2026-01-12: Phase 10 Complete - Subscription Optimizer
+
+**Branch:** `dev` (direct implementation)
+
+**What was built:**
+
+### Optimizer Library (TDD)
+- `src/lib/optimizer/types.ts`: OptimizedSchedule, MonthPlan, ServiceAction, SubscriptionForOptimizer, ContentForOptimizer, TasteProfileForOptimizer, OptimizerInput, ApplyScheduleResult types
+- `src/lib/optimizer/savings.ts`: calculateCurrentAnnualCost, calculateOptimizedAnnualCost, calculateSavings utilities (11 tests)
+- `src/lib/optimizer/analyzer.ts`: aggregateOptimizerData function to prepare Claude prompt data (7 tests)
+- `src/lib/optimizer/prompt.ts`: buildOptimizerPrompt, parseOptimizerResponse for Claude API interaction
+
+### API Routes (TDD)
+- `POST /api/optimizer`: Gathers subscriptions, taste profile, 12-month content calendar, calls Claude, returns OptimizedSchedule with 1hr cache (6 tests)
+- `POST /api/optimizer/apply`: Creates reminders for subscribe/cancel actions, updates subscriptions to 'scheduled' board_column (5 tests)
+
+### Components (TDD)
+- `src/components/optimizer/SavingsSummary.tsx`: Current vs Optimized cost display with green savings highlight (7 tests)
+- `src/components/optimizer/OptimizedTimeline.tsx`: 12-month visual timeline with service activity and action icons (6 tests)
+- `src/components/optimizer/MonthlyBreakdown.tsx`: Expandable accordion with monthly actions and costs (6 tests)
+- `src/components/optimizer/OptimizerClient.tsx`: State management for generate/apply/regenerate flow (7 tests)
+
+### Page & Navigation
+- `src/app/(app)/optimizer/page.tsx`: Optimizer page with client component
+- Sidebar: Added "Optimizer" link with TrendingUp icon (1 test)
+
+**Tests:** 405 passing (+56 new)
+- savings.test.ts: 11 tests
+- analyzer.test.ts: 7 tests
+- route.test.ts (optimizer): 6 tests
+- apply/route.test.ts: 5 tests
+- SavingsSummary.test.tsx: 7 tests
+- OptimizedTimeline.test.tsx: 6 tests
+- MonthlyBreakdown.test.tsx: 6 tests
+- OptimizerClient.test.tsx: 7 tests
+- sidebar.test.tsx: 1 new test
+
+**TDD Approach:**
+- RED: Wrote tests first for each module
+- GREEN: Implemented minimal code to pass
+- REFACTOR: Cleaned up types and shared utilities
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 405/405 PASS
+- Build: PASS
+
+**Files created:**
+- src/lib/optimizer/types.ts
+- src/lib/optimizer/savings.ts
+- src/lib/optimizer/savings.test.ts
+- src/lib/optimizer/analyzer.ts
+- src/lib/optimizer/analyzer.test.ts
+- src/lib/optimizer/prompt.ts
+- src/app/api/optimizer/route.ts
+- src/app/api/optimizer/route.test.ts
+- src/app/api/optimizer/apply/route.ts
+- src/app/api/optimizer/apply/route.test.ts
+- src/components/optimizer/SavingsSummary.tsx
+- src/components/optimizer/SavingsSummary.test.tsx
+- src/components/optimizer/OptimizedTimeline.tsx
+- src/components/optimizer/OptimizedTimeline.test.tsx
+- src/components/optimizer/MonthlyBreakdown.tsx
+- src/components/optimizer/MonthlyBreakdown.test.tsx
+- src/components/optimizer/OptimizerClient.tsx
+- src/components/optimizer/OptimizerClient.test.tsx
+- src/app/(app)/optimizer/page.tsx
+
+**Files modified:**
+- src/components/layout/sidebar.tsx (Optimizer link)
+- src/components/layout/sidebar.test.tsx (Optimizer link test)
+
+**Next:** Phase 11 (Binge Planner)
+
+---

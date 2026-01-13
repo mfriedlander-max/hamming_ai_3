@@ -18,7 +18,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 7b: Account Linking (Email Detection)
 - [x] Phase 8: Kanban Board View
 - [x] Phase 9: Content Calendar
-- [ ] Phase 10: Subscription Optimizer
+- [x] Phase 10: Subscription Optimizer
 - [ ] Phase 11: Binge Planner
 - [ ] Phase 12: Smart Notifications + Auto-Remind
 - [ ] Phase 13a: Household Mode
@@ -26,7 +26,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 
 ## Current Status
 
-Wave 2 complete! 349 tests passing. Dashboard has drag-and-drop Kanban board view (4 columns: Active, Consider Canceling, Paused, Scheduled). New Content Calendar page shows upcoming releases across subscribed services with timeline swim lanes. Ready for Wave 3 (Phases 10-12).
+Phase 10 complete! 405 tests passing. New Subscription Optimizer page uses Claude AI to generate a 12-month subscribe/cancel schedule that maximizes content access while minimizing annual cost. Shows savings summary, timeline visualization, and monthly breakdown with apply functionality. Ready for Phase 11 (Binge Planner).
 
 ## Tech Stack
 
