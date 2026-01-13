@@ -16,8 +16,8 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 6: Reminders & Polish (25/25 tasks complete)
 - [x] Phase 7a: Editable Taste Profile
 - [x] Phase 7b: Account Linking (Email Detection)
-- [ ] Phase 8: Kanban Board View
-- [ ] Phase 9: Content Calendar
+- [x] Phase 8: Kanban Board View
+- [x] Phase 9: Content Calendar
 - [ ] Phase 10: Subscription Optimizer
 - [ ] Phase 11: Binge Planner
 - [ ] Phase 12: Smart Notifications + Auto-Remind
@@ -26,7 +26,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 
 ## Current Status
 
-Phase 7b complete! 275 tests passing. Settings page has tabbed interface (Profile | Connected Accounts) with Gmail connection and subscription detection (mock mode for dev). Ready for Phase 8.
+Wave 2 complete! 349 tests passing. Dashboard has drag-and-drop Kanban board view (4 columns: Active, Consider Canceling, Paused, Scheduled). New Content Calendar page shows upcoming releases across subscribed services with timeline swim lanes. Ready for Wave 3 (Phases 10-12).
 
 ## Tech Stack
 

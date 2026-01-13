@@ -487,3 +487,91 @@ All pages follow consistent spacing standards:
 **Next:** Wave 2 (Phases 8 + 9 in parallel)
 
 ---
+
+## 2026-01-12: Wave 2 Complete - Phases 8 + 9 (Parallel Execution)
+
+**Branches:** `feature/phase-8-kanban-board` and `feature/phase-9-content-calendar` → merged to `dev`
+
+**Approach:** Used `dispatching-parallel-agents` skill to run both phases concurrently via git worktrees. Zero file overlap allowed clean parallel development.
+
+### Phase 8: Kanban Board View
+**What was built:**
+- Database migration: Added `board_column` enum to subscriptions table
+- `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` dependencies
+- `src/components/board/BoardColumn.tsx`: Droppable column with header showing title + cost total (5 tests)
+- `src/components/board/DraggableCard.tsx`: Wraps SubscriptionCard with useDraggable (4 tests)
+- `src/components/board/SubscriptionBoard.tsx`: DndContext with 4 columns (Active, Consider Canceling, Paused, Scheduled), optimistic updates + API error revert (7 tests)
+- Updated `PATCH /api/subscriptions/[id]` to accept `board_column` field (5 tests)
+- Updated DashboardClient to use SubscriptionBoard with onBoardColumnChange
+- Dashboard fetches `board_column` from database
+- 21 new tests
+
+### Phase 9: Content Calendar
+**What was built:**
+- `src/lib/calendar/types.ts`: ContentRelease, CalendarMonth, ServiceReleases, CalendarResponse types
+- `src/lib/calendar/utils.ts`: Date utilities (getMonthRange, groupReleasesByService, getPositionInMonth, formatMonthDisplay, parseMonthString) (16 tests)
+- `GET /api/calendar`: Returns releases grouped by month and service, filtered by user's subscribed services (6 tests)
+- `src/components/calendar/ContentMarker.tsx`: Positioned dot with hover tooltip (7 tests)
+- `src/components/calendar/ServiceLane.tsx`: Horizontal timeline for each streaming service (7 tests)
+- `src/components/calendar/ContentDetailModal.tsx`: Shows content details with Set Reminder button (7 tests)
+- `src/components/calendar/ContentCalendar.tsx`: Month navigation (prev/next arrows, Today button) + service lanes (9 tests)
+- `src/app/(app)/calendar/page.tsx`: Calendar page
+- Sidebar: Added "Content Calendar" link with Calendar icon
+- 52 new tests
+
+**Infrastructure Fix:**
+- Updated `vitest.config.ts` to exclude `.worktrees` and `worktrees` directories from test runs
+
+**Tests:** 349 passing (+74 new from Wave 2)
+- Phase 8: 21 new tests
+- Phase 9: 52 new tests
+- vitest config update (worktree exclusion)
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 349/349 PASS
+- Build: PASS
+
+**Merge order:** Phase 8 first (fast-forward), then Phase 9 (merge commit)
+
+**Files created (Phase 8):**
+- supabase/migrations/005_board_column.sql
+- src/components/board/BoardColumn.tsx
+- src/components/board/BoardColumn.test.tsx
+- src/components/board/DraggableCard.tsx
+- src/components/board/DraggableCard.test.tsx
+- src/components/board/SubscriptionBoard.tsx
+- src/components/board/SubscriptionBoard.test.tsx
+- src/components/board/index.ts
+- src/app/api/subscriptions/[id]/route.test.ts
+
+**Files created (Phase 9):**
+- src/lib/calendar/types.ts
+- src/lib/calendar/utils.ts
+- src/lib/calendar/utils.test.ts
+- src/app/api/calendar/route.ts
+- src/app/api/calendar/route.test.ts
+- src/components/calendar/ContentCalendar.tsx
+- src/components/calendar/ContentCalendar.test.tsx
+- src/components/calendar/ContentMarker.tsx
+- src/components/calendar/ContentMarker.test.tsx
+- src/components/calendar/ServiceLane.tsx
+- src/components/calendar/ServiceLane.test.tsx
+- src/components/calendar/ContentDetailModal.tsx
+- src/components/calendar/ContentDetailModal.test.tsx
+- src/app/(app)/calendar/page.tsx
+
+**Files modified:**
+- src/components/subscriptions/types.ts (BoardColumn type)
+- src/components/subscriptions/DashboardClient.tsx (SubscriptionBoard integration)
+- src/app/(app)/dashboard/page.tsx (fetch board_column)
+- src/app/api/subscriptions/[id]/route.ts (PATCH board_column)
+- src/components/layout/sidebar.tsx (Calendar link)
+- src/components/layout/sidebar.test.tsx (Calendar link test)
+- vitest.config.ts (worktree exclusion)
+- package.json (dnd-kit dependencies)
+
+**Next:** Wave 3 (Phases 10-12) or Wave 4 (Phases 13a-13b)
+
+---

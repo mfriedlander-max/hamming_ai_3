@@ -83,7 +83,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ## Phases 7-14 Roadmap
 
-**Status:** Phases 1-6 + 7a complete (217 tests). Ready for Phase 7b.
+**Status:** Phases 1-9 complete (349 tests). Ready for Wave 3 (Phases 10-12).
 
 ### Overview
 
@@ -205,4 +205,19 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Allow users to edit taste profile (genres, favorite shows) from Settings page
 **Files:** app/(app)/settings/page.tsx, components/settings/TasteProfileEditor.tsx, app/api/taste-profile/route.ts, lib/constants.ts, lib/errors.ts, components/layout/sidebar.tsx, app/(app)/dashboard/page.tsx, components/onboarding/TasteQuiz.tsx, app/api/recommendations/route.ts
 **Summary:** Built Settings page with TasteProfileEditor component. Genre chips (toggle on/off) and comma-separated favorite shows input. GET/PATCH /api/taste-profile API with cache invalidation. Extracted GENRES to shared constants, created ApiError/errorResponse helpers. Added Settings link to sidebar and "Edit Preferences" button to dashboard. E2E verified with Playwright. 17 new tests (217 total).
+
+### feature/phase-7b-account-linking (merged 2026-01-12)
+**Goal:** Email-based subscription detection via Gmail integration
+**Files:** supabase/migrations/004_user_emails.sql, lib/email/*, app/api/auth/gmail/route.ts, app/api/subscriptions/detect/route.ts, components/settings/EmailAccountsManager.tsx, components/settings/SubscriptionDetector.tsx, app/(app)/settings/SettingsClient.tsx
+**Summary:** Built user_emails table with RLS. Email detection library with patterns for 15 services, GmailClient with mock mode. GET/POST/DELETE /api/auth/gmail for account management, POST /api/subscriptions/detect for scanning. Settings page now tabbed (Profile | Connected Accounts). EmailAccountsManager and SubscriptionDetector components. 58 new tests (275 total).
+
+### feature/phase-8-kanban-board (merged 2026-01-12)
+**Goal:** Drag-and-drop Kanban board view for subscription management
+**Files:** supabase/migrations/005_board_column.sql, components/board/*, app/api/subscriptions/[id]/route.ts, components/subscriptions/DashboardClient.tsx, components/subscriptions/types.ts
+**Summary:** Added board_column enum to subscriptions table. Built BoardColumn (droppable with cost total), DraggableCard (wraps SubscriptionCard), and SubscriptionBoard (4 columns: Active, Consider Canceling, Paused, Scheduled) using @dnd-kit. Optimistic updates with API error revert. Updated PATCH endpoint and dashboard. 21 new tests (296 total).
+
+### feature/phase-9-content-calendar (merged 2026-01-12)
+**Goal:** Timeline view of upcoming content releases across subscribed services
+**Files:** lib/calendar/*, app/api/calendar/route.ts, components/calendar/*, app/(app)/calendar/page.tsx, components/layout/sidebar.tsx
+**Summary:** Built calendar types and utils (date range, grouping, positioning). GET /api/calendar returns releases grouped by month and service. ContentMarker (positioned dots), ServiceLane (timeline per service), ContentDetailModal (with Set Reminder), ContentCalendar (month navigation + swim lanes). Added Calendar link to sidebar. 52 new tests (349 total).
 
