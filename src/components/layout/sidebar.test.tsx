@@ -55,4 +55,11 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /settings/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /settings/i })).toHaveAttribute('href', '/settings')
   })
+
+  it('renders Calendar link', () => {
+    render(<Sidebar />)
+
+    expect(screen.getByRole('link', { name: /content calendar/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /content calendar/i })).toHaveAttribute('href', '/calendar')
+  })
 })
