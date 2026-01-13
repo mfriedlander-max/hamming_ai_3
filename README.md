@@ -19,14 +19,14 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 8: Kanban Board View
 - [x] Phase 9: Content Calendar
 - [x] Phase 10: Subscription Optimizer
-- [ ] Phase 11: Binge Planner
+- [x] Phase 11: Binge Planner
 - [ ] Phase 12: Smart Notifications + Auto-Remind
 - [ ] Phase 13a: Household Mode
 - [ ] Phase 13b: Social/Friends
 
 ## Current Status
 
-Phase 10 complete! 405 tests passing. New Subscription Optimizer page uses Claude AI to generate a 12-month subscribe/cancel schedule that maximizes content access while minimizing annual cost. Shows savings summary, timeline visualization, and monthly breakdown with apply functionality. Ready for Phase 11 (Binge Planner).
+Phase 11 complete! 445 tests passing. New Binge Planner helps users calculate optimal subscribe/cancel dates for binge-watching shows based on episode count and watch speed. Features watch speed slider (1-6 eps/day), plan cards with cost estimates, and direct reminder creation. Integrates with Content Calendar via "Plan Binge" button on TV shows. Ready for Phase 12 (Smart Notifications).
 
 ## Tech Stack
 

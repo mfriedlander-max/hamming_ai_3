@@ -83,7 +83,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ## Phases 7-14 Roadmap
 
-**Status:** Phases 1-10 complete (405 tests). Ready for Phase 11 (Binge Planner).
+**Status:** Phases 1-11 complete (445 tests). Ready for Phase 12 (Smart Notifications).
 
 ### Overview
 
@@ -220,4 +220,14 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Timeline view of upcoming content releases across subscribed services
 **Files:** lib/calendar/*, app/api/calendar/route.ts, components/calendar/*, app/(app)/calendar/page.tsx, components/layout/sidebar.tsx
 **Summary:** Built calendar types and utils (date range, grouping, positioning). GET /api/calendar returns releases grouped by month and service. ContentMarker (positioned dots), ServiceLane (timeline per service), ContentDetailModal (with Set Reminder), ContentCalendar (month navigation + swim lanes). Added Calendar link to sidebar. 52 new tests (349 total).
+
+### Phase 10 - Subscription Optimizer (merged 2026-01-12)
+**Goal:** AI-powered 12-month subscription optimization schedule
+**Files:** lib/optimizer/*, app/api/optimizer/*, components/optimizer/*, app/(app)/optimizer/page.tsx, components/layout/sidebar.tsx
+**Summary:** Built optimizer library (types, savings calculator, analyzer, prompt builder). Claude API generates optimal subscribe/cancel schedule. SavingsSummary, OptimizedTimeline, MonthlyBreakdown, OptimizerClient components. /optimizer page with generate/apply flow. Creates reminders and updates board columns. 56 new tests (405 total).
+
+### Phase 11 - Binge Planner (merged 2026-01-12)
+**Goal:** Calculate optimal subscribe/cancel dates for binge-watching shows
+**Files:** supabase/migrations/006_add_watch_speed.sql, lib/tmdb/client.ts, lib/binge/*, app/api/binge/*, components/binge/*, app/(app)/binge/page.tsx, components/calendar/ContentDetailModal.tsx, components/calendar/ServiceLane.tsx, components/layout/sidebar.tsx
+**Summary:** Added watch_speed column to profiles. Extended TMDB client with getShowDetails for episode data. Built binge calculator (duration, dates, cost). WatchSpeedSlider (1-6 eps/day), BingePlanCard (plan display), BingeClient (state management). /binge page with sidebar link. ContentDetailModal gets "Plan Binge" button for TV shows. 40 new tests (445 total).
 

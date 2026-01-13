@@ -652,3 +652,88 @@ All pages follow consistent spacing standards:
 **Next:** Phase 11 (Binge Planner)
 
 ---
+
+## 2026-01-12: Phase 11 Complete - Binge Planner
+
+**Branch:** `dev` (direct implementation)
+
+**What was built:**
+
+### Database Migration
+- `supabase/migrations/006_add_watch_speed.sql`: Add watch_speed column to profiles (default: 2, range: 1-6)
+
+### TMDB Client Extension
+- Added `getShowDetails(seriesId)` method to `src/lib/tmdb/client.ts`
+- Added `TMDBShowDetails` interface to `src/lib/tmdb/types.ts` (episode counts, runtime, status)
+
+### Binge Library (TDD)
+- `src/lib/binge/types.ts`: BingePlan, BingePlanInput, BingeService types
+- `src/lib/binge/calculator.ts`: calculateBingePlan (duration, dates, cost), formatDateRange utilities (13 tests)
+
+### API Routes (TDD)
+- `POST /api/binge/plan`: Gets user watch_speed from profile, fetches TMDB show details, calculates binge plan (6 tests)
+
+### Components (TDD)
+- `src/components/binge/WatchSpeedSlider.tsx`: Slider for 1-6 episodes/day with labels (4 tests)
+- `src/components/binge/BingePlanCard.tsx`: Plan display with poster, episode count, dates, cost, Set Reminders button (7 tests)
+- `src/components/binge/BingeClient.tsx`: State management for plan generation and reminder creation (6 tests)
+
+### Page & Navigation
+- `src/app/(app)/binge/page.tsx`: Binge planner page
+- Sidebar: Added "Binge Planner" link with PlayCircle icon (1 test)
+
+### Calendar Integration
+- `src/components/calendar/ContentDetailModal.tsx`: Added "Plan Binge" button for TV shows
+- `src/components/calendar/ServiceLane.tsx`: Passes serviceId to onSelectRelease callback
+- `src/components/calendar/ContentCalendar.tsx`: handlePlanBinge navigates to /binge with query params
+
+**Tests:** 445 passing (+40 new)
+- calculator.test.ts: 13 tests
+- route.test.ts (binge/plan): 6 tests
+- WatchSpeedSlider.test.tsx: 4 tests
+- BingePlanCard.test.tsx: 7 tests
+- BingeClient.test.tsx: 6 tests
+- ContentDetailModal.test.tsx: 3 new tests
+- sidebar.test.tsx: 1 new test
+
+**TDD Approach:**
+- RED: Wrote tests first for each module
+- GREEN: Implemented minimal code to pass
+- REFACTOR: Fixed timezone issues in formatDateRange, updated Next.js Image usage
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 445/445 PASS
+- Build: PASS
+
+**Files created:**
+- supabase/migrations/006_add_watch_speed.sql
+- src/lib/binge/types.ts
+- src/lib/binge/calculator.ts
+- src/lib/binge/calculator.test.ts
+- src/app/api/binge/plan/route.ts
+- src/app/api/binge/plan/route.test.ts
+- src/components/binge/WatchSpeedSlider.tsx
+- src/components/binge/WatchSpeedSlider.test.tsx
+- src/components/binge/BingePlanCard.tsx
+- src/components/binge/BingePlanCard.test.tsx
+- src/components/binge/BingeClient.tsx
+- src/components/binge/BingeClient.test.tsx
+- src/app/(app)/binge/page.tsx
+
+**Files modified:**
+- src/lib/tmdb/client.ts (getShowDetails method)
+- src/lib/tmdb/types.ts (TMDBShowDetails interface)
+- src/components/calendar/ContentDetailModal.tsx (Plan Binge button)
+- src/components/calendar/ContentDetailModal.test.tsx (Plan Binge tests)
+- src/components/calendar/ServiceLane.tsx (serviceId prop)
+- src/components/calendar/ServiceLane.test.tsx (serviceId test)
+- src/components/calendar/ContentCalendar.tsx (handlePlanBinge, useRouter)
+- src/components/calendar/ContentCalendar.test.tsx (router mock)
+- src/components/layout/sidebar.tsx (Binge Planner link)
+- src/components/layout/sidebar.test.tsx (Binge Planner test)
+
+**Next:** Phase 12 (Smart Notifications + Auto-Remind)
+
+---
