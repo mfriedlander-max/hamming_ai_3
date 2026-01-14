@@ -20,13 +20,13 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 9: Content Calendar
 - [x] Phase 10: Subscription Optimizer
 - [x] Phase 11: Binge Planner
-- [ ] Phase 12: Smart Notifications + Auto-Remind
-- [ ] Phase 13a: Household Mode
-- [ ] Phase 13b: Social/Friends
+- [x] Phase 12: Smart Notifications + Auto-Remind
+- [x] Phase 13a: Household Mode
+- [x] Phase 13b: Social/Friends
 
 ## Current Status
 
-Phase 11 complete! 445 tests passing. New Binge Planner helps users calculate optimal subscribe/cancel dates for binge-watching shows based on episode count and watch speed. Features watch speed slider (1-6 eps/day), plan cards with cost estimates, and direct reminder creation. Integrates with Content Calendar via "Plan Binge" button on TV shows. Ready for Phase 12 (Smart Notifications).
+Phase 13 complete! 720 tests passing. Household Mode allows families to create households with invite codes, share subscriptions, and view combined taste profiles across all members. Social/Friends features include friend requests, activity feeds showing subscription changes, and collaborative shared watchlists with owner/editor/viewer roles. Both features add new pages (/household and /friends) with sidebar navigation.
 
 ## Tech Stack
 

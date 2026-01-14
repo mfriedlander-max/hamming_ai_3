@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Home, Bell, LogOut, Sparkles, Menu, X, Settings, Calendar, TrendingUp, PlayCircle } from "lucide-react";
+import { Home, Bell, LogOut, Sparkles, Menu, X, Settings, Calendar, TrendingUp, PlayCircle, Users, UsersRound } from "lucide-react";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
@@ -13,6 +14,8 @@ const navItems = [
   { href: "/optimizer", label: "Optimizer", icon: TrendingUp },
   { href: "/binge", label: "Binge Planner", icon: PlayCircle },
   { href: "/calendar", label: "Content Calendar", icon: Calendar },
+  { href: "/household", label: "Household", icon: UsersRound },
+  { href: "/friends", label: "Friends", icon: Users },
   { href: "/reminders", label: "Reminders", icon: Bell },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
@@ -89,15 +92,18 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile header with hamburger */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center px-4 z-40">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2 -ml-2 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Open menu"
-        >
-          <Menu className="h-6 w-6 text-gray-600" />
-        </button>
-        <span className="ml-3 font-bold text-gray-900">SubCycle</span>
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
+        <div className="flex items-center">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="p-2 -ml-2 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu className="h-6 w-6 text-gray-600" />
+          </button>
+          <span className="ml-3 font-bold text-gray-900">SubCycle</span>
+        </div>
+        <NotificationBell />
       </div>
 
       {/* Mobile drawer overlay */}
@@ -125,6 +131,11 @@ export function Sidebar() {
       <aside className="hidden md:flex w-64 bg-white border-r border-gray-200 flex-col">
         <NavContent pathname={pathname} onNavClick={handleNavClick} onSignOut={handleSignOut} />
       </aside>
+
+      {/* Desktop notification bell (fixed top right) */}
+      <div className="hidden md:block fixed top-4 right-4 z-40">
+        <NotificationBell />
+      </div>
     </>
   );
 }

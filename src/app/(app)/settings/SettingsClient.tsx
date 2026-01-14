@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TasteProfileEditor } from '@/components/settings/TasteProfileEditor'
 import { EmailAccountsManager } from '@/components/settings/EmailAccountsManager'
 import { SubscriptionDetector } from '@/components/settings/SubscriptionDetector'
+import { NotificationPreferences } from '@/components/settings/NotificationPreferences'
 import type { ConnectedEmail } from '@/lib/email/types'
 
 interface SettingsClientProps {
@@ -46,6 +47,7 @@ export function SettingsClient({
           <TabsList>
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="accounts">Connected Accounts</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile">
@@ -67,6 +69,10 @@ export function SettingsClient({
                 onSubscriptionsAdded={handleSubscriptionsAdded}
               />
             )}
+          </TabsContent>
+
+          <TabsContent value="notifications">
+            <NotificationPreferences />
           </TabsContent>
         </Tabs>
       </div>

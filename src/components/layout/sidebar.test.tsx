@@ -76,4 +76,11 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /binge planner/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /binge planner/i })).toHaveAttribute('href', '/binge')
   })
+
+  it('renders Household link', () => {
+    render(<Sidebar />)
+
+    expect(screen.getByRole('link', { name: /household/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /household/i })).toHaveAttribute('href', '/household')
+  })
 })

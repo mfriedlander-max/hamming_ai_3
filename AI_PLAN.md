@@ -83,7 +83,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ## Phases 7-14 Roadmap
 
-**Status:** Phases 1-11 complete (445 tests). Ready for Phase 12 (Smart Notifications).
+**Status:** Phases 1-13 complete (720 tests). All planned phases done.
 
 ### Overview
 
@@ -230,4 +230,21 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Calculate optimal subscribe/cancel dates for binge-watching shows
 **Files:** supabase/migrations/006_add_watch_speed.sql, lib/tmdb/client.ts, lib/binge/*, app/api/binge/*, components/binge/*, app/(app)/binge/page.tsx, components/calendar/ContentDetailModal.tsx, components/calendar/ServiceLane.tsx, components/layout/sidebar.tsx
 **Summary:** Added watch_speed column to profiles. Extended TMDB client with getShowDetails for episode data. Built binge calculator (duration, dates, cost). WatchSpeedSlider (1-6 eps/day), BingePlanCard (plan display), BingeClient (state management). /binge page with sidebar link. ContentDetailModal gets "Plan Binge" button for TV shows. 40 new tests (445 total).
+
+### Phase 12 - Smart Notifications (merged 2026-01-13)
+**Goal:** In-app notification center with auto-remind on subscription pause
+**Files:** supabase/migrations/007_notifications.sql, lib/notifications/*, app/api/notifications/*, components/notifications/*, components/settings/NotificationPreferences.tsx, components/ui/switch.tsx, components/layout/sidebar.tsx, app/(app)/settings/SettingsClient.tsx, app/api/subscriptions/[id]/route.ts
+**Summary:** Created notifications and notification_preferences tables with RLS. Built notification generator utilities (content_release, pause_suggestion, resubscribe_reminder, price_change types). NotificationBell with dropdown in sidebar (mobile + desktop), NotificationCard with icons and timestamps. NotificationPreferences in Settings with toggle switches. Auto-remind hook: when subscription moved to 'paused' board, creates resubscribe reminder and notification. 54 new tests (499 total).
+
+### Phase 13a - Household Mode (merged 2026-01-14)
+**Goal:** Multi-user household support with shared subscriptions and combined taste profiles
+**Files:** supabase/migrations/008_households.sql, lib/household/*, app/api/household/*, components/household/*, app/(app)/household/page.tsx, components/layout/sidebar.tsx
+**Summary:** Created households and household_members tables with RLS. Built invite code generation (8-char alphanumeric), taste profile aggregator (union of genres/shows). API routes for household CRUD, invite validation/join, member management. Components: HouseholdSetup (create/join forms), MemberCard, MembersList, InviteModal (copy code), HouseholdInsights (combined taste, monthly spend), HouseholdClient. /household page with sidebar link. ~105 new tests.
+
+### Phase 13b - Social/Friends (merged 2026-01-14)
+**Goal:** Friend connections, activity feeds, and shared watchlists
+**Files:** supabase/migrations/009_social.sql, lib/social/*, app/api/friends/*, app/api/activity/*, app/api/watchlists/*, components/social/*, app/(app)/friends/page.tsx, components/layout/sidebar.tsx
+**Summary:** Created friendships, activity_feed, watchlists, watchlist_members, watchlist_items tables with RLS. Friend request system (send/accept/decline). Activity feed showing friends' subscription changes. Shared watchlists with owner/editor/viewer roles. Components: FriendCard, FriendRequestCard, FriendsList, AddFriendModal, ActivityFeed, WatchlistCard, WatchlistDetail, SocialClient (tabbed). /friends page with sidebar link. ~116 new tests.
+
+**Combined Phase 13:** 221 new tests (720 total).
 

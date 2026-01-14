@@ -737,3 +737,258 @@ All pages follow consistent spacing standards:
 **Next:** Phase 12 (Smart Notifications + Auto-Remind)
 
 ---
+
+## 2026-01-13: Phase 12 Complete - Smart Notifications
+
+**Branch:** `dev` (direct implementation)
+
+**What was built:**
+
+### Database Migration
+- `supabase/migrations/007_notifications.sql`: notifications and notification_preferences tables with RLS policies
+
+### Notifications Library (TDD)
+- `src/lib/notifications/types.ts`: NotificationType, Notification, NotificationPreferences, CreateNotificationInput, NotificationsResponse types
+- `src/lib/notifications/generator.ts`: createContentReleaseNotification, createResubscribeNotification, createPauseSuggestionNotification, createPriceChangeNotification, formatRelativeTime (12 tests)
+
+### API Routes (TDD)
+- `GET /api/notifications`: Fetch user notifications with unread count (8 tests)
+- `PATCH /api/notifications`: Mark single or all notifications as read
+- `POST /api/notifications`: Create new notification
+- `DELETE /api/notifications/[id]`: Delete notification with ownership check (3 tests)
+- `GET /api/notifications/preferences`: Fetch preferences (creates defaults if none) (5 tests)
+- `PATCH /api/notifications/preferences`: Update preferences with upsert
+
+### Auto-Remind Integration
+- Updated `PATCH /api/subscriptions/[id]` to automatically create resubscribe reminder and notification when subscription moved to 'paused' board column
+- Respects user's notification preferences (resubscribe_reminder toggle)
+- Uses resume_date if provided, otherwise defaults to 30 days
+
+### Components (TDD)
+- `src/components/notifications/NotificationCard.tsx`: Icon based on type, title, body, relative timestamp, dismiss button (7 tests)
+- `src/components/notifications/NotificationDropdown.tsx`: List of NotificationCards with header and "Mark all read" (6 tests)
+- `src/components/notifications/NotificationBell.tsx`: Bell icon with unread count badge, toggles dropdown (5 tests)
+- `src/components/settings/NotificationPreferences.tsx`: Toggle switches for each notification type with auto-save (5 tests)
+- `src/components/ui/switch.tsx`: Simple toggle switch component
+
+### Layout Integration
+- Updated sidebar.tsx: NotificationBell in mobile header and fixed position on desktop
+
+### Settings Integration
+- Updated SettingsClient.tsx: Added third tab "Notifications" with NotificationPreferences component
+
+### ESLint Configuration
+- Added `.worktrees/**` to globalIgnores in eslint.config.mjs to exclude stale worktree build artifacts
+
+**Tests:** 499 passing (+54 new)
+- generator.test.ts: 12 tests
+- route.test.ts (notifications): 8 tests
+- [id]/route.test.ts: 3 tests
+- preferences/route.test.ts: 5 tests
+- NotificationCard.test.tsx: 7 tests
+- NotificationDropdown.test.tsx: 6 tests
+- NotificationBell.test.tsx: 5 tests
+- NotificationPreferences.test.tsx: 5 tests
+- subscriptions/[id]/route.test.ts: +3 tests (auto-remind)
+
+**TDD Approach:**
+- RED: Wrote tests first for each module
+- GREEN: Implemented minimal code to pass
+- REFACTOR: Fixed nested button issue in NotificationCard (changed to div with role="article")
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 499/499 PASS
+- Build: PASS
+
+**Files created:**
+- supabase/migrations/007_notifications.sql
+- src/lib/notifications/types.ts
+- src/lib/notifications/generator.ts
+- src/lib/notifications/generator.test.ts
+- src/app/api/notifications/route.ts
+- src/app/api/notifications/route.test.ts
+- src/app/api/notifications/[id]/route.ts
+- src/app/api/notifications/[id]/route.test.ts
+- src/app/api/notifications/preferences/route.ts
+- src/app/api/notifications/preferences/route.test.ts
+- src/components/notifications/NotificationCard.tsx
+- src/components/notifications/NotificationCard.test.tsx
+- src/components/notifications/NotificationDropdown.tsx
+- src/components/notifications/NotificationDropdown.test.tsx
+- src/components/notifications/NotificationBell.tsx
+- src/components/notifications/NotificationBell.test.tsx
+- src/components/settings/NotificationPreferences.tsx
+- src/components/settings/NotificationPreferences.test.tsx
+- src/components/ui/switch.tsx
+
+**Files modified:**
+- src/app/api/subscriptions/[id]/route.ts (auto-remind hook)
+- src/app/api/subscriptions/[id]/route.test.ts (auto-remind tests)
+- src/components/layout/sidebar.tsx (NotificationBell integration)
+- src/app/(app)/settings/SettingsClient.tsx (Notifications tab)
+- eslint.config.mjs (worktrees ignore)
+
+**Next:** Phase 13 (Household Mode + Social/Friends)
+
+---
+
+## 2026-01-14: Phase 13 Complete - Household Mode + Social/Friends
+
+**Branch:** `dev` (direct implementation with parallel agents)
+
+**What was built:**
+
+### Phase 13a: Household Mode
+
+**Database Migration:**
+- `supabase/migrations/008_households.sql`: households table, household_members junction table, added household_id to subscriptions, RLS policies
+
+**Library (TDD):**
+- `src/lib/household/types.ts`: Household, HouseholdRole, HouseholdMember, HouseholdWithMembers, AggregatedTaste, TasteProfile
+- `src/lib/household/invite.ts`: generateInviteCode (8-char alphanumeric, excludes ambiguous chars 0/O/1/I)
+- `src/lib/household/aggregator.ts`: aggregateTasteProfiles (union of genres/shows)
+
+**API Routes (TDD):**
+- `GET/POST/PATCH/DELETE /api/household`: Household CRUD with owner-only updates
+- `GET/POST /api/household/invite`: Validate invite code, join household
+- `GET/DELETE /api/household/members`: List members, remove/leave
+
+**Components (TDD):**
+- `HouseholdSetup.tsx`: Create/join household forms with toggle tabs
+- `MemberCard.tsx`: Avatar, display name, role badge, remove button
+- `MembersList.tsx`: Grid of MemberCards with Invite button
+- `InviteModal.tsx`: Display invite code with copy button
+- `HouseholdInsights.tsx`: Combined taste profile, monthly spend, member avatars
+- `HouseholdClient.tsx`: State management for household page
+
+**Page & Navigation:**
+- `app/(app)/household/page.tsx`: Shows setup if no household, client if member
+- Sidebar: Added "Household" link with UsersRound icon
+
+### Phase 13b: Social/Friends
+
+**Database Migration:**
+- `supabase/migrations/009_social.sql`: friendships, activity_feed, watchlists, watchlist_members, watchlist_items tables with RLS
+
+**Library (TDD):**
+- `src/lib/social/types.ts`: FriendshipStatus, Friendship, Friend, FriendRequest, ActivityAction, ActivityItem, Watchlist, WatchlistWithDetails, WatchlistItem, WatchlistRole
+- `src/lib/social/activity.ts`: formatActivityMessage
+
+**API Routes (TDD):**
+- `GET/POST/PATCH/DELETE /api/friends`: List friends/requests, send request, accept/decline, remove
+- `GET /api/activity`: Activity feed with pagination
+- `GET/POST /api/watchlists`: List watchlists, create new
+- `GET/PATCH/DELETE /api/watchlists/[id]`: Watchlist CRUD
+- `POST/DELETE /api/watchlists/[id]/items`: Add/remove items
+- `POST/DELETE /api/watchlists/[id]/members`: Invite/remove members
+
+**Components (TDD):**
+- `FriendCard.tsx`: Avatar, name, friends since date, remove button
+- `FriendRequestCard.tsx`: Accept/Decline buttons
+- `FriendsList.tsx`: Grid of FriendCards with Add Friend button
+- `AddFriendModal.tsx`: Email input, send request
+- `ActivityFeed.tsx`: List with icons, timestamps, load more
+- `WatchlistCard.tsx`: Name, member avatars, item count
+- `WatchlistDetail.tsx`: Full view with members, items, add/remove
+- `SocialClient.tsx`: Tabbed navigation (Friends | Activity | Watchlists)
+
+**Page & Navigation:**
+- `app/(app)/friends/page.tsx`: Shows SocialClient
+- Sidebar: Added "Friends" link with Users icon
+
+**Tests:** 720 passing (+221 new)
+- Phase 13a: ~105 tests (library, API, components)
+- Phase 13b: ~116 tests (library, API, components)
+
+**Parallel Execution:**
+- Used dispatching-parallel-agents skill
+- Two agents ran simultaneously (no file overlap except sidebar)
+- Both completed successfully
+
+**TypeScript Fixes:**
+- Fixed Supabase array return format for joined tables in:
+  - `src/app/api/activity/route.ts`
+  - `src/app/api/friends/route.ts`
+
+**Verification:**
+- Lint: PASS (1 warning for external img in WatchlistDetail)
+- TypeCheck: PASS
+- Tests: 720/720 PASS
+- Build: PASS
+
+**Files created (Phase 13a):**
+- supabase/migrations/008_households.sql
+- src/lib/household/types.ts
+- src/lib/household/invite.ts
+- src/lib/household/invite.test.ts
+- src/lib/household/aggregator.ts
+- src/lib/household/aggregator.test.ts
+- src/app/api/household/route.ts
+- src/app/api/household/route.test.ts
+- src/app/api/household/invite/route.ts
+- src/app/api/household/invite/route.test.ts
+- src/app/api/household/members/route.ts
+- src/app/api/household/members/route.test.ts
+- src/components/household/MemberCard.tsx
+- src/components/household/MemberCard.test.tsx
+- src/components/household/MembersList.tsx
+- src/components/household/MembersList.test.tsx
+- src/components/household/InviteModal.tsx
+- src/components/household/InviteModal.test.tsx
+- src/components/household/HouseholdSetup.tsx
+- src/components/household/HouseholdSetup.test.tsx
+- src/components/household/HouseholdInsights.tsx
+- src/components/household/HouseholdInsights.test.tsx
+- src/components/household/HouseholdClient.tsx
+- src/components/household/HouseholdClient.test.tsx
+- src/app/(app)/household/page.tsx
+
+**Files created (Phase 13b):**
+- supabase/migrations/009_social.sql
+- src/lib/social/types.ts
+- src/lib/social/activity.ts
+- src/lib/social/activity.test.ts
+- src/app/api/friends/route.ts
+- src/app/api/friends/route.test.ts
+- src/app/api/activity/route.ts
+- src/app/api/activity/route.test.ts
+- src/app/api/watchlists/route.ts
+- src/app/api/watchlists/route.test.ts
+- src/app/api/watchlists/[id]/route.ts
+- src/app/api/watchlists/[id]/route.test.ts
+- src/app/api/watchlists/[id]/items/route.ts
+- src/app/api/watchlists/[id]/items/route.test.ts
+- src/app/api/watchlists/[id]/members/route.ts
+- src/app/api/watchlists/[id]/members/route.test.ts
+- src/components/social/FriendCard.tsx
+- src/components/social/FriendCard.test.tsx
+- src/components/social/FriendRequestCard.tsx
+- src/components/social/FriendRequestCard.test.tsx
+- src/components/social/FriendsList.tsx
+- src/components/social/FriendsList.test.tsx
+- src/components/social/AddFriendModal.tsx
+- src/components/social/AddFriendModal.test.tsx
+- src/components/social/ActivityFeed.tsx
+- src/components/social/ActivityFeed.test.tsx
+- src/components/social/WatchlistCard.tsx
+- src/components/social/WatchlistCard.test.tsx
+- src/components/social/WatchlistDetail.tsx
+- src/components/social/WatchlistDetail.test.tsx
+- src/components/social/SocialClient.tsx
+- src/components/social/SocialClient.test.tsx
+- src/app/(app)/friends/page.tsx
+
+**Files modified:**
+- src/components/layout/sidebar.tsx (Household + Friends links)
+- src/components/layout/sidebar.test.tsx (new tests)
+- src/app/api/activity/route.ts (fixed Supabase array handling)
+- src/app/api/friends/route.ts (fixed Supabase array handling)
+- src/app/(app)/household/page.tsx (removed unused variables)
+- src/components/social/SocialClient.tsx (fixed unused variable)
+- src/components/social/SocialClient.test.tsx (removed unused import)
+
+**All planned phases complete!**
+
+---

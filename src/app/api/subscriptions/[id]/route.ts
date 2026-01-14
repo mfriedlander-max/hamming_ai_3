@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createResubscribeNotification } from '@/lib/notifications/generator'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -7,6 +8,15 @@ interface RouteParams {
 
 const VALID_STATUSES = ['active', 'paused']
 const VALID_BOARD_COLUMNS = ['active', 'consider', 'paused', 'scheduled']
+
+/**
+ * Calculate default resume date (30 days from now)
+ */
+function getDefaultResumeDate(): string {
+  const date = new Date()
+  date.setDate(date.getDate() + 30)
+  return date.toISOString().split('T')[0]
+}
 
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
@@ -23,7 +33,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     const body = await request.json()
-    const { status, board_column } = body
+    const { status, board_column, resume_date } = body
 
     // Build update object based on provided fields
     const updateData: { status?: string; board_column?: string } = {}
@@ -92,6 +102,51 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       }
       console.error('Error updating subscription:', error)
       return NextResponse.json({ error: 'Failed to update subscription' }, { status: 500 })
+    }
+
+    // Auto-remind: When subscription is moved to 'paused' board, create reminder and notification
+    if (board_column === 'paused' && subscription) {
+      // Service is an array from the join, get first element
+      const service = Array.isArray(subscription.service)
+        ? subscription.service[0]
+        : subscription.service
+      const serviceName = service?.name || 'Service'
+      const reminderDate = resume_date || getDefaultResumeDate()
+
+      // Check user's notification preferences
+      const { data: prefs } = await supabase
+        .from('notification_preferences')
+        .select('resubscribe_reminder')
+        .eq('user_id', user.id)
+        .single()
+
+      // Default to true if no preferences exist
+      const shouldNotify = prefs?.resubscribe_reminder !== false
+
+      // Create the resubscribe reminder
+      await supabase.from('reminders').insert({
+        user_id: user.id,
+        subscription_id: id,
+        type: 'resubscribe',
+        trigger_date: reminderDate,
+      })
+
+      // Create notification if enabled
+      if (shouldNotify) {
+        const notificationInput = createResubscribeNotification(
+          user.id,
+          serviceName,
+          id,
+          reminderDate
+        )
+        await supabase.from('notifications').insert({
+          user_id: notificationInput.user_id,
+          type: notificationInput.type,
+          title: notificationInput.title,
+          body: notificationInput.body,
+          data: notificationInput.data,
+        })
+      }
     }
 
     return NextResponse.json(subscription)
