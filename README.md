@@ -23,11 +23,11 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 12: Smart Notifications + Auto-Remind
 - [x] Phase 13a: Household Mode
 - [x] Phase 13b: Social/Friends
-- [ ] Direct Cancellation: Cancel subscriptions via external service URLs
+- [x] Direct Cancellation: Cancel subscriptions via external service URLs
 
 ## Current Status
 
-Phase 13 complete! 720 tests passing. Household Mode allows families to create households with invite codes, share subscriptions, and view combined taste profiles across all members. Social/Friends features include friend requests, activity feeds showing subscription changes, and collaborative shared watchlists with owner/editor/viewer roles. Both features add new pages (/household and /friends) with sidebar navigation.
+Direct Cancellation feature complete! 730 tests passing. Household Mode allows families to create households with invite codes, share subscriptions, and view combined taste profiles across all members. Social/Friends features include friend requests, activity feeds showing subscription changes, and collaborative shared watchlists with owner/editor/viewer roles. Both features add new pages (/household and /friends) with sidebar navigation.
 
 ## Tech Stack
 

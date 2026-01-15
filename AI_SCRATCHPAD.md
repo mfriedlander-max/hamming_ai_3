@@ -1089,7 +1089,7 @@ Two TODO comments indicated reminder functionality wasn't fully wired up:
 
 ## 2026-01-15: Direct Cancellation Feature
 
-**Branch:** `feature/direct-cancel` (in-progress)
+**Branch:** `feature/direct-cancel` → merged to `dev`
 
 **What was built:**
 
@@ -1145,6 +1145,6 @@ Two TODO comments indicated reminder functionality wasn't fully wired up:
 - src/components/board/BoardColumn.tsx (onCancel prop)
 - src/components/board/DraggableCard.tsx (onCancel prop)
 
-**Ready for:** Branch merge to dev
+**Status:** Merged to dev
 
 ---

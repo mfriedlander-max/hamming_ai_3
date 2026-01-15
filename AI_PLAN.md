@@ -76,7 +76,6 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
-| `feature/direct-cancel` | in-progress | Direct subscription cancellation via external URLs |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 
@@ -250,4 +249,9 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Summary:** Created friendships, activity_feed, watchlists, watchlist_members, watchlist_items tables with RLS. Friend request system (send/accept/decline). Activity feed showing friends' subscription changes. Shared watchlists with owner/editor/viewer roles. Components: FriendCard, FriendRequestCard, FriendsList, AddFriendModal, ActivityFeed, WatchlistCard, WatchlistDetail, SocialClient (tabbed). /friends page with sidebar link. ~116 new tests.
 
 **Combined Phase 13:** 221 new tests (720 total).
+
+### feature/direct-cancel (merged 2026-01-15)
+**Goal:** Direct subscription cancellation via external service URLs
+**Files:** components/subscriptions/CancelSubscriptionModal.tsx, components/subscriptions/SubscriptionCard.tsx, components/subscriptions/DashboardClient.tsx, components/board/SubscriptionBoard.tsx, components/board/BoardColumn.tsx, components/board/DraggableCard.tsx
+**Summary:** Added CancelSubscriptionModal that opens service's cancel_url in new tab with optional mark-as-paused checkbox. Cancel button appears on subscription cards when cancel_url exists. Modal wired through DashboardClient and Kanban board component chain. 10 new tests (730 total).
 
