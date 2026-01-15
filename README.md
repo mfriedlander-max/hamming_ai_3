@@ -23,6 +23,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 12: Smart Notifications + Auto-Remind
 - [x] Phase 13a: Household Mode
 - [x] Phase 13b: Social/Friends
+- [ ] Direct Cancellation: Cancel subscriptions via external service URLs
 
 ## Current Status
 

@@ -22,6 +22,7 @@ interface SubscriptionBoardProps {
   onStatusChange: (id: string, status: SubscriptionStatus) => void
   onSetReminder: (id: string) => void
   onBoardColumnChange: (id: string, column: BoardColumnType) => Promise<void>
+  onCancel?: (id: string) => void
 }
 
 const COLUMNS: { id: BoardColumnType; title: string }[] = [
@@ -36,6 +37,7 @@ export function SubscriptionBoard({
   onStatusChange,
   onSetReminder,
   onBoardColumnChange,
+  onCancel,
 }: SubscriptionBoardProps) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [localSubscriptions, setLocalSubscriptions] = useState(subscriptions)
@@ -154,6 +156,7 @@ export function SubscriptionBoard({
             totalCost={getColumnTotal(column.id)}
             onStatusChange={onStatusChange}
             onSetReminder={onSetReminder}
+            onCancel={onCancel}
           />
         ))}
       </div>

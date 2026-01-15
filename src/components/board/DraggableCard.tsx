@@ -10,12 +10,14 @@ interface DraggableCardProps {
   subscription: SubscriptionWithService
   onStatusChange: (id: string, status: SubscriptionStatus) => void
   onSetReminder: (id: string) => void
+  onCancel?: (id: string) => void
 }
 
 export function DraggableCard({
   subscription,
   onStatusChange,
   onSetReminder,
+  onCancel,
 }: DraggableCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: subscription.id,
@@ -43,6 +45,7 @@ export function DraggableCard({
         subscription={subscription}
         onStatusChange={onStatusChange}
         onSetReminder={onSetReminder}
+        onCancel={onCancel}
       />
     </div>
   )

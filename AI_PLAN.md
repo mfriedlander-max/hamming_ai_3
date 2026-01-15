@@ -76,6 +76,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 |--------|--------|-------------|
 | `main` | active | Branch of truth |
 | `dev` | active | Integration branch |
+| `feature/direct-cancel` | in-progress | Direct subscription cancellation via external URLs |
 
 **Status values:** `active` (permanent branches), `in-progress`, `blocked`, `abandoned`
 

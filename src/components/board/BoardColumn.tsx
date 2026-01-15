@@ -14,6 +14,7 @@ interface BoardColumnProps {
   totalCost: number
   onStatusChange: (id: string, status: SubscriptionStatus) => void
   onSetReminder: (id: string) => void
+  onCancel?: (id: string) => void
 }
 
 export function BoardColumn({
@@ -23,6 +24,7 @@ export function BoardColumn({
   totalCost,
   onStatusChange,
   onSetReminder,
+  onCancel,
 }: BoardColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id,
@@ -56,6 +58,7 @@ export function BoardColumn({
             subscription={subscription}
             onStatusChange={onStatusChange}
             onSetReminder={onSetReminder}
+            onCancel={onCancel}
           />
         ))}
         {subscriptions.length === 0 && (

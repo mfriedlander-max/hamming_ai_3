@@ -12,6 +12,7 @@ interface SubscriptionCardProps {
   subscription: SubscriptionWithService
   onStatusChange: (id: string, status: SubscriptionStatus) => void
   onSetReminder: (id: string) => void
+  onCancel?: (id: string) => void
   recommendationBadge?: ReactNode
 }
 
@@ -19,6 +20,7 @@ export function SubscriptionCard({
   subscription,
   onStatusChange,
   onSetReminder,
+  onCancel,
   recommendationBadge,
 }: SubscriptionCardProps) {
   const { id, status, monthly_cost, service } = subscription
@@ -77,6 +79,15 @@ export function SubscriptionCard({
         >
           Set Reminder
         </Button>
+        {service.cancel_url && onCancel && (
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => onCancel(id)}
+          >
+            Cancel
+          </Button>
+        )}
       </CardFooter>
     </Card>
   )

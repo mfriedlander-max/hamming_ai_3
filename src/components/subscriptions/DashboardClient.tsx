@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { SubscriptionBoard } from '@/components/board'
 import { AddSubscriptionModal } from './AddSubscriptionModal'
 import { SetReminderModal } from '@/components/reminders'
+import { CancelSubscriptionModal } from './CancelSubscriptionModal'
 import { useToast } from '@/components/ui/toast'
 import { ErrorBanner } from '@/components/ui/error-banner'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,8 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [reminderModalOpen, setReminderModalOpen] = useState(false)
   const [selectedSubscriptionForReminder, setSelectedSubscriptionForReminder] = useState<SubscriptionWithService | null>(null)
+  const [cancelModalOpen, setCancelModalOpen] = useState(false)
+  const [selectedSubscriptionForCancel, setSelectedSubscriptionForCancel] = useState<SubscriptionWithService | null>(null)
   const [error, setError] = useState<string | null>(null)
   const { toast } = useToast()
 
@@ -149,6 +152,46 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
     }
   }, [toast])
 
+  const handleCancel = useCallback((id: string) => {
+    const subscription = subscriptions.find((sub) => sub.id === id)
+    if (subscription) {
+      setSelectedSubscriptionForCancel(subscription)
+      setCancelModalOpen(true)
+    }
+  }, [subscriptions])
+
+  const handleCancelConfirm = useCallback(async (subscriptionId: string, markAsPaused: boolean) => {
+    if (markAsPaused) {
+      try {
+        const response = await fetch(`/api/subscriptions/${subscriptionId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'paused' }),
+        })
+
+        if (!response.ok) {
+          const data = await response.json()
+          throw new Error(data.error || 'Failed to update subscription')
+        }
+
+        const updatedSubscription = await response.json()
+        setSubscriptions((prev) =>
+          prev.map((sub) => (sub.id === subscriptionId ? updatedSubscription : sub))
+        )
+
+        toast({
+          message: 'Subscription marked as paused',
+          type: 'success',
+        })
+      } catch (err) {
+        toast({
+          message: err instanceof Error ? err.message : 'Failed to update subscription',
+          type: 'error',
+        })
+      }
+    }
+  }, [toast])
+
   return (
     <div>
       {error && (
@@ -169,6 +212,7 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
         onStatusChange={handleStatusChange}
         onSetReminder={handleSetReminder}
         onBoardColumnChange={handleBoardColumnChange}
+        onCancel={handleCancel}
       />
 
       <AddSubscriptionModal
@@ -193,6 +237,22 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
           onSubmit={handleReminderSubmit}
         />
       )}
+
+      <CancelSubscriptionModal
+        open={cancelModalOpen}
+        onClose={() => {
+          setCancelModalOpen(false)
+          setSelectedSubscriptionForCancel(null)
+        }}
+        subscription={selectedSubscriptionForCancel ? {
+          id: selectedSubscriptionForCancel.id,
+          service: {
+            name: selectedSubscriptionForCancel.service.name,
+            cancel_url: selectedSubscriptionForCancel.service.cancel_url,
+          },
+        } : null}
+        onConfirm={handleCancelConfirm}
+      />
     </div>
   )
 }

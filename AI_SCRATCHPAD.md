@@ -1086,3 +1086,65 @@ Two TODO comments indicated reminder functionality wasn't fully wired up:
 - `next.config.ts` - Added TMDB image domain config
 
 ---
+
+## 2026-01-15: Direct Cancellation Feature
+
+**Branch:** `feature/direct-cancel` (in-progress)
+
+**What was built:**
+
+### Cancel Subscription Modal (TDD)
+- `src/components/subscriptions/CancelSubscriptionModal.tsx`: Modal for confirming cancellation
+  - Shows service name in title
+  - Warning about opening external site in new tab
+  - Checkbox to optionally mark as paused after canceling (default: checked)
+  - "Go to Cancellation Page" button opens `cancel_url` in new tab
+  - "Keep Subscription" button closes modal
+  - Handles services without cancel_url gracefully
+- `src/components/subscriptions/CancelSubscriptionModal.test.tsx`: 10 tests
+
+### SubscriptionCard Updates
+- Added `onCancel?: (id: string) => void` prop
+- Added "Cancel" button in CardFooter (only shows if `cancel_url` exists and `onCancel` provided)
+
+### Dashboard Integration
+- `src/components/subscriptions/DashboardClient.tsx`:
+  - State for cancel modal (`cancelModalOpen`, `selectedSubscriptionForCancel`)
+  - `handleCancel` and `handleCancelConfirm` handlers
+  - Renders CancelSubscriptionModal
+
+### Kanban Board Integration
+- `src/components/board/SubscriptionBoard.tsx`: Added `onCancel` prop
+- `src/components/board/BoardColumn.tsx`: Added `onCancel` prop
+- `src/components/board/DraggableCard.tsx`: Added `onCancel` prop, passes to SubscriptionCard
+
+**Tests:** 730 passing (+10 new)
+
+**E2E Verification (Playwright MCP):**
+1. Navigated to dashboard
+2. Clicked Cancel on Netflix subscription card
+3. Modal appeared with "Cancel Netflix" title
+4. Verified checkbox defaulted to checked
+5. Clicked "Keep Subscription" → modal closed
+6. Cancel button visible on both Active and Scheduled column cards
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 730/730 PASS
+- Build: PASS
+
+**Files created:**
+- src/components/subscriptions/CancelSubscriptionModal.tsx
+- src/components/subscriptions/CancelSubscriptionModal.test.tsx
+
+**Files modified:**
+- src/components/subscriptions/SubscriptionCard.tsx (onCancel prop + Cancel button)
+- src/components/subscriptions/DashboardClient.tsx (modal state + handlers)
+- src/components/board/SubscriptionBoard.tsx (onCancel prop)
+- src/components/board/BoardColumn.tsx (onCancel prop)
+- src/components/board/DraggableCard.tsx (onCancel prop)
+
+**Ready for:** Branch merge to dev
+
+---
