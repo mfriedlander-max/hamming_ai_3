@@ -164,6 +164,7 @@ describe('/api/calendar', () => {
       const netflixJan = january.services.find(
         (s: { service_name: string }) => s.service_name === 'Netflix'
       )
+      expect(netflixJan.subscription_id).toBe('sub-1')
       expect(netflixJan.releases).toHaveLength(1)
       expect(netflixJan.releases[0].title).toBe('Movie A')
 

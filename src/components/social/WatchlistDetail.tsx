@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { ArrowLeft, UserPlus, X, Film, Tv } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { WatchlistWithDetails, WatchlistItem } from '@/lib/social/types'
@@ -34,12 +35,14 @@ function ItemCard({
   return (
     <div className="flex gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
       {/* Poster or placeholder */}
-      <div className="flex-shrink-0 w-16 h-24 bg-gray-100 rounded overflow-hidden">
+      <div className="flex-shrink-0 w-16 h-24 bg-gray-100 rounded overflow-hidden relative">
         {item.poster_path ? (
-          <img
+          <Image
             src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
             alt={item.title}
-            className="w-full h-full object-cover"
+            fill
+            sizes="64px"
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">

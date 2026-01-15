@@ -151,6 +151,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         return {
           service_id: sub.service_id,
           service_name: serviceName,
+          subscription_id: sub.id,
           releases,
         }
       })

@@ -31,6 +31,7 @@ describe('ContentCalendar', () => {
           {
             service_id: 'service-1',
             service_name: 'Netflix',
+            subscription_id: 'sub-1',
             releases: [
               {
                 id: 'content-1',
@@ -46,6 +47,7 @@ describe('ContentCalendar', () => {
           {
             service_id: 'service-2',
             service_name: 'Disney+',
+            subscription_id: 'sub-2',
             releases: [],
           },
         ],

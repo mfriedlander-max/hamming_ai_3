@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/toast'
 import { ServiceLane } from './ServiceLane'
 import { ContentDetailModal } from './ContentDetailModal'
 import {
@@ -17,6 +18,7 @@ import type { ContentRelease, CalendarMonth } from '@/lib/calendar/types'
 interface SelectedContent {
   release: ContentRelease
   serviceId: string
+  subscriptionId?: string
 }
 
 export interface ContentCalendarProps {
@@ -25,6 +27,7 @@ export interface ContentCalendarProps {
 
 export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
   const router = useRouter()
+  const { toast } = useToast()
   const [currentMonth, setCurrentMonth] = useState(
     initialMonth ?? getCurrentMonthString()
   )
@@ -87,17 +90,55 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
     setCurrentMonth(getCurrentMonthString())
   }
 
-  const handleSelectRelease = (release: ContentRelease, serviceId: string) => {
-    setSelectedContent({ release, serviceId })
+  const handleSelectRelease = (release: ContentRelease, serviceId: string, subscriptionId?: string) => {
+    setSelectedContent({ release, serviceId, subscriptionId })
   }
 
   const handleCloseModal = () => {
     setSelectedContent(null)
   }
 
-  const handleSetReminder = (release: ContentRelease) => {
-    // TODO: Implement reminder creation
-    console.log('Set reminder for:', release.title)
+  const handleSetReminder = async (release: ContentRelease) => {
+    if (!selectedContent || !selectedContent.subscriptionId) {
+      toast({
+        message: 'Unable to set reminder for this content.',
+        type: 'error',
+      })
+      setSelectedContent(null)
+      return
+    }
+
+    try {
+      const response = await fetch('/api/reminders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subscription_id: selectedContent.subscriptionId,
+          type: 'resubscribe', // Content release reminders are for resubscription
+          trigger_date: release.release_date,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create reminder')
+      }
+
+      const formattedDate = new Date(release.release_date + 'T00:00:00').toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+      })
+
+      toast({
+        message: `Reminder set for "${release.title}" on ${formattedDate}`,
+        type: 'success',
+      })
+    } catch {
+      toast({
+        message: 'Failed to set reminder. Please try again.',
+        type: 'error',
+      })
+    }
+
     setSelectedContent(null)
   }
 
@@ -236,6 +277,7 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
             key={service.service_id}
             serviceId={service.service_id}
             serviceName={service.service_name}
+            subscriptionId={service.subscription_id}
             releases={service.releases}
             monthStart={currentMonth}
             onSelectRelease={handleSelectRelease}

@@ -37,8 +37,7 @@ export function SocialClient() {
   const [watchlists, setWatchlists] = useState<Watchlist[]>([])
   const [isWatchlistsLoading, setIsWatchlistsLoading] = useState(false)
   const [selectedWatchlist, setSelectedWatchlist] = useState<WatchlistWithDetails | null>(null)
-  // Note: isWatchlistDetailLoading could be used for loading states in future
-  const [, setIsWatchlistDetailLoading] = useState(false)
+  const [isWatchlistDetailLoading, setIsWatchlistDetailLoading] = useState(false)
 
   // Active tab
   const [activeTab, setActiveTab] = useState('friends')
@@ -285,7 +284,17 @@ export function SocialClient() {
         </TabsContent>
 
         <TabsContent value="watchlists" className="mt-6">
-          {selectedWatchlist ? (
+          {isWatchlistDetailLoading ? (
+            <div className="space-y-4 animate-pulse">
+              <div className="h-8 bg-gray-100 rounded w-48" />
+              <div className="h-12 bg-gray-100 rounded" />
+              <div className="grid gap-3 sm:grid-cols-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-32 bg-gray-100 rounded-lg" />
+                ))}
+              </div>
+            </div>
+          ) : selectedWatchlist ? (
             <WatchlistDetail
               watchlist={selectedWatchlist}
               onBack={() => setSelectedWatchlist(null)}

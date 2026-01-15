@@ -7,14 +7,16 @@ import type { ContentRelease } from '@/lib/calendar/types'
 export interface ServiceLaneProps {
   serviceId: string
   serviceName: string
+  subscriptionId?: string
   releases: ContentRelease[]
   monthStart: string // "2026-01"
-  onSelectRelease: (release: ContentRelease, serviceId: string) => void
+  onSelectRelease: (release: ContentRelease, serviceId: string, subscriptionId?: string) => void
 }
 
 export function ServiceLane({
   serviceId,
   serviceName,
+  subscriptionId,
   releases,
   monthStart,
   onSelectRelease,
@@ -38,7 +40,7 @@ export function ServiceLane({
               key={release.id}
               release={release}
               position={position}
-              onClick={(r) => onSelectRelease(r, serviceId)}
+              onClick={(r) => onSelectRelease(r, serviceId, subscriptionId)}
             />
           )
         })}

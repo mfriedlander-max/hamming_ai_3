@@ -70,24 +70,48 @@ export function RecommendationsClient({ initialServices }: RecommendationsClient
         throw new Error('Failed to pause subscription')
       }
 
-      // Show success toast with reminder info
+      // Create reminder if resumeDate is provided
       if (resumeDate) {
-        const resumeDateFormatted = new Date(resumeDate).toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-        })
-        toast({
-          message: `${serviceName} paused. Reminder set for ${resumeDateFormatted}.`,
-          type: 'success',
-        })
+        try {
+          const reminderResponse = await fetch('/api/reminders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subscription_id: serviceId,
+              type: 'resubscribe',
+              trigger_date: resumeDate,
+            }),
+          })
+
+          if (reminderResponse.ok) {
+            const resumeDateFormatted = new Date(resumeDate).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+            })
+            toast({
+              message: `${serviceName} paused. Reminder set for ${resumeDateFormatted}.`,
+              type: 'success',
+            })
+          } else {
+            // Pause succeeded but reminder failed
+            toast({
+              message: `${serviceName} paused, but failed to set reminder.`,
+              type: 'success',
+            })
+          }
+        } catch {
+          // Pause succeeded but reminder failed
+          toast({
+            message: `${serviceName} paused, but failed to set reminder.`,
+            type: 'success',
+          })
+        }
       } else {
         toast({
           message: `${serviceName} paused successfully.`,
           type: 'success',
         })
       }
-
-      // TODO: Create reminder if resumeDate is provided (Phase 6)
 
       // Refresh recommendations
       await fetchRecommendations(true)

@@ -28,6 +28,7 @@ describe('ServiceLane', () => {
   const defaultProps = {
     serviceId: 'service-123',
     serviceName: 'Netflix',
+    subscriptionId: 'sub-456',
     releases: mockReleases,
     monthStart: '2026-01',
     onSelectRelease: vi.fn(),
@@ -70,14 +71,14 @@ describe('ServiceLane', () => {
     expect(parseFloat(left1)).toBeLessThan(parseFloat(left2))
   })
 
-  it('calls onSelectRelease with release and serviceId when a marker is clicked', () => {
+  it('calls onSelectRelease with release, serviceId, and subscriptionId when a marker is clicked', () => {
     const handleSelect = vi.fn()
     render(<ServiceLane {...defaultProps} onSelectRelease={handleSelect} />)
 
     const markers = screen.getAllByRole('button')
     fireEvent.click(markers[0])
 
-    expect(handleSelect).toHaveBeenCalledWith(mockReleases[0], 'service-123')
+    expect(handleSelect).toHaveBeenCalledWith(mockReleases[0], 'service-123', 'sub-456')
   })
 
   it('renders empty lane when no releases', () => {

@@ -13,6 +13,7 @@ export interface ContentRelease {
 export interface ServiceReleases {
   service_id: string
   service_name: string
+  subscription_id?: string // User's subscription ID for this service (optional for contexts like optimizer)
   releases: ContentRelease[]
 }
 

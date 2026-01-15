@@ -992,3 +992,63 @@ All pages follow consistent spacing standards:
 **All planned phases complete!**
 
 ---
+
+## 2026-01-15: Polish & Bug Fix Round
+
+**Branch:** `dev` (direct implementation)
+
+**What was fixed:**
+
+### Task 1: Implement Missing Reminder Creation (HIGH)
+Two TODO comments indicated reminder functionality wasn't fully wired up:
+
+**RecommendationsClient.tsx:**
+- Line 90 had TODO: "Create reminder if resumeDate is provided (Phase 6)"
+- Implemented: When pausing with resumeDate, now calls `POST /api/reminders` with type 'resubscribe'
+- Shows toast confirming reminder was set
+
+**ContentCalendar.tsx:**
+- Lines 98-100 had TODO and console.log placeholder
+- Added `subscription_id` to `ServiceReleases` type (optional, for contexts needing reminders)
+- Updated API, ServiceLane, and ContentCalendar to pass subscription_id through
+- Implemented `handleSetReminder` to call `/api/reminders` API
+- Added toast notifications for success/failure
+
+### Task 2: Replace img with Next.js Image (MEDIUM)
+**WatchlistDetail.tsx:**
+- Replaced `<img>` with Next.js `<Image>` component for TMDB posters
+- Added `remotePatterns` config for `image.tmdb.org` in next.config.ts
+- Added `fill` prop with `sizes="64px"` for responsive images
+
+### Task 5: Remove Unused State Variable (LOW)
+**SocialClient.tsx:**
+- Line 41 had `const [, setIsWatchlistDetailLoading]` - getter ignored
+- Changed to `const [isWatchlistDetailLoading, setIsWatchlistDetailLoading]`
+- Added loading skeleton UI when fetching watchlist details
+
+### Task 3: Fix Type Casting Issues - DEFERRED
+- Multiple files use `as unknown as Type` or `as any` for Supabase responses
+- Would require significant type refactoring across 6+ files
+- Current code works correctly, just not type-safe
+- Low risk, defer to future cleanup
+
+**Verification:**
+- Lint: PASS (0 warnings)
+- TypeCheck: PASS
+- Tests: 720/720 PASS
+- Build: PASS
+
+**Files modified:**
+- `src/lib/calendar/types.ts` - Made subscription_id optional in ServiceReleases
+- `src/app/api/calendar/route.ts` - Added subscription_id to response
+- `src/components/calendar/ServiceLane.tsx` - Added optional subscriptionId prop
+- `src/components/calendar/ServiceLane.test.tsx` - Updated test expectations
+- `src/components/calendar/ContentCalendar.tsx` - Implemented reminder creation
+- `src/components/calendar/ContentCalendar.test.tsx` - Updated mock data
+- `src/app/api/calendar/route.test.ts` - Added subscription_id assertion
+- `src/components/recommendations/RecommendationsClient.tsx` - Implemented reminder creation on pause
+- `src/components/social/WatchlistDetail.tsx` - Replaced img with Image
+- `src/components/social/SocialClient.tsx` - Fixed unused state, added loading UI
+- `next.config.ts` - Added TMDB image domain config
+
+---
