@@ -41,10 +41,12 @@ This project uses the **superpowers** skill system. Skills are mandatory, not op
 | **Branch Done** | `finishing-a-development-branch` | Ready to merge |
 | **Review** | `requesting-code-review` | After major implementations |
 | **Review** | `receiving-code-review` | When processing feedback |
+| **UX Review** | `ux-flow-analysis` | UX audits, flow analysis, friction identification |
 
 ### Testing Requirements
 - **Unit tests:** Strict TDD (RED → GREEN → REFACTOR)
-- **E2E tests:** Verification gate before merge. Use MCP Playwright tools (`browser_navigate`, `browser_snapshot`, `browser_click`, etc.) to navigate the app, inspect/critique the UI, compare against other UIs for inspiration, and validate critical user-facing flows. Feel free to test E2E without MCP, it is not required if it doesn't make sense.  
+- **E2E tests:** Verification gate before merge. Use MCP Playwright tools (`browser_navigate`, `browser_snapshot`, `browser_click`, etc.) to navigate the app, inspect/critique the UI, compare against other UIs for inspiration, and validate critical user-facing flows. Feel free to test E2E without MCP, it is not required if it doesn't make sense.
+- **UX Analysis:** Use the `ux-flow-analysis` skill (global at `~/.claude/skills/ux-flow-analysis/`) for comprehensive UX audits. This skill provides systematic user journey tracing, friction scoring, cognitive load assessment, and emotional journey mapping.  
 
 ### Token Optimization
 | Task Type | Strategy |
