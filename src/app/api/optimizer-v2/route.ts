@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { generateOptimizedPlan } from '@/lib/optimizer-v2/optimizer'
-import { shouldRecalculate, hashOptimizerInputs } from '@/lib/optimizer-v2/recalculator'
+import { shouldRecalculate } from '@/lib/optimizer-v2/recalculator'
 import type {
   OptimizerInputs,
   OptimizedPlan,
@@ -227,14 +227,11 @@ export async function POST(request: Request): Promise<NextResponse<OptimizeRespo
     // Check cache unless force refresh
     if (!forceRefresh) {
       const cached = await getCachedPlan(supabase, user.id)
-      if (cached) {
-        const currentHash = hashOptimizerInputs(inputs)
-        if (!shouldRecalculate(inputs, cached.plan)) {
-          return NextResponse.json({
-            plan: cached.plan,
-            from_cache: true,
-          })
-        }
+      if (cached && !shouldRecalculate(inputs, cached.plan)) {
+        return NextResponse.json({
+          plan: cached.plan,
+          from_cache: true,
+        })
       }
     }
 

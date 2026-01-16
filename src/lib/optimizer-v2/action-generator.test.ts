@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { generateThisWeekActions, generateActionsForWindow } from './action-generator'
-import type { SubscriptionWindow, UserSubscription, ThisWeekAction } from './types'
+import type { SubscriptionWindow, UserSubscription } from './types'
 
 describe('action-generator', () => {
   beforeEach(() => {
