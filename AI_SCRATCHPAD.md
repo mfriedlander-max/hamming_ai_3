@@ -1377,3 +1377,94 @@ Complete automatic subscription management system:
 **Status:** Merged to dev
 
 ---
+
+## 2026-01-15: UX-3 Unified Content Calendar Complete
+
+**Branch:** `feature/ux-3-unified-calendar` (worktree at `.worktrees/ux-3-unified-calendar`)
+
+**What was built:**
+
+### Unified Calendar Components (TDD)
+Complete Content Calendar page with 4 sections that shows everything and controls everything:
+
+- `src/components/calendar-unified/OptimizerSummary.tsx` (8 tests): Top section
+  - Savings display with progress bar (current vs optimized cost)
+  - This week's actions list with action type badges
+  - Apply All and Regenerate buttons
+  - Loading state support
+
+- `src/components/calendar-unified/WatchQueue.tsx` (8 tests): Prioritized watch queue
+  - Queue items with title, service, duration, deadline
+  - Friend share badges ("Shared by friend")
+  - Urgent deadline highlighting (≤3 days)
+  - Remove, Plan Binge, Add to Watchlist actions
+  - Empty state with guidance
+
+- `src/components/calendar-unified/CalendarView.tsx` (10 tests): Timeline view
+  - Month navigation (Previous/Next/Today buttons)
+  - Service lanes with subscription window bars
+  - Current vs planned subscriptions (green vs blue)
+  - Release markers positioned by date
+  - Movie/Series icons with tooltips
+
+- `src/components/calendar-unified/UpcomingReleases.tsx` (8 tests): Content discovery
+  - Release list with taste match scores
+  - Type badges (Movie/Series)
+  - Friend watching indicators
+  - Add to Queue and View Details actions
+  - Empty state
+
+- `src/components/calendar-unified/ReleaseDetailModal.tsx` (6 tests): Content details
+  - Uses shadcn Dialog component
+  - Shows release info, genres, match score
+  - Add to Queue, Plan Binge, Set Reminder actions
+  - Close button
+
+- `src/components/calendar-unified/ContentCalendarPage.tsx` (6 tests): Main orchestrator
+  - Composes all 4 sections with proper layout
+  - Manages state for current month and selected release
+  - Handles inter-section communication
+  - Loading state when fetching data
+
+### Type System Extensions
+- Added Calendar-prefixed types to `src/lib/optimizer-v2/types.ts`:
+  - CalendarSavings, CalendarAction, CalendarWatchSlot
+  - CalendarSubscriptionWindow, CalendarOptimizedPlan
+  - ContentRelease with optional fields
+- Added `toCalendarPlan()` converter function for legacy compatibility
+
+**Tests:** 890 passing (+46 new)
+- OptimizerSummary.test.tsx: 8 tests
+- WatchQueue.test.tsx: 8 tests
+- CalendarView.test.tsx: 10 tests
+- UpcomingReleases.test.tsx: 8 tests
+- ReleaseDetailModal.test.tsx: 6 tests
+- ContentCalendarPage.test.tsx: 6 tests
+
+**Verification:**
+- Lint: PASS (5 warnings)
+- TypeCheck: PASS
+- Tests: 890/890 PASS
+- Build: PASS
+
+**Files created:**
+- src/components/calendar-unified/OptimizerSummary.tsx
+- src/components/calendar-unified/OptimizerSummary.test.tsx
+- src/components/calendar-unified/WatchQueue.tsx
+- src/components/calendar-unified/WatchQueue.test.tsx
+- src/components/calendar-unified/CalendarView.tsx
+- src/components/calendar-unified/CalendarView.test.tsx
+- src/components/calendar-unified/UpcomingReleases.tsx
+- src/components/calendar-unified/UpcomingReleases.test.tsx
+- src/components/calendar-unified/ReleaseDetailModal.tsx
+- src/components/calendar-unified/ReleaseDetailModal.test.tsx
+- src/components/calendar-unified/ContentCalendarPage.tsx
+- src/components/calendar-unified/ContentCalendarPage.test.tsx
+- src/components/calendar-unified/index.ts
+
+**Files modified:**
+- src/lib/optimizer-v2/types.ts (Calendar-prefixed types + toCalendarPlan)
+
+**Status:** Merged to dev
+
+---
