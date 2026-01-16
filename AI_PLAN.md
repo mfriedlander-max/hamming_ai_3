@@ -161,59 +161,6 @@ See `docs/PHASES_7-14_PLAN.md` for complete task lists, file ownership, and data
 
 ---
 
-## Branch: feature/ux-1-optimizer-brain
-
-### Goal
-Rebuild optimizer to make smart decisions from ALL inputs (taste matches, watchlists, friend shares, binge plans) with deterministic priority scoring and optional Claude AI for conflicts.
-
-### Scope
-**Included:**
-- New `lib/optimizer-v2/` module with TDD
-- Types, intent-builder, time-calculator, prioritizer, scheduler, subscription-optimizer, action-generator, optimizer, recalculator
-- Migration 010_optimizer_plans.sql
-- Update existing API route
-
-**Excluded:**
-- UI components (UX-3)
-- Auto-pilot system (UX-2)
-- Legacy optimizer removal (UX-5)
-
-### Tasks
-- [ ] Task 1: Create types.ts
-- [ ] Task 2: TDD intent-builder.ts (12 tests)
-- [ ] Task 3: TDD time-calculator.ts (6 tests)
-- [ ] Task 4: TDD prioritizer.ts (8 tests)
-- [ ] Task 5: TDD scheduler.ts (8 tests)
-- [ ] Task 6: TDD subscription-optimizer.ts (8 tests)
-- [ ] Task 7: TDD action-generator.ts (6 tests)
-- [ ] Task 8: TDD optimizer.ts orchestrator (6 tests)
-- [ ] Task 9: TDD recalculator.ts (4 tests)
-- [ ] Task 10: Update API route (4 tests)
-- [ ] Task 11: Create migration 010_optimizer_plans.sql
-- [ ] Task 12: Update documentation
-
-### Files
-| File | Owner |
-|------|-------|
-| `src/lib/optimizer-v2/*` | Claude |
-| `src/app/api/optimizer/route.ts` | Claude |
-| `supabase/migrations/010_optimizer_plans.sql` | Claude |
-
-### Verification
-```bash
-npm run lint && npm run typecheck && npm test && npm run build
-```
-
-### Definition of Done
-- [ ] All 12 tasks complete
-- [ ] 62 new tests passing (792 total)
-- [ ] Migration 010 created
-- [ ] API route updated
-- [ ] Results written to AI_SCRATCHPAD.md
-- [ ] Branch merged to dev
-
----
-
 ## Archive
 
 Merged branch sections are moved here for reference. To edit a feature, create a new branch and reference the archived section.
@@ -307,4 +254,14 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Direct subscription cancellation via external service URLs
 **Files:** components/subscriptions/CancelSubscriptionModal.tsx, components/subscriptions/SubscriptionCard.tsx, components/subscriptions/DashboardClient.tsx, components/board/SubscriptionBoard.tsx, components/board/BoardColumn.tsx, components/board/DraggableCard.tsx
 **Summary:** Added CancelSubscriptionModal that opens service's cancel_url in new tab with optional mark-as-paused checkbox. Cancel button appears on subscription cards when cancel_url exists. Modal wired through DashboardClient and Kanban board component chain. 10 new tests (730 total).
+
+### feature/ux-1-optimizer-brain (merged 2026-01-15)
+**Goal:** Rebuild optimizer with deterministic priority scoring from all inputs (taste matches, watchlists, friend shares, binge plans)
+**Files:** lib/optimizer-v2/*, app/api/optimizer-v2/route.ts, supabase/migrations/010_optimizer_plans.sql
+**Summary:** Complete optimizer-v2 library with modular design: types, intent-builder (12 tests), time-calculator (9 tests), prioritizer (13 tests), scheduler (8 tests), subscription-optimizer (8 tests), action-generator (6 tests), optimizer (6 tests), recalculator (8 tests). Database caching with hash-based invalidation. 74 new tests (804 total).
+
+### feature/ux-2-auto-pilot (merged 2026-01-15)
+**Goal:** Automatic subscription management system - auto-pause, auto-remind, handle missed deadlines
+**Files:** lib/auto-pilot/*, app/api/auto-pilot/execute/route.ts, app/api/optimizer-v2/apply/route.ts, supabase/migrations/011_auto_pilot.sql, vercel.json
+**Summary:** Complete auto-pilot library: action-executor (8 tests), deadline-detector (6 tests), deadline-handler (6 tests), behavior-tracker (7 tests), notification-sender (5 tests). Execute cron route (4 tests), apply plan route (4 tests). Database tables for auto_actions and user_behavior_patterns. Vercel cron configured for daily 9 AM UTC execution. 40 new tests (844 total).
 

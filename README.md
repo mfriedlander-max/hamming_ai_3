@@ -25,10 +25,11 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 13b: Social/Friends
 - [x] Direct Cancellation: Cancel subscriptions via external service URLs
 - [x] UX-1: Optimizer Brain (unified watch intent system)
+- [x] UX-2: Auto-Pilot (automatic subscription management)
 
 ## Current Status
 
-UX Overhaul Phase 1 complete! 804 tests passing. The new optimizer-v2 library provides a modular, algorithmic approach to subscription optimization with deterministic priority scoring. Features include unified watch intents from all data sources (taste matches, watchlists, friend shares, binge plans), smart scheduling with overload detection, subscription window optimization with savings calculation, and database caching with hash-based invalidation.
+UX Overhaul Phase 2 complete! 844 tests passing. Auto-pilot system enables automatic subscription management: executes optimizer plans without user effort, handles missed deadlines gracefully, and tracks user behavior patterns. Daily Vercel cron runs at 9 AM UTC to process scheduled actions. Includes action executor, deadline detector/handler, behavior tracker, and notification sender modules.
 
 ## Tech Stack
 

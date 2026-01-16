@@ -1272,3 +1272,108 @@ Complete rebuild of the optimizer system using a modular, algorithmic approach:
 **Status:** Merged to dev
 
 ---
+
+## 2026-01-15: UX-2 Auto-Pilot Complete
+
+**Branch:** `feature/ux-2-auto-pilot` (worktree at `.worktrees/ux-2-auto-pilot`)
+
+**What was built:**
+
+### Auto-Pilot Library (TDD)
+Complete automatic subscription management system:
+
+- `src/lib/auto-pilot/types.ts`: Core type definitions
+  - AutoAction, AutoActionStatus (tracking executed actions)
+  - MissedDeadline, UpcomingDeadline, DeadlineCheckResult
+  - UserBehaviorPattern, ExecutionResult, ExecutionError
+  - AutoPilotNotification types
+  - API types for cron and apply routes
+
+- `src/lib/auto-pilot/action-executor.ts` (8 tests): Execute scheduled actions
+  - executeAction: Handles set_reminder, pause, resume, cancel, subscribe
+  - executeActions: Batch processing with error resilience
+  - Creates reminders for reminder-type actions
+  - Updates subscription status for pause/resume
+  - Records all actions in auto_actions table
+
+- `src/lib/auto-pilot/deadline-detector.ts` (6 tests): Detect deadlines
+  - detectMissedDeadlines: Finds past deadlines with days-missed calculation
+  - detectUpcomingDeadlines: Finds deadlines within 7 days
+  - checkDeadlines: Combined result for both missed and upcoming
+  - Marks urgent deadlines (≤3 days)
+
+- `src/lib/auto-pilot/deadline-handler.ts` (6 tests): Handle deadline events
+  - handleMissedDeadline: Send notification, update behavior, invalidate cache
+  - handleUpcomingDeadline: Send warning for urgent deadlines
+  - handleAllDeadlines: Process all deadlines
+
+- `src/lib/auto-pilot/behavior-tracker.ts` (7 tests): Track user patterns
+  - getUserBehaviorPattern: Fetch or create default pattern
+  - updateBehaviorPattern: Increment count fields
+  - recordAutoActionResponse: Track accept/reject ratio
+  - inferOptimalActionTime: Calculate from user activity
+
+- `src/lib/auto-pilot/notification-sender.ts` (5 tests): Send notifications
+  - createAutoPilotNotification: Build notification by type
+  - sendAutoPilotNotification: Check preferences, insert to DB
+
+### API Routes (TDD)
+- `POST /api/auto-pilot/execute` (4 tests): Cron endpoint
+  - Fetches cached optimizer plan
+  - Executes today's actions
+  - Handles missed/upcoming deadlines
+  - Supports dry_run mode for preview
+
+- `POST /api/optimizer-v2/apply` (4 tests): Apply plan route
+  - Creates reminders from plan actions
+  - Creates auto_actions entries
+  - Updates subscription board_column to 'scheduled'
+  - Sends confirmation notification
+
+### Database Migration
+- `supabase/migrations/011_auto_pilot.sql`:
+  - Adds timezone column to profiles
+  - Creates auto_actions table (tracks executed actions)
+  - Creates user_behavior_patterns table (tracks user patterns)
+  - Full RLS policies for secure user access
+
+### Vercel Cron Configuration
+- `vercel.json`: Daily cron at 9 AM UTC
+
+**Tests:** 844 passing (+40 new)
+- action-executor.test.ts: 8 tests
+- deadline-detector.test.ts: 6 tests
+- deadline-handler.test.ts: 6 tests
+- behavior-tracker.test.ts: 7 tests
+- notification-sender.test.ts: 5 tests
+- execute/route.test.ts: 4 tests
+- apply/route.test.ts: 4 tests
+
+**Verification:**
+- Lint: PASS (4 warnings)
+- TypeCheck: PASS
+- Tests: 844/844 PASS
+- Build: PASS
+
+**Files created:**
+- src/lib/auto-pilot/types.ts
+- src/lib/auto-pilot/action-executor.ts
+- src/lib/auto-pilot/action-executor.test.ts
+- src/lib/auto-pilot/deadline-detector.ts
+- src/lib/auto-pilot/deadline-detector.test.ts
+- src/lib/auto-pilot/deadline-handler.ts
+- src/lib/auto-pilot/deadline-handler.test.ts
+- src/lib/auto-pilot/behavior-tracker.ts
+- src/lib/auto-pilot/behavior-tracker.test.ts
+- src/lib/auto-pilot/notification-sender.ts
+- src/lib/auto-pilot/notification-sender.test.ts
+- src/app/api/auto-pilot/execute/route.ts
+- src/app/api/auto-pilot/execute/route.test.ts
+- src/app/api/optimizer-v2/apply/route.ts
+- src/app/api/optimizer-v2/apply/route.test.ts
+- supabase/migrations/011_auto_pilot.sql
+- vercel.json
+
+**Status:** Merged to dev
+
+---
