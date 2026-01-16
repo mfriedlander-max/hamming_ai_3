@@ -161,6 +161,59 @@ See `docs/PHASES_7-14_PLAN.md` for complete task lists, file ownership, and data
 
 ---
 
+## Branch: feature/ux-1-optimizer-brain
+
+### Goal
+Rebuild optimizer to make smart decisions from ALL inputs (taste matches, watchlists, friend shares, binge plans) with deterministic priority scoring and optional Claude AI for conflicts.
+
+### Scope
+**Included:**
+- New `lib/optimizer-v2/` module with TDD
+- Types, intent-builder, time-calculator, prioritizer, scheduler, subscription-optimizer, action-generator, optimizer, recalculator
+- Migration 010_optimizer_plans.sql
+- Update existing API route
+
+**Excluded:**
+- UI components (UX-3)
+- Auto-pilot system (UX-2)
+- Legacy optimizer removal (UX-5)
+
+### Tasks
+- [ ] Task 1: Create types.ts
+- [ ] Task 2: TDD intent-builder.ts (12 tests)
+- [ ] Task 3: TDD time-calculator.ts (6 tests)
+- [ ] Task 4: TDD prioritizer.ts (8 tests)
+- [ ] Task 5: TDD scheduler.ts (8 tests)
+- [ ] Task 6: TDD subscription-optimizer.ts (8 tests)
+- [ ] Task 7: TDD action-generator.ts (6 tests)
+- [ ] Task 8: TDD optimizer.ts orchestrator (6 tests)
+- [ ] Task 9: TDD recalculator.ts (4 tests)
+- [ ] Task 10: Update API route (4 tests)
+- [ ] Task 11: Create migration 010_optimizer_plans.sql
+- [ ] Task 12: Update documentation
+
+### Files
+| File | Owner |
+|------|-------|
+| `src/lib/optimizer-v2/*` | Claude |
+| `src/app/api/optimizer/route.ts` | Claude |
+| `supabase/migrations/010_optimizer_plans.sql` | Claude |
+
+### Verification
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+### Definition of Done
+- [ ] All 12 tasks complete
+- [ ] 62 new tests passing (792 total)
+- [ ] Migration 010 created
+- [ ] API route updated
+- [ ] Results written to AI_SCRATCHPAD.md
+- [ ] Branch merged to dev
+
+---
+
 ## Archive
 
 Merged branch sections are moved here for reference. To edit a feature, create a new branch and reference the archived section.

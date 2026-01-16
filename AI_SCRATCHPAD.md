@@ -1148,3 +1148,127 @@ Two TODO comments indicated reminder functionality wasn't fully wired up:
 **Status:** Merged to dev
 
 ---
+## 2026-01-15: UX-1 Optimizer Brain Complete
+
+**Branch:** `feature/ux-1-optimizer-brain` (worktree at `.worktrees/ux-1-optimizer-brain`)
+
+**What was built:**
+
+### Optimizer-v2 Library (TDD)
+Complete rebuild of the optimizer system using a modular, algorithmic approach:
+
+- `src/lib/optimizer-v2/types.ts`: Core type definitions
+  - WatchIntent (unified intent from all sources)
+  - OptimizedPlan, WatchSlot, SubscriptionWindow, ThisWeekAction, Savings
+  - PRIORITY_WEIGHTS constants for scoring
+  
+- `src/lib/optimizer-v2/intent-builder.ts` (12 tests): Builds WatchIntents from all data sources
+  - buildFromTasteMatches: Content matching user genres
+  - buildFromWatchlist: User's explicit watchlist items
+  - buildFromFriendShares: Content shared by friends
+  - buildFromBingePlans: Scheduled binge watching
+  - buildFromFavorites: Favorite show matches
+  - Deduplication with source priority (binge_plan > friend_share > favorite > watchlist > taste_match)
+
+- `src/lib/optimizer-v2/time-calculator.ts` (9 tests): Time calculation utilities
+  - calculateAvailableTime: Minutes per week/day from settings
+  - estimateWatchDuration: Runtime for movies, episode count × 45min for TV
+  - canFitInSchedule: Check if content fits available time
+  - getWeeklySlots: Generate day slots for scheduling
+
+- `src/lib/optimizer-v2/prioritizer.ts` (13 tests): Priority scoring system
+  - getDeadlineBoost: +50 for ≤7 days, +30 for ≤14 days
+  - getSourceBoost: friend_share +40, watchlist/binge_plan +10
+  - getRecencyBoost: +20 for releases within 7 days
+  - calculatePriorityScore: Combines all boosts
+  - prioritizeIntents: Sorts by score descending
+
+- `src/lib/optimizer-v2/scheduler.ts` (8 tests): Content scheduling
+  - fitIntentIntoSlots: Schedules across available day slots
+  - detectOverload: Identifies when schedule exceeds capacity
+  - scheduleIntents: Orchestrates with deadline/priority sorting
+
+- `src/lib/optimizer-v2/subscription-optimizer.ts` (8 tests): Subscription window optimization
+  - calculateSubscriptionWindows: Creates time windows per service
+  - Splits windows when gaps > 30 days
+  - Includes buffer days before/after content
+  - calculateSavings: Current vs optimized yearly cost
+
+- `src/lib/optimizer-v2/action-generator.ts` (6 tests): This week's actions
+  - generateActionsForWindow: Subscribe/cancel for window dates
+  - Uses resume/pause for existing, subscribe/cancel for new
+  - generateThisWeekActions: All actions sorted by date
+
+- `src/lib/optimizer-v2/optimizer.ts` (6 tests): Main orchestrator
+  - generateOptimizedPlan: Complete workflow combining all modules
+  - hashInputs: Cache key generation for invalidation
+  - Detects overload conflicts with resolution suggestions
+
+- `src/lib/optimizer-v2/recalculator.ts` (8 tests): Cache management
+  - hashOptimizerInputs: Deterministic input hashing
+  - isPlanExpired: 1-hour TTL check
+  - shouldRecalculate: Determines when regeneration needed
+
+### API Route (TDD)
+- `POST /api/optimizer-v2` (4 tests): New endpoint using optimizer-v2 library
+  - Fetches all user data (subscriptions, taste profile, watchlist, shares, binge plans)
+  - Uses database caching via optimizer_plans table
+  - Returns from_cache flag when serving cached plan
+
+### Database Migration
+- `supabase/migrations/010_optimizer_plans.sql`:
+  - Creates optimizer_plans table with JSONB plan storage
+  - Unique constraint on user_id (one cached plan per user)
+  - Hash-based cache invalidation via inputs_hash column
+  - Indexes for user lookup and expiry cleanup
+  - RLS policies for secure user access
+
+**Architecture Decisions:**
+- Modular library design (each module has single responsibility)
+- Algorithmic core - no Claude API needed for 95% of cases
+- Deterministic priority scoring (no AI randomness)
+- Database caching with smart invalidation
+- Backward compatible with legacy optimizer
+
+**Tests:** 804 passing (+74 new)
+- intent-builder.test.ts: 12 tests
+- time-calculator.test.ts: 9 tests
+- prioritizer.test.ts: 13 tests
+- scheduler.test.ts: 8 tests
+- subscription-optimizer.test.ts: 8 tests
+- action-generator.test.ts: 6 tests
+- optimizer.test.ts: 6 tests
+- recalculator.test.ts: 8 tests
+- route.test.ts (optimizer-v2): 4 tests
+
+**Verification:**
+- Lint: PASS (2 warnings for unused params - intentional for API consistency)
+- TypeCheck: PASS
+- Tests: 804/804 PASS
+- Build: PASS
+
+**Files created:**
+- src/lib/optimizer-v2/types.ts
+- src/lib/optimizer-v2/intent-builder.ts
+- src/lib/optimizer-v2/intent-builder.test.ts
+- src/lib/optimizer-v2/time-calculator.ts
+- src/lib/optimizer-v2/time-calculator.test.ts
+- src/lib/optimizer-v2/prioritizer.ts
+- src/lib/optimizer-v2/prioritizer.test.ts
+- src/lib/optimizer-v2/scheduler.ts
+- src/lib/optimizer-v2/scheduler.test.ts
+- src/lib/optimizer-v2/subscription-optimizer.ts
+- src/lib/optimizer-v2/subscription-optimizer.test.ts
+- src/lib/optimizer-v2/action-generator.ts
+- src/lib/optimizer-v2/action-generator.test.ts
+- src/lib/optimizer-v2/optimizer.ts
+- src/lib/optimizer-v2/optimizer.test.ts
+- src/lib/optimizer-v2/recalculator.ts
+- src/lib/optimizer-v2/recalculator.test.ts
+- src/app/api/optimizer-v2/route.ts
+- src/app/api/optimizer-v2/route.test.ts
+- supabase/migrations/010_optimizer_plans.sql
+
+**Status:** Merged to dev
+
+---
