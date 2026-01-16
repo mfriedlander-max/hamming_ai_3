@@ -66,12 +66,24 @@ export function BingeClient({ defaultWatchSpeed }: BingeClientProps) {
     setReminderSuccess(false)
 
     try {
-      // Create subscribe reminder
+      // First, lookup subscription ID from service_id
+      const subResponse = await fetch(`/api/subscriptions?service_id=${bingePlan.service_id}`)
+      if (!subResponse.ok) {
+        throw new Error('Failed to find subscription for this service')
+      }
+      const subscriptions = await subResponse.json()
+      const subscription = subscriptions.find((s: { service_id: string }) => s.service_id === bingePlan.service_id)
+
+      if (!subscription) {
+        throw new Error('You need to subscribe to this service first to set reminders')
+      }
+
+      // Create subscribe reminder using actual subscription ID
       const subscribeResponse = await fetch('/api/reminders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          subscription_id: bingePlan.service_id,
+          subscription_id: subscription.id, // Use actual subscription ID
           type: 'resubscribe',
           trigger_date: bingePlan.subscribe_date,
         }),
@@ -81,12 +93,12 @@ export function BingeClient({ defaultWatchSpeed }: BingeClientProps) {
         throw new Error('Failed to create subscribe reminder')
       }
 
-      // Create cancel reminder
+      // Create cancel reminder using actual subscription ID
       const cancelResponse = await fetch('/api/reminders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          subscription_id: bingePlan.service_id,
+          subscription_id: subscription.id, // Use actual subscription ID
           type: 'cancel',
           trigger_date: bingePlan.cancel_date,
         }),

@@ -6,9 +6,19 @@ import type { ThisWeekAction } from '../optimizer-v2/types'
 const mockEq = vi.fn().mockReturnValue({ error: null })
 const mockUpdate = vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ eq: mockEq }) })
 const mockInsert = vi.fn().mockReturnValue({ error: null })
+const mockSelect = vi.fn().mockReturnValue({
+  eq: vi.fn().mockReturnValue({
+    eq: vi.fn().mockReturnValue({
+      single: vi.fn().mockReturnValue({
+        data: { id: 'sub-123' }, // Return a mock subscription ID
+        error: null,
+      }),
+    }),
+  }),
+})
 const mockFrom = vi.fn().mockImplementation((table: string) => {
   if (table === 'subscriptions') {
-    return { update: mockUpdate }
+    return { update: mockUpdate, select: mockSelect }
   }
   return { insert: mockInsert }
 })

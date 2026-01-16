@@ -49,6 +49,16 @@ vi.mock('@/lib/supabase/server', () => ({
         }
         if (table === 'subscriptions') {
           return {
+            select: vi.fn(() => ({
+              eq: vi.fn(() => ({
+                eq: vi.fn(() => ({
+                  single: vi.fn(() => ({
+                    data: { id: 'sub-123' }, // Return a mock subscription ID
+                    error: null,
+                  })),
+                })),
+              })),
+            })),
             update: vi.fn(() => ({
               eq: vi.fn((col: string, val: string) => {
                 if (col === 'id') mockSubscriptionsUpdated.push(val)

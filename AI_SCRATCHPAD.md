@@ -1468,3 +1468,155 @@ Complete Content Calendar page with 4 sections that shows everything and control
 **Status:** Merged to dev
 
 ---
+
+## 2026-01-15: UX Integration Bug Fixes
+
+**Branch:** dev (direct fixes)
+
+**What was fixed:**
+
+### Critical Bug #1: Reminder Schema Mismatch
+Auto-pilot and optimizer-v2 used wrong column names when creating reminders:
+- Code used `reminder_type` but schema has `type`
+- Code used `reminder_date` but schema has `trigger_date`
+- Code used non-existent `message` column
+
+**Files fixed:**
+- `src/lib/auto-pilot/action-executor.ts` - lines 39-55
+- `src/app/api/optimizer-v2/apply/route.ts` - lines 67-84
+
+### Critical Bug #2: Invalid 'custom' Enum Value
+Code used `'custom'` as reminder type but database only allows `'cancel'` | `'resubscribe'`.
+
+**Fix:** Changed `'custom'` to `'resubscribe'` for `set_reminder` actions.
+
+### Critical Bug #3: Service ID vs Subscription ID Confusion
+`ThisWeekAction.service_id` contains services table ID but was passed where `subscription_id` (subscriptions table PK) was expected.
+
+**Impact:** FK constraint violations, wrong subscription updates, API validation failures.
+
+**Locations fixed:**
+- `src/lib/auto-pilot/action-executor.ts` - added subscription lookup before reminder creation
+- `src/app/api/optimizer-v2/apply/route.ts` - added subscription lookup before processing
+- `src/components/binge/BingeClient.tsx` - added subscription lookup before calling reminders API
+- `src/app/(app)/recommendations/page.tsx` - fixed to pass subscription ID instead of service ID
+
+### Additional Fixes
+- Added `'subscription_lookup'` to `ExecutionError.error_type` union in types.ts
+- Updated test mocks in action-executor.test.ts and optimizer-v2/apply/route.test.ts
+- Updated test mocks in BingeClient.test.tsx
+
+**Tests:** 890 passing (unchanged count)
+
+**Verification:**
+- npm test: PASS (890/890)
+- npm run build: PASS
+
+**Files modified:**
+- src/lib/auto-pilot/action-executor.ts
+- src/lib/auto-pilot/action-executor.test.ts
+- src/lib/auto-pilot/types.ts
+- src/app/api/optimizer-v2/apply/route.ts
+- src/app/api/optimizer-v2/apply/route.test.ts
+- src/components/binge/BingeClient.tsx
+- src/components/binge/BingeClient.test.tsx
+- src/app/(app)/recommendations/page.tsx
+
+**Status:** Fixes applied on dev
+
+---
+
+## 2026-01-15: UX-4 One-Tap Actions Complete
+
+**Branch:** `feature/ux-4-one-tap-actions` (worktree at `.worktrees/ux-4-one-tap-actions`)
+
+**What was built:**
+
+### Queue API (TDD)
+- `src/lib/queue/types.ts`: Queue type definitions
+  - QueueItem, QueueItemSource, CreateQueueItemInput
+  - Queue reorder types
+
+- `src/app/api/queue/route.ts` (8 tests): Queue CRUD
+  - GET: Fetch user's queue items ordered by priority
+  - POST: Create new queue item with auto-incrementing priority
+  - DELETE: Remove queue item by ID
+
+- `src/app/api/queue/binge/route.ts` (4 tests): Binge planning
+  - Fetches TMDB show details for episode count/runtime
+  - Uses user's watch_speed preference for deadline calculation
+  - Creates queue item with source='binge_plan'
+
+- `src/app/api/queue/watch-together/route.ts` (4 tests): Social watching
+  - Creates watch-together session in database
+  - Links queue item to session
+  - Notifies invited friends
+
+- `src/app/api/queue/reorder/route.ts`: Priority reordering
+  - Batch updates priorities for drag-drop reordering
+
+### Calendar Actions API (TDD)
+- `src/app/api/calendar/actions/route.ts` (6 tests): Unified calendar endpoint
+  - apply_all: Creates reminders and updates subscriptions from optimizer plan
+  - regenerate: Invalidates cached optimizer plan
+  - add_to_queue: Adds release to user's watch queue
+  - set_reminder: Creates reminder for release date
+  - remove_from_queue: Deletes queue item
+
+### Client Action Handlers (TDD)
+- `src/lib/calendar-unified/action-handlers.ts` (9 tests): API wrappers
+  - addToQueue, removeFromQueue
+  - planBinge, watchTogether
+  - setReminder, applyAllActions, regeneratePlan
+  - reorderQueue
+  - Error handling with typed responses
+
+- `src/lib/calendar-unified/use-calendar-actions.ts` (6 tests): React hook
+  - Loading and error state management
+  - onSuccess/onError callbacks
+  - Wrapped action handlers with try/catch
+
+### Drag-and-Drop Component (TDD)
+- `src/components/calendar-unified/DraggableQueueItem.tsx` (4 tests): Sortable item
+  - Uses @dnd-kit/sortable (useSortable hook)
+  - Drag handle with grip icon
+  - Urgent deadline highlighting (≤3 days)
+  - Friend share badges
+  - Action buttons: Add to Watchlist, Plan Binge, Remove
+
+**Tests:** 931 passing (+41 new)
+- queue/route.test.ts: 8 tests
+- queue/binge/route.test.ts: 4 tests
+- queue/watch-together/route.test.ts: 4 tests
+- calendar/actions/route.test.ts: 6 tests
+- action-handlers.test.ts: 9 tests
+- use-calendar-actions.test.ts: 6 tests
+- DraggableQueueItem.test.tsx: 4 tests
+
+**Verification:**
+- Lint: PASS (4 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 931/931 PASS
+- Build: PASS
+
+**Files created:**
+- src/lib/queue/types.ts
+- src/app/api/queue/route.ts
+- src/app/api/queue/route.test.ts
+- src/app/api/queue/binge/route.ts
+- src/app/api/queue/binge/route.test.ts
+- src/app/api/queue/watch-together/route.ts
+- src/app/api/queue/watch-together/route.test.ts
+- src/app/api/queue/reorder/route.ts
+- src/app/api/calendar/actions/route.ts
+- src/app/api/calendar/actions/route.test.ts
+- src/lib/calendar-unified/action-handlers.ts
+- src/lib/calendar-unified/action-handlers.test.ts
+- src/lib/calendar-unified/use-calendar-actions.ts
+- src/lib/calendar-unified/use-calendar-actions.test.ts
+- src/components/calendar-unified/DraggableQueueItem.tsx
+- src/components/calendar-unified/DraggableQueueItem.test.tsx
+
+**Status:** Merged to dev
+
+---

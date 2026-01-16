@@ -113,6 +113,16 @@ describe('BingeClient', () => {
         ok: true,
         json: () => Promise.resolve({ plan: mockPlan }),
       })
+      // Mock subscription lookup
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([{ id: 'sub-123', service_id: 'service-123' }]),
+      })
+      // Mock reminder creation
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ success: true }),
+      })
       .mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ success: true }),
@@ -140,6 +150,12 @@ describe('BingeClient', () => {
         ok: true,
         json: () => Promise.resolve({ plan: mockPlan }),
       })
+      // Mock subscription lookup
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve([{ id: 'sub-123', service_id: 'service-123' }]),
+      })
+      // Mock reminder creation
       .mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ id: 'reminder-1' }),

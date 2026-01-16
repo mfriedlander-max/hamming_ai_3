@@ -63,21 +63,27 @@ export async function POST(request: Request) {
     const now = new Date().toISOString()
     const actionId = randomUUID()
 
+    // Lookup subscription by service_id to get actual subscription_id
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('id')
+      .eq('service_id', action.service_id)
+      .eq('user_id', user.id)
+      .single()
+
     // Create reminder for reminder-type actions
-    if (['set_reminder', 'cancel', 'subscribe'].includes(action.type)) {
+    if (['set_reminder', 'cancel', 'subscribe'].includes(action.type) && subscription) {
+      // Map action type to valid reminder_type enum: 'cancel' | 'resubscribe'
       const reminderType =
         action.type === 'cancel'
           ? 'cancel'
-          : action.type === 'subscribe'
-            ? 'resubscribe'
-            : 'custom'
+          : 'resubscribe' // Both 'subscribe' and 'set_reminder' map to 'resubscribe'
 
       await supabase.from('reminders').insert({
         user_id: user.id,
-        subscription_id: action.service_id,
-        reminder_type: reminderType,
-        reminder_date: action.date,
-        message: action.reason,
+        subscription_id: subscription.id, // Use actual subscription ID
+        type: reminderType, // Correct column name
+        trigger_date: action.date, // Correct column name
       })
       reminders_created++
     }
@@ -95,11 +101,13 @@ export async function POST(request: Request) {
     auto_actions_created++
 
     // Update subscription board_column to 'scheduled'
-    await supabase
-      .from('subscriptions')
-      .update({ board_column: 'scheduled' })
-      .eq('id', action.service_id)
-    subscriptions_updated++
+    if (subscription) {
+      await supabase
+        .from('subscriptions')
+        .update({ board_column: 'scheduled' })
+        .eq('id', subscription.id) // Use actual subscription ID
+      subscriptions_updated++
+    }
 
     // Track applied action
     actions_applied.push({

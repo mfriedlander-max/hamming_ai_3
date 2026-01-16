@@ -83,7 +83,7 @@ export interface ExecutionResult {
 
 export interface ExecutionError {
   action_id: string
-  error_type: 'subscription_update' | 'reminder_create' | 'notification_send' | 'unknown'
+  error_type: 'subscription_lookup' | 'subscription_update' | 'reminder_create' | 'notification_send' | 'unknown'
   message: string
 }
 

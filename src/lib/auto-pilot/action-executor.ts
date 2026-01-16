@@ -29,19 +29,37 @@ export async function executeAction(
       case 'cancel':
       case 'subscribe': {
         // Create reminder in reminders table
+        // Map action type to valid reminder_type enum: 'cancel' | 'resubscribe'
         const reminderType =
           action.type === 'cancel'
             ? 'cancel'
-            : action.type === 'subscribe'
-              ? 'resubscribe'
-              : 'custom'
+            : 'resubscribe' // Both 'subscribe' and 'set_reminder' map to 'resubscribe'
+
+        // Lookup subscription by service_id to get actual subscription_id
+        const { data: subscription, error: subLookupError } = await supabase
+          .from('subscriptions')
+          .select('id')
+          .eq('service_id', action.service_id)
+          .eq('user_id', userId)
+          .single()
+
+        if (subLookupError || !subscription) {
+          return {
+            success: false,
+            autoAction: null,
+            error: {
+              action_id: actionId,
+              error_type: 'subscription_lookup',
+              message: subLookupError?.message || 'Subscription not found for service',
+            },
+          }
+        }
 
         const { error: reminderError } = await supabase.from('reminders').insert({
           user_id: userId,
-          subscription_id: action.service_id,
-          reminder_type: reminderType,
-          reminder_date: action.date,
-          message: action.reason,
+          subscription_id: subscription.id, // Use actual subscription ID
+          type: reminderType, // Correct column name
+          trigger_date: action.date, // Correct column name
         })
 
         if (reminderError) {
@@ -64,13 +82,14 @@ export async function executeAction(
         const newStatus = action.type === 'pause' ? 'paused' : 'active'
         const newBoardColumn = action.type === 'pause' ? 'paused' : 'active'
 
+        // Use service_id + user_id to find correct subscription
         const { error: subError } = await supabase
           .from('subscriptions')
           .update({
             status: newStatus,
             board_column: newBoardColumn,
           })
-          .eq('id', action.service_id)
+          .eq('service_id', action.service_id) // Correct: lookup by service_id
           .eq('user_id', userId)
 
         if (subError) {

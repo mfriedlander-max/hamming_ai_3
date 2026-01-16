@@ -34,7 +34,7 @@ export default async function RecommendationsPage() {
     const serviceData = sub.service as unknown
     const service = Array.isArray(serviceData) ? serviceData[0] : serviceData as { id: string; name: string } | null
     return {
-      id: service?.id || sub.service_id,
+      id: sub.id, // Use subscription ID, not service ID
       name: service?.name || 'Unknown Service',
       monthly_cost: sub.monthly_cost,
     }
