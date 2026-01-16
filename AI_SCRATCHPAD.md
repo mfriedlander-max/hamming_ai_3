@@ -1620,3 +1620,71 @@ Code used `'custom'` as reminder type but database only allows `'cancel'` | `'re
 **Status:** Merged to dev
 
 ---
+
+## 2026-01-16: UX-5 Remove Old Pages Complete
+
+**Branch:** `feature/ux-5-remove-old-pages` (worktree at `.worktrees/ux-5-remove-old-pages`)
+
+**Goal:** Remove redundant pages merged into unified calendar, simplify navigation to 6 items.
+
+**What was removed:**
+
+### Pages Deleted (3)
+- `src/app/(app)/recommendations/page.tsx`
+- `src/app/(app)/optimizer/page.tsx`
+- `src/app/(app)/binge/page.tsx`
+
+### Components Deleted (15 files)
+- `src/components/recommendations/` (9 files)
+  - RecommendationBadge, RecommendationCard, RecommendationCardSkeleton
+  - RecommendationsSummary, RecommendationsClient, index
+- `src/components/binge/` (6 files)
+  - BingePlanCard, WatchSpeedSlider, BingeClient (+ tests)
+
+### API Routes Deleted (5 files)
+- `src/app/api/recommendations/route.ts`
+- `src/app/api/optimizer/route.ts` + test
+- `src/app/api/optimizer/apply/route.ts` + test
+
+### Moved to Legacy (14 files)
+- `src/lib/optimizer/` → `src/lib/optimizer-legacy/` (6 files)
+- `src/components/optimizer/` → `src/components/optimizer-legacy/` (8 files)
+
+**What was updated:**
+
+### Sidebar Navigation
+Changed from 9 items to 6 items:
+1. Dashboard
+2. Content Calendar ← The super page
+3. Household
+4. Friends
+5. Reminders
+6. Settings
+
+### Middleware
+- Default redirect changed from `/dashboard` to `/calendar`
+- Added `/calendar`, `/household`, `/friends`, `/settings` to protected paths
+
+### next.config.ts
+Added permanent redirects:
+```typescript
+{ source: '/recommendations', destination: '/calendar', permanent: true }
+{ source: '/optimizer', destination: '/calendar', permanent: true }
+{ source: '/binge', destination: '/calendar', permanent: true }
+```
+
+### taste-profile route
+- Removed import of `clearCachedRecommendations` from deleted recommendations API
+- Now clears `optimizer_plans` cache directly
+
+**Tests:** 879 passing (-52 from deleted components)
+
+**Verification:**
+- Lint: PASS (4 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 879/879 PASS
+- Build: PASS
+
+**Status:** Merged to dev
+
+---
