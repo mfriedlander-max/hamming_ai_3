@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { OptimizedTimeline } from './OptimizedTimeline'
-import type { MonthPlan } from '@/lib/optimizer/types'
+import type { MonthPlan } from '@/lib/optimizer-legacy/types'
 
 describe('OptimizedTimeline', () => {
   const mockMonths: MonthPlan[] = [

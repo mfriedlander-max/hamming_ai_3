@@ -63,24 +63,17 @@ describe('Sidebar', () => {
     expect(screen.getByRole('link', { name: /content calendar/i })).toHaveAttribute('href', '/calendar')
   })
 
-  it('renders Optimizer link', () => {
-    render(<Sidebar />)
-
-    expect(screen.getByRole('link', { name: /optimizer/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /optimizer/i })).toHaveAttribute('href', '/optimizer')
-  })
-
-  it('renders Binge Planner link', () => {
-    render(<Sidebar />)
-
-    expect(screen.getByRole('link', { name: /binge planner/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /binge planner/i })).toHaveAttribute('href', '/binge')
-  })
-
   it('renders Household link', () => {
     render(<Sidebar />)
 
     expect(screen.getByRole('link', { name: /household/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /household/i })).toHaveAttribute('href', '/household')
+  })
+
+  it('renders Friends link', () => {
+    render(<Sidebar />)
+
+    expect(screen.getByRole('link', { name: /friends/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /friends/i })).toHaveAttribute('href', '/friends')
   })
 })

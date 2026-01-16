@@ -5,14 +5,11 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Home, Bell, LogOut, Sparkles, Menu, X, Settings, Calendar, TrendingUp, PlayCircle, Users, UsersRound } from "lucide-react";
+import { Home, Bell, LogOut, Menu, X, Settings, Calendar, Users, UsersRound } from "lucide-react";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
-  { href: "/recommendations", label: "AI Recommendations", icon: Sparkles },
-  { href: "/optimizer", label: "Optimizer", icon: TrendingUp },
-  { href: "/binge", label: "Binge Planner", icon: PlayCircle },
   { href: "/calendar", label: "Content Calendar", icon: Calendar },
   { href: "/household", label: "Household", icon: UsersRound },
   { href: "/friends", label: "Friends", icon: Users },

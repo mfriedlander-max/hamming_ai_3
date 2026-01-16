@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import type { MonthPlan } from '@/lib/optimizer/types'
+import type { MonthPlan } from '@/lib/optimizer-legacy/types'
 
 interface MonthlyBreakdownProps {
   months: MonthPlan[]

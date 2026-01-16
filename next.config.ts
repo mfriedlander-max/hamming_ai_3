@@ -10,6 +10,25 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/recommendations',
+        destination: '/calendar',
+        permanent: true,
+      },
+      {
+        source: '/optimizer',
+        destination: '/calendar',
+        permanent: true,
+      },
+      {
+        source: '/binge',
+        destination: '/calendar',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default nextConfig;

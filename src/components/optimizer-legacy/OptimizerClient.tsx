@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { SavingsSummary } from './SavingsSummary'
 import { OptimizedTimeline } from './OptimizedTimeline'
 import { MonthlyBreakdown } from './MonthlyBreakdown'
-import type { OptimizedSchedule } from '@/lib/optimizer/types'
+import type { OptimizedSchedule } from '@/lib/optimizer-legacy/types'
 
 type Status = 'idle' | 'loading' | 'success' | 'error' | 'applying' | 'applied'
 

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { GENRES } from '@/lib/constants'
-import { clearCachedRecommendations } from '@/app/api/recommendations/route'
 import { errorResponse } from '@/lib/errors'
 
 export async function GET() {
@@ -87,8 +86,8 @@ export async function PATCH(request: Request) {
       return errorResponse('Failed to update taste profile', 500)
     }
 
-    // Clear recommendation cache so next fetch gets fresh data
-    clearCachedRecommendations(user.id)
+    // Clear optimizer cache so next fetch generates fresh plan
+    await supabase.from('optimizer_plans').delete().eq('user_id', user.id)
 
     return NextResponse.json({ success: true })
   } catch (error) {

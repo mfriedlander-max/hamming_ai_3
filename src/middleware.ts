@@ -43,7 +43,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Define protected routes
-  const protectedPaths = ["/dashboard", "/onboarding", "/reminders"];
+  const protectedPaths = ["/dashboard", "/calendar", "/onboarding", "/reminders", "/household", "/friends", "/settings"];
   const isProtectedPath = protectedPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   );
@@ -61,17 +61,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect to dashboard if accessing auth routes while logged in
+  // Redirect to calendar if accessing auth routes while logged in
   if (isAuthPath && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = "/calendar";
     return NextResponse.redirect(url);
   }
 
-  // Redirect root to dashboard or login
+  // Redirect root to calendar or login
   if (request.nextUrl.pathname === "/") {
     const url = request.nextUrl.clone();
-    url.pathname = user ? "/dashboard" : "/login";
+    url.pathname = user ? "/calendar" : "/login";
     return NextResponse.redirect(url);
   }
 

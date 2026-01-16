@@ -6,17 +6,10 @@ vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(),
 }))
 
-// Mock the recommendations cache clearing function
-vi.mock('@/app/api/recommendations/route', () => ({
-  clearCachedRecommendations: vi.fn(),
-}))
-
 import { createClient } from '@/lib/supabase/server'
-import { clearCachedRecommendations } from '@/app/api/recommendations/route'
 import { GET, PATCH } from './route'
 
 const mockCreateClient = createClient as ReturnType<typeof vi.fn>
-const mockClearCache = clearCachedRecommendations as ReturnType<typeof vi.fn>
 
 describe('/api/taste-profile', () => {
   beforeEach(() => {
@@ -148,7 +141,10 @@ describe('/api/taste-profile', () => {
       expect(data.error).toContain('Invalid genre')
     })
 
-    it('updates taste profile and clears recommendation cache', async () => {
+    it('updates taste profile and clears optimizer cache', async () => {
+      const mockDelete = vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ error: null }),
+      })
       const mockUpsert = vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({
@@ -158,6 +154,16 @@ describe('/api/taste-profile', () => {
         }),
       })
 
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'taste_profiles') {
+          return { upsert: mockUpsert }
+        }
+        if (table === 'optimizer_plans') {
+          return { delete: mockDelete }
+        }
+        return {}
+      })
+
       mockCreateClient.mockResolvedValue({
         auth: {
           getUser: vi.fn().mockResolvedValue({
@@ -165,9 +171,7 @@ describe('/api/taste-profile', () => {
             error: null,
           }),
         },
-        from: vi.fn().mockReturnValue({
-          upsert: mockUpsert,
-        }),
+        from: mockFrom,
       })
 
       const request = new NextRequest('http://localhost/api/taste-profile', {
@@ -183,10 +187,14 @@ describe('/api/taste-profile', () => {
 
       expect(response.status).toBe(200)
       expect(data.success).toBe(true)
-      expect(mockClearCache).toHaveBeenCalledWith('user-123')
+      expect(mockFrom).toHaveBeenCalledWith('optimizer_plans')
+      expect(mockDelete).toHaveBeenCalled()
     })
 
     it('accepts partial updates (genres only)', async () => {
+      const mockDelete = vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ error: null }),
+      })
       const mockUpsert = vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({
@@ -196,6 +204,16 @@ describe('/api/taste-profile', () => {
         }),
       })
 
+      const mockFrom = vi.fn().mockImplementation((table: string) => {
+        if (table === 'taste_profiles') {
+          return { upsert: mockUpsert }
+        }
+        if (table === 'optimizer_plans') {
+          return { delete: mockDelete }
+        }
+        return {}
+      })
+
       mockCreateClient.mockResolvedValue({
         auth: {
           getUser: vi.fn().mockResolvedValue({
@@ -203,9 +221,7 @@ describe('/api/taste-profile', () => {
             error: null,
           }),
         },
-        from: vi.fn().mockReturnValue({
-          upsert: mockUpsert,
-        }),
+        from: mockFrom,
       })
 
       const request = new NextRequest('http://localhost/api/taste-profile', {

@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { MonthPlan } from '@/lib/optimizer/types'
+import type { MonthPlan } from '@/lib/optimizer-legacy/types'
 
 interface OptimizedTimelineProps {
   months: MonthPlan[]

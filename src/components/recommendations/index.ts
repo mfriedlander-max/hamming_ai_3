@@ -1,5 +1,0 @@
-export { RecommendationBadge, type Verdict } from './RecommendationBadge'
-export { RecommendationCard } from './RecommendationCard'
-export { RecommendationCardSkeleton } from './RecommendationCardSkeleton'
-export { RecommendationsSummary } from './RecommendationsSummary'
-export { RecommendationsClient } from './RecommendationsClient'
