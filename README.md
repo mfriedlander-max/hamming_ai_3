@@ -24,10 +24,11 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Phase 13a: Household Mode
 - [x] Phase 13b: Social/Friends
 - [x] Direct Cancellation: Cancel subscriptions via external service URLs
+- [x] UX-1: Optimizer Brain (unified watch intent system)
 
 ## Current Status
 
-Direct Cancellation feature complete! 730 tests passing. Household Mode allows families to create households with invite codes, share subscriptions, and view combined taste profiles across all members. Social/Friends features include friend requests, activity feeds showing subscription changes, and collaborative shared watchlists with owner/editor/viewer roles. Both features add new pages (/household and /friends) with sidebar navigation.
+UX Overhaul Phase 1 complete! 804 tests passing. The new optimizer-v2 library provides a modular, algorithmic approach to subscription optimization with deterministic priority scoring. Features include unified watch intents from all data sources (taste matches, watchlists, friend shares, binge plans), smart scheduling with overload detection, subscription window optimization with savings calculation, and database caching with hash-based invalidation.
 
 ## Tech Stack
 
