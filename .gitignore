@@ -39,3 +39,9 @@ Thumbs.db
 
 # Testing
 coverage/
+
+# Playwright MCP screenshots
+.playwright-mcp/
+
+# Supabase temp
+supabase/.temp/
