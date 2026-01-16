@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/auto-pilot/execute",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
