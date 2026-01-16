@@ -1,0 +1,155 @@
+'use client'
+
+import { useState } from 'react'
+import { OptimizerSummary } from './OptimizerSummary'
+import { WatchQueue } from './WatchQueue'
+import { CalendarView } from './CalendarView'
+import { UpcomingReleases } from './UpcomingReleases'
+import { ReleaseDetailModal } from './ReleaseDetailModal'
+import { Loader2 } from 'lucide-react'
+import type {
+  CalendarOptimizedPlan,
+  CalendarWatchSlot,
+  CalendarAction,
+  CalendarSavings,
+  CalendarSubscriptionWindow,
+  ContentRelease,
+} from '@/lib/optimizer-v2/types'
+
+type OptimizedPlan = CalendarOptimizedPlan
+type WatchSlot = CalendarWatchSlot
+type ThisWeekAction = CalendarAction
+type Savings = CalendarSavings
+type SubscriptionWindow = CalendarSubscriptionWindow
+
+interface ContentCalendarPageProps {
+  plan: OptimizedPlan | null
+  releases: ContentRelease[]
+  isLoading: boolean
+  onApplyAll: () => void
+  onRegenerate: () => void
+  onRemoveFromQueue: (intentId: string) => void
+  onAddToQueue: (release: ContentRelease) => void
+}
+
+const emptySavings: Savings = {
+  current_annual_cost: 0,
+  optimized_annual_cost: 0,
+  annual_savings: 0,
+  savings_percentage: 0,
+}
+
+export function ContentCalendarPage({
+  plan,
+  releases,
+  isLoading,
+  onApplyAll,
+  onRegenerate,
+  onRemoveFromQueue,
+  onAddToQueue,
+}: ContentCalendarPageProps) {
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [selectedRelease, setSelectedRelease] = useState<ContentRelease | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Extract data from plan or use defaults
+  const savings: Savings = plan?.savings ?? emptySavings
+  const watchQueue: WatchSlot[] = plan?.watch_queue ?? []
+  const subscriptionWindows: SubscriptionWindow[] = plan?.subscription_windows ?? []
+  const thisWeekActions: ThisWeekAction[] = plan?.this_week_actions ?? []
+
+  const handleSelectRelease = (release: ContentRelease) => {
+    setSelectedRelease(release)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedRelease(null)
+  }
+
+  const handlePlanBinge = (slot: WatchSlot) => {
+    // TODO: Implement binge planning
+    console.log('Plan binge for:', slot.title)
+  }
+
+  const handleAddToWatchlist = (slot: WatchSlot) => {
+    // TODO: Implement add to watchlist
+    console.log('Add to watchlist:', slot.title)
+  }
+
+  const handleSetReminder = (release: ContentRelease) => {
+    // TODO: Implement set reminder
+    console.log('Set reminder for:', release.title)
+    handleCloseModal()
+  }
+
+  const handleAddToQueueFromModal = (release: ContentRelease) => {
+    onAddToQueue(release)
+    handleCloseModal()
+  }
+
+  const handlePlanBingeFromModal = (release: ContentRelease) => {
+    // TODO: Implement binge planning from modal
+    console.log('Plan binge from modal for:', release.title)
+    handleCloseModal()
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-primary" />
+          <p className="text-gray-600">Loading your optimized plan...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Section 1: Optimizer Summary */}
+      <OptimizerSummary
+        savings={savings}
+        actions={thisWeekActions}
+        onApplyAll={onApplyAll}
+        onRegenerate={onRegenerate}
+        isLoading={isLoading}
+      />
+
+      {/* Section 2: Watch Queue */}
+      <WatchQueue
+        slots={watchQueue}
+        onRemove={onRemoveFromQueue}
+        onPlanBinge={handlePlanBinge}
+        onAddToWatchlist={handleAddToWatchlist}
+      />
+
+      {/* Section 3: Calendar View */}
+      <CalendarView
+        windows={subscriptionWindows}
+        releases={releases}
+        currentMonth={currentMonth}
+        onMonthChange={setCurrentMonth}
+        onSelectRelease={handleSelectRelease}
+      />
+
+      {/* Section 4: Upcoming Releases */}
+      <UpcomingReleases
+        releases={releases}
+        onAddToQueue={onAddToQueue}
+        onViewDetails={handleSelectRelease}
+      />
+
+      {/* Release Detail Modal */}
+      <ReleaseDetailModal
+        release={selectedRelease}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onAddToQueue={handleAddToQueueFromModal}
+        onPlanBinge={handlePlanBingeFromModal}
+        onSetReminder={handleSetReminder}
+      />
+    </div>
+  )
+}

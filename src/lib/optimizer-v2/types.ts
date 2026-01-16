@@ -208,3 +208,109 @@ export const PRIORITY_WEIGHTS = {
   BINGE_PLAN: 10,
   RELEASE_RECENT: 20, // ≤7 days old
 } as const
+
+// === CALENDAR-UNIFIED TYPES ===
+// Extended types for the unified calendar page
+
+export interface CalendarSavings {
+  current_annual_cost: number
+  optimized_annual_cost: number
+  annual_savings: number
+  savings_percentage: number
+}
+
+export interface CalendarAction {
+  id: string
+  action_type: ActionType
+  service_id: string
+  service_name: string
+  scheduled_date: string
+  reason: string
+}
+
+export interface CalendarWatchSlot {
+  intent_id: string
+  title: string
+  service_id: string
+  service_name: string
+  scheduled_date: string
+  duration_minutes: number
+  priority_score: number
+  source: WatchIntentSource
+  deadline?: string
+}
+
+export interface CalendarSubscriptionWindow {
+  service_id: string
+  service_name: string
+  start_date: string
+  end_date: string
+  monthly_cost: number
+  is_currently_subscribed: boolean
+  reason: string
+}
+
+export interface CalendarOptimizedPlan {
+  savings: CalendarSavings
+  watch_queue: CalendarWatchSlot[]
+  subscription_windows: CalendarSubscriptionWindow[]
+  this_week_actions: CalendarAction[]
+}
+
+export interface ContentRelease {
+  id: string
+  title: string
+  release_date: string
+  service_id: string
+  service_name: string
+  type: 'movie' | 'series'
+  taste_match_score: number
+  overview?: string
+  genres?: string[]
+  runtime?: number
+  season_count?: number
+  poster_path?: string
+  friend_watching?: boolean
+}
+
+// Helper to convert OptimizedPlan to CalendarOptimizedPlan
+export function toCalendarPlan(plan: OptimizedPlan, subscriptions: UserSubscription[]): CalendarOptimizedPlan {
+  const subscriptionMap = new Map(subscriptions.map(s => [s.service_id, s]))
+
+  return {
+    savings: {
+      current_annual_cost: plan.savings.current_yearly,
+      optimized_annual_cost: plan.savings.optimized_yearly,
+      annual_savings: plan.savings.savings_yearly,
+      savings_percentage: plan.savings.savings_percent,
+    },
+    watch_queue: plan.watch_intents.map(intent => ({
+      intent_id: intent.id,
+      title: intent.title,
+      service_id: intent.service_id,
+      service_name: intent.service_name,
+      scheduled_date: plan.watch_schedule.find(s => s.intent_id === intent.id)?.date || intent.release_date || '',
+      duration_minutes: intent.runtime_minutes || (intent.episode_count || 1) * 45,
+      priority_score: intent.priority_score,
+      source: intent.source,
+      deadline: intent.deadline,
+    })),
+    subscription_windows: plan.subscription_windows.map(window => ({
+      service_id: window.service_id,
+      service_name: window.service_name,
+      start_date: window.subscribe_date,
+      end_date: window.cancel_date,
+      monthly_cost: window.monthly_cost,
+      is_currently_subscribed: subscriptionMap.get(window.service_id)?.status === 'active',
+      reason: window.reason,
+    })),
+    this_week_actions: plan.this_week_actions.map((action, index) => ({
+      id: `action-${index}`,
+      action_type: action.type,
+      service_id: action.service_id,
+      service_name: action.service_name,
+      scheduled_date: action.date,
+      reason: action.reason,
+    })),
+  }
+}
