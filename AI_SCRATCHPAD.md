@@ -1721,6 +1721,121 @@ Code used `'custom'` as reminder type but database only allows `'cancel'` | `'re
 
 ---
 
+## 2026-01-17: UX-7 Edge Case Handling Complete
+
+**Branch:** `feature/ux-7-edge-cases` (worktree at `.worktrees/ux-7-edge-cases`)
+
+**Goal:** System handles real-world chaos gracefully - content changes, price changes, user absence, and overloaded queues.
+
+**What was built:**
+
+### Content Monitor (TDD)
+- `src/lib/edge-cases/content-monitor.ts` (7 tests): Detect TMDB content changes
+  - Release date changes
+  - Content removed from TMDB
+  - Show cancellation status
+  - Error handling for API failures
+
+### Price Monitor (TDD)
+- `src/lib/edge-cases/price-monitor.ts` (6 tests): Track service price changes
+  - Detect price increases/decreases
+  - Calculate percentage change
+  - Identify significant changes (>10%)
+  - Record in service_price_history table
+
+### Activity Monitor (TDD)
+- `src/lib/edge-cases/activity-monitor.ts` (6 tests): Track user activity
+  - Record login, queue interaction, item completion
+  - Get activity summary
+  - Detect inactive users (>7 days)
+
+### Vacation Mode (TDD)
+- `src/lib/edge-cases/vacation-mode.ts` (8 tests): Pause auto-pilot
+  - Enable/disable vacation mode
+  - Optional return date
+  - Auto-disable after return date
+  - Check vacation status
+
+### Queue Manager (TDD)
+- `src/lib/edge-cases/queue-manager.ts` (6 tests): Handle overloaded queue
+  - Check queue health (healthy/warning/overloaded)
+  - Calculate hours deficit
+  - Suggest items to remove by priority
+  - Detect deadline conflicts
+
+### Edge Cases API (TDD)
+- `src/app/api/edge-cases/check/route.ts` (5 tests): Daily cron check
+  - Run all monitors
+  - Skip if user on vacation
+  - Handle individual monitor errors gracefully
+  - Return comprehensive summary
+
+### Vacation Mode API
+- `src/app/api/vacation-mode/route.ts`: GET/POST vacation status
+
+### VacationMode Component (TDD)
+- `src/components/settings/VacationMode.tsx` (5 tests): Settings UI
+  - Toggle switch for vacation mode
+  - Optional return date picker
+  - Days remaining counter
+  - "I'm Back!" quick button
+
+### Database Migration
+- `supabase/migrations/012_vacation_mode.sql`:
+  - profiles: vacation_mode, vacation_start_date, vacation_return_date
+  - user_behavior_patterns: last_login_date, last_queue_interaction, items_completed_count
+  - service_price_history table with RLS
+
+### Integrations
+- Auto-pilot skips users on vacation
+- WatchQueue shows health indicator (overloaded/warning badges)
+- Settings page includes VacationMode in Profile tab
+
+**Tests:** 950 passing (+43 new)
+- content-monitor.test.ts: 7 tests
+- price-monitor.test.ts: 6 tests
+- activity-monitor.test.ts: 6 tests
+- vacation-mode.test.ts: 8 tests
+- queue-manager.test.ts: 6 tests
+- edge-cases/check/route.test.ts: 5 tests
+- VacationMode.test.tsx: 5 tests
+
+**Verification:**
+- Lint: PASS (5 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 950/950 PASS
+- Build: PASS
+
+**Files created:**
+- src/lib/edge-cases/types.ts
+- src/lib/edge-cases/content-monitor.ts
+- src/lib/edge-cases/content-monitor.test.ts
+- src/lib/edge-cases/price-monitor.ts
+- src/lib/edge-cases/price-monitor.test.ts
+- src/lib/edge-cases/activity-monitor.ts
+- src/lib/edge-cases/activity-monitor.test.ts
+- src/lib/edge-cases/vacation-mode.ts
+- src/lib/edge-cases/vacation-mode.test.ts
+- src/lib/edge-cases/queue-manager.ts
+- src/lib/edge-cases/queue-manager.test.ts
+- src/lib/edge-cases/index.ts
+- src/app/api/edge-cases/check/route.ts
+- src/app/api/edge-cases/check/route.test.ts
+- src/app/api/vacation-mode/route.ts
+- src/components/settings/VacationMode.tsx
+- src/components/settings/VacationMode.test.tsx
+- supabase/migrations/012_vacation_mode.sql
+
+**Files modified:**
+- src/app/api/auto-pilot/execute/route.ts (vacation mode integration)
+- src/app/api/auto-pilot/execute/route.test.ts (mock vacation-mode)
+- src/app/(app)/settings/SettingsClient.tsx (VacationMode component)
+- src/components/calendar-unified/WatchQueue.tsx (queue health indicator)
+
+**Status:** Merged to dev
+
+---
+
 ## 2026-01-16: UX-5 Remove Old Pages Complete
 
 **Branch:** `feature/ux-5-remove-old-pages` (worktree at `.worktrees/ux-5-remove-old-pages`)
