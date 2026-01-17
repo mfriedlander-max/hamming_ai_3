@@ -14,6 +14,7 @@ interface WatchQueueProps {
   onRemove: (intentId: string) => void
   onPlanBinge: (slot: WatchSlot) => void
   onAddToWatchlist: (slot: WatchSlot) => void
+  onWatchTogether?: (slot: WatchSlot) => void
   currentDate?: Date
   queueHealth?: QueueHealth | null
 }
@@ -44,6 +45,7 @@ export function WatchQueue({
   onRemove,
   onPlanBinge,
   onAddToWatchlist,
+  onWatchTogether,
   currentDate = new Date(),
   queueHealth,
 }: WatchQueueProps) {
@@ -88,6 +90,7 @@ export function WatchQueue({
             {slots.map((slot) => {
               const urgent = isUrgent(slot.deadline, currentDate)
               const isFriendShare = slot.source === 'friend_share'
+              const friendName = slot.source_details?.friend_name
 
               return (
                 <li
@@ -102,9 +105,9 @@ export function WatchQueue({
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium">{slot.title}</span>
                         {isFriendShare && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs" data-testid="friend-share-badge">
                             <Users className="h-3 w-3 mr-1" />
-                            Shared by friend
+                            {friendName ? `Shared by ${friendName}` : 'Shared by friend'}
                           </Badge>
                         )}
                         {urgent && (
@@ -128,6 +131,18 @@ export function WatchQueue({
                       </div>
                     </div>
                     <div className="flex items-center gap-1 ml-2">
+                      {isFriendShare && onWatchTogether && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onWatchTogether(slot)}
+                          title="Watch together"
+                          data-testid="watch-together-button"
+                        >
+                          <Users className="h-4 w-4" />
+                          <span className="sr-only">Watch Together</span>
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"

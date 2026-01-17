@@ -8,6 +8,7 @@ export interface ContentRelease {
   release_date: string // ISO date string
   poster_url: string | null
   genres: string[]
+  friend_watching?: boolean // Social integration: indicates if a friend has this in their queue
 }
 
 export interface ServiceReleases {

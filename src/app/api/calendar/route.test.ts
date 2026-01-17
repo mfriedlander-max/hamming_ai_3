@@ -139,7 +139,17 @@ describe('/api/calendar', () => {
               }),
             }
           }
-          return {}
+          // Default handler for social integration tables (friendships, watchlist_items)
+          // Returns empty data to allow tests to pass without friend enrichment
+          const emptyChain = {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            or: vi.fn().mockReturnThis(),
+            in: vi.fn().mockReturnThis(),
+            then: (resolve: (val: { data: unknown[]; error: null }) => void) =>
+              Promise.resolve({ data: [], error: null }).then(resolve),
+          }
+          return emptyChain
         }),
       })
 
@@ -301,7 +311,17 @@ describe('/api/calendar', () => {
               }),
             }
           }
-          return {}
+          // Default handler for social integration tables (friendships, watchlist_items)
+          // Returns empty data to allow tests to pass without friend enrichment
+          const emptyChain = {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            or: vi.fn().mockReturnThis(),
+            in: vi.fn().mockReturnThis(),
+            then: (resolve: (val: { data: unknown[]; error: null }) => void) =>
+              Promise.resolve({ data: [], error: null }).then(resolve),
+          }
+          return emptyChain
         }),
       })
 

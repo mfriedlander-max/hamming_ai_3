@@ -237,6 +237,13 @@ export interface CalendarWatchSlot {
   duration_minutes: number
   priority_score: number
   source: WatchIntentSource
+  source_details?: {
+    friend_id?: string
+    friend_name?: string
+    watchlist_id?: string
+    watchlist_name?: string
+    binge_plan_id?: string
+  }
   deadline?: string
 }
 

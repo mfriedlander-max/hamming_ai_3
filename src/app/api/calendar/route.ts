@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getMonthRange } from '@/lib/calendar/utils'
+import { enrichReleasesWithFriendActivity } from '@/lib/social-integration/friend-activity'
 import type {
   ContentRelease,
   CalendarMonth,
@@ -161,6 +162,36 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         services,
       }
     })
+
+    // Enrich releases with friend activity (friend_watching flag)
+    // Collect all releases across all months and services
+    const allReleases: ContentRelease[] = []
+    for (const month of months) {
+      for (const service of month.services) {
+        allReleases.push(...service.releases)
+      }
+    }
+
+    // Enrich with friend activity
+    const enrichedReleasesMap = new Map<string, ContentRelease>()
+    if (allReleases.length > 0) {
+      const enrichedReleases = await enrichReleasesWithFriendActivity(
+        allReleases,
+        user.id
+      )
+      for (const release of enrichedReleases) {
+        enrichedReleasesMap.set(release.id, release)
+      }
+
+      // Update the releases in months with enriched data
+      for (const month of months) {
+        for (const service of month.services) {
+          service.releases = service.releases.map(
+            (r) => enrichedReleasesMap.get(r.id) || r
+          )
+        }
+      }
+    }
 
     const response: CalendarResponse = { months }
     return NextResponse.json(response)

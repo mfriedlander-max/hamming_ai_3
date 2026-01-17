@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { OptimizerSummary } from './OptimizerSummary'
 import { WatchQueue } from './WatchQueue'
 import { CalendarView } from './CalendarView'
@@ -8,6 +8,7 @@ import { UpcomingReleases } from './UpcomingReleases'
 import { ReleaseDetailModal } from './ReleaseDetailModal'
 import { EmptyState } from './EmptyState'
 import { FirstSavingsPopup, hasSeenFirstSavings } from './FirstSavingsPopup'
+import { WatchTogetherModal } from './WatchTogetherModal'
 import { Loader2 } from 'lucide-react'
 import type {
   CalendarOptimizedPlan,
@@ -17,6 +18,7 @@ import type {
   CalendarSubscriptionWindow,
   ContentRelease,
 } from '@/lib/optimizer-v2/types'
+import type { FriendInfo, WatchTogetherInput } from '@/lib/social-integration/types'
 
 type OptimizedPlan = CalendarOptimizedPlan
 type WatchSlot = CalendarWatchSlot
@@ -44,6 +46,8 @@ interface ContentCalendarPageProps {
   services?: Service[]
   onGenreSelect?: (genres: string[]) => void
   onServiceAdd?: (serviceId: string, price: number) => void
+  // Social integration props
+  onWatchTogether?: (queueItemId: string, friendIds: string[], scheduledDate?: string, message?: string) => Promise<void>
 }
 
 const emptySavings: Savings = {
@@ -66,12 +70,41 @@ export function ContentCalendarPage({
   services = [],
   onGenreSelect,
   onServiceAdd,
+  onWatchTogether,
 }: ContentCalendarPageProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [selectedRelease, setSelectedRelease] = useState<ContentRelease | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [emptyStateStep, setEmptyStateStep] = useState(1)
   const [firstSavingsPopupDismissed, setFirstSavingsPopupDismissed] = useState(false)
+
+  // Watch Together modal state
+  const [watchTogetherSlot, setWatchTogetherSlot] = useState<WatchSlot | null>(null)
+  const [isWatchTogetherModalOpen, setIsWatchTogetherModalOpen] = useState(false)
+  const [friends, setFriends] = useState<FriendInfo[]>([])
+
+  // Fetch friends when component mounts
+  useEffect(() => {
+    async function fetchFriends() {
+      try {
+        const response = await fetch('/api/friends')
+        if (response.ok) {
+          const data = await response.json()
+          // Transform to FriendInfo format
+          setFriends(
+            (data.friends || []).map((f: { user_id: string; name: string | null; email: string }) => ({
+              id: f.user_id,
+              name: f.name || 'Unknown',
+              email: f.email,
+            }))
+          )
+        }
+      } catch (error) {
+        console.error('Failed to fetch friends:', error)
+      }
+    }
+    fetchFriends()
+  }, [])
 
   // Check if this is a new user (no subscriptions or taste profile)
   const isNewUser = !hasSubscriptions || !hasTasteProfile
@@ -143,6 +176,28 @@ export function ContentCalendarPage({
     setEmptyStateStep(3)
   }
 
+  // Watch Together handlers
+  const handleOpenWatchTogether = (slot: WatchSlot) => {
+    setWatchTogetherSlot(slot)
+    setIsWatchTogetherModalOpen(true)
+  }
+
+  const handleCloseWatchTogether = () => {
+    setIsWatchTogetherModalOpen(false)
+    setWatchTogetherSlot(null)
+  }
+
+  const handleWatchTogetherSubmit = async (input: Omit<WatchTogetherInput, 'queue_item_id'>) => {
+    if (!watchTogetherSlot || !onWatchTogether) return
+    await onWatchTogether(
+      watchTogetherSlot.intent_id,
+      input.friend_ids,
+      input.scheduled_date,
+      input.message
+    )
+    handleCloseWatchTogether()
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -187,6 +242,7 @@ export function ContentCalendarPage({
           onRemove={onRemoveFromQueue}
           onPlanBinge={handlePlanBinge}
           onAddToWatchlist={handleAddToWatchlist}
+          onWatchTogether={onWatchTogether ? handleOpenWatchTogether : undefined}
         />
       </div>
 
@@ -225,6 +281,15 @@ export function ContentCalendarPage({
         savingsAmount={savings.annual_savings}
         isVisible={showFirstSavingsPopup}
         onDismiss={() => setFirstSavingsPopupDismissed(true)}
+      />
+
+      {/* Watch Together Modal */}
+      <WatchTogetherModal
+        isOpen={isWatchTogetherModalOpen}
+        onClose={handleCloseWatchTogether}
+        onSubmit={handleWatchTogetherSubmit}
+        friends={friends}
+        contentTitle={watchTogetherSlot?.title || ''}
       />
     </div>
   )

@@ -1903,3 +1903,111 @@ Added permanent redirects:
 **Status:** Merged to dev
 
 ---
+
+## 2026-01-17: UX-8 Social Integration Complete
+
+**Branch:** `feature/ux-8-social-integration` (worktree at `.worktrees/ux-8-social-integration`)
+
+**Goal:** Friends enhance the calendar experience naturally. Social signals (friend shares, mutual watching) are integrated directly into the unified calendar.
+
+**What was built:**
+
+### Social Integration Library (TDD)
+- `src/lib/social-integration/types.ts`: Core type definitions
+  - FriendActivityItem, FriendsWatchingMap
+  - ShareContentInput, WatchTogetherInput
+  - SpoilerAlert, WatchTogetherSession, FriendInfo
+
+- `src/lib/social-integration/friend-activity.ts` (5 tests): Friend activity for calendar
+  - getFriendsActivity: Get watchlist items from friends
+  - getFriendsWatchingContent: Map tmdb_ids to friends watching
+  - enrichReleasesWithFriendActivity: Set friend_watching flag on releases
+
+- `src/lib/social-integration/share-handler.ts` (4 tests): Handle friend shares
+  - shareContentWithFriend: Create share and notification
+  - getSharesReceivedByUser: Fetch incoming shares
+  - addShareToQueue: Create queue item with source='friend_share'
+
+- `src/lib/social-integration/watch-together.ts` (4 tests): Schedule joint watching
+  - createWatchTogetherSession: Create session and notify friends
+  - getSessionsForUser: Get sessions as organizer or participant
+  - respondToSession: Accept/decline session invite
+
+- `src/lib/social-integration/spoiler-alert.ts` (3 tests): Spoiler warnings
+  - checkSpoilerRisks: Compare watch progress with friends
+  - Returns alerts when friends are ahead/behind on TV shows
+
+### Calendar API Update
+- `src/app/api/calendar/route.ts`: Enriches releases with friend_watching flag
+  - Imports enrichReleasesWithFriendActivity
+  - Applies to all releases before response
+
+### Calendar Types Update
+- `src/lib/calendar/types.ts`: Added friend_watching to ContentRelease
+
+### WatchQueue Component Update (2 tests)
+- `src/components/calendar-unified/WatchQueue.tsx`:
+  - Shows "Shared by {friend_name}" instead of generic "Shared by friend"
+  - Shows "Watch Together" button for friend-shared items
+  - New onWatchTogether prop for triggering modal
+
+### WatchTogetherModal Component (TDD, 3 tests)
+- `src/components/calendar-unified/WatchTogetherModal.tsx`:
+  - Friend selection with checkboxes
+  - Optional date picker for scheduling
+  - Optional message input
+  - Submit button disabled when no friends selected
+
+### ContentCalendarPage Integration
+- Added WatchTogetherModal integration
+- Fetches friends list on mount
+- Handles watch-together submission
+- Passes onWatchTogether to WatchQueue
+
+### Action Handlers Update
+- `src/lib/calendar-unified/action-handlers.ts`: Added message parameter to watchTogether
+- `src/lib/calendar-unified/use-calendar-actions.ts`: Updated hook signature
+
+**Tests:** 972 passing (+22 new)
+- friend-activity.test.ts: 5 tests
+- share-handler.test.ts: 4 tests
+- watch-together.test.ts: 4 tests
+- spoiler-alert.test.ts: 3 tests
+- WatchTogetherModal.test.tsx: 3 tests
+- WatchQueue.test.tsx: +2 tests (friend name, watch together button)
+- calendar/route.test.ts: Updated mocks for friend activity enrichment
+
+**Verification:**
+- Lint: PASS (5 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 972/972 PASS
+- Build: PASS
+
+**Files created:**
+- src/lib/social-integration/types.ts
+- src/lib/social-integration/friend-activity.ts
+- src/lib/social-integration/friend-activity.test.ts
+- src/lib/social-integration/share-handler.ts
+- src/lib/social-integration/share-handler.test.ts
+- src/lib/social-integration/watch-together.ts
+- src/lib/social-integration/watch-together.test.ts
+- src/lib/social-integration/spoiler-alert.ts
+- src/lib/social-integration/spoiler-alert.test.ts
+- src/lib/social-integration/index.ts
+- src/components/calendar-unified/WatchTogetherModal.tsx
+- src/components/calendar-unified/WatchTogetherModal.test.tsx
+
+**Files modified:**
+- src/app/api/calendar/route.ts (friend activity enrichment)
+- src/app/api/calendar/route.test.ts (updated mocks)
+- src/lib/calendar/types.ts (friend_watching field)
+- src/lib/optimizer-v2/types.ts (source_details in CalendarWatchSlot)
+- src/components/calendar-unified/WatchQueue.tsx (friend name + Watch Together button)
+- src/components/calendar-unified/WatchQueue.test.tsx (2 new tests)
+- src/components/calendar-unified/ContentCalendarPage.tsx (modal integration)
+- src/lib/calendar-unified/action-handlers.ts (message parameter)
+- src/lib/calendar-unified/use-calendar-actions.ts (hook update)
+
+**Status:** Ready for merge to dev
+
+---

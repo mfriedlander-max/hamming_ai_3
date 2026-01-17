@@ -84,7 +84,7 @@ export async function planBinge(show: BingeShowData) {
 /**
  * Create a watch-together session with friends
  */
-export async function watchTogether(queueItemId: string, friendIds: string[], scheduledDate?: string) {
+export async function watchTogether(queueItemId: string, friendIds: string[], scheduledDate?: string, message?: string) {
   return apiCall<{
     session: {
       id: string
@@ -97,6 +97,7 @@ export async function watchTogether(queueItemId: string, friendIds: string[], sc
     queue_item_id: queueItemId,
     friend_ids: friendIds,
     scheduled_date: scheduledDate,
+    message: message,
   })
 }
 

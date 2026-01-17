@@ -83,8 +83,8 @@ export function useCalendarActions(options: UseCalendarActionsOptions = {}) {
   )
 
   const handleWatchTogether = useCallback(
-    (queueItemId: string, friendIds: string[], scheduledDate?: string) =>
-      wrapAction(() => watchTogether(queueItemId, friendIds, scheduledDate)),
+    (queueItemId: string, friendIds: string[], scheduledDate?: string, message?: string) =>
+      wrapAction(() => watchTogether(queueItemId, friendIds, scheduledDate, message)),
     [wrapAction]
   )
 

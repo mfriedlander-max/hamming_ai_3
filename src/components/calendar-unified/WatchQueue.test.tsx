@@ -187,4 +187,73 @@ describe('WatchQueue', () => {
     expect(screen.getByRole('listitem')).toHaveClass('border-amber-300')
     expect(screen.getByText('Urgent')).toBeInTheDocument()
   })
+
+  it('shows friend name in badge when source_details has friend_name', () => {
+    const friendShareSlot: WatchSlot[] = [
+      {
+        intent_id: 'friend-1',
+        title: 'Friend Recommendation',
+        service_id: 'service-1',
+        service_name: 'Netflix',
+        scheduled_date: '2026-01-20',
+        duration_minutes: 120,
+        priority_score: 85,
+        source: 'friend_share',
+        source_details: {
+          friend_id: 'user-123',
+          friend_name: 'Alice',
+        },
+      },
+    ]
+
+    render(
+      <WatchQueue
+        slots={friendShareSlot}
+        onRemove={() => {}}
+        onPlanBinge={() => {}}
+        onAddToWatchlist={() => {}}
+      />
+    )
+
+    // Should show "Shared by Alice" instead of generic "Shared by friend"
+    expect(screen.getByText('Shared by Alice')).toBeInTheDocument()
+  })
+
+  it('shows Watch Together button for friend-shared items when onWatchTogether is provided', () => {
+    const onWatchTogether = vi.fn()
+    const friendShareSlot: WatchSlot[] = [
+      {
+        intent_id: 'friend-1',
+        title: 'Friend Recommendation',
+        service_id: 'service-1',
+        service_name: 'Netflix',
+        scheduled_date: '2026-01-20',
+        duration_minutes: 120,
+        priority_score: 85,
+        source: 'friend_share',
+        source_details: {
+          friend_id: 'user-123',
+          friend_name: 'Alice',
+        },
+      },
+    ]
+
+    render(
+      <WatchQueue
+        slots={friendShareSlot}
+        onRemove={() => {}}
+        onPlanBinge={() => {}}
+        onAddToWatchlist={() => {}}
+        onWatchTogether={onWatchTogether}
+      />
+    )
+
+    // Should show Watch Together button
+    const watchTogetherButton = screen.getByTestId('watch-together-button')
+    expect(watchTogetherButton).toBeInTheDocument()
+
+    // Click should call handler with slot
+    fireEvent.click(watchTogetherButton)
+    expect(onWatchTogether).toHaveBeenCalledWith(friendShareSlot[0])
+  })
 })
