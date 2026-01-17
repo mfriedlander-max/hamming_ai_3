@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { X, Play, Plus, Users, Clock, AlertTriangle } from 'lucide-react'
 import type { CalendarWatchSlot } from '@/lib/optimizer-v2/types'
+import type { QueueHealth } from '@/lib/edge-cases/types'
 
 type WatchSlot = CalendarWatchSlot
 
@@ -14,6 +15,7 @@ interface WatchQueueProps {
   onPlanBinge: (slot: WatchSlot) => void
   onAddToWatchlist: (slot: WatchSlot) => void
   currentDate?: Date
+  queueHealth?: QueueHealth | null
 }
 
 function formatDeadline(deadline: string): string {
@@ -43,8 +45,11 @@ export function WatchQueue({
   onPlanBinge,
   onAddToWatchlist,
   currentDate = new Date(),
+  queueHealth,
 }: WatchQueueProps) {
   const hasSlots = slots.length > 0
+  const isOverloaded = queueHealth?.status === 'overloaded'
+  const isWarning = queueHealth?.status === 'warning'
 
   return (
     <Card>
@@ -57,7 +62,25 @@ export function WatchQueue({
               {slots.length} items
             </Badge>
           )}
+          {isOverloaded && (
+            <Badge variant="destructive" className="ml-2" title={`${queueHealth.hours_deficit.toFixed(1)} hours over capacity`}>
+              <AlertTriangle className="h-3 w-3 mr-1" />
+              Overloaded
+            </Badge>
+          )}
+          {isWarning && (
+            <Badge variant="outline" className="ml-2 text-amber-600 border-amber-300">
+              <AlertTriangle className="h-3 w-3 mr-1" />
+              Near Capacity
+            </Badge>
+          )}
         </CardTitle>
+        {isOverloaded && queueHealth.hours_deficit > 0 && (
+          <p className="text-sm text-red-600 mt-1">
+            You need {queueHealth.hours_deficit.toFixed(1)} more hours than available to complete your queue.
+            Consider removing some items.
+          </p>
+        )}
       </CardHeader>
       <CardContent>
         {hasSlots ? (
