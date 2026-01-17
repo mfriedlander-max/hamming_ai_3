@@ -6,6 +6,8 @@ import { WatchQueue } from './WatchQueue'
 import { CalendarView } from './CalendarView'
 import { UpcomingReleases } from './UpcomingReleases'
 import { ReleaseDetailModal } from './ReleaseDetailModal'
+import { EmptyState } from './EmptyState'
+import { FirstSavingsPopup, hasSeenFirstSavings } from './FirstSavingsPopup'
 import { Loader2 } from 'lucide-react'
 import type {
   CalendarOptimizedPlan,
@@ -22,6 +24,12 @@ type ThisWeekAction = CalendarAction
 type Savings = CalendarSavings
 type SubscriptionWindow = CalendarSubscriptionWindow
 
+interface Service {
+  id: string
+  name: string
+  base_price: number
+}
+
 interface ContentCalendarPageProps {
   plan: OptimizedPlan | null
   releases: ContentRelease[]
@@ -30,6 +38,12 @@ interface ContentCalendarPageProps {
   onRegenerate: () => void
   onRemoveFromQueue: (intentId: string) => void
   onAddToQueue: (release: ContentRelease) => void
+  // New user experience props
+  hasSubscriptions?: boolean
+  hasTasteProfile?: boolean
+  services?: Service[]
+  onGenreSelect?: (genres: string[]) => void
+  onServiceAdd?: (serviceId: string, price: number) => void
 }
 
 const emptySavings: Savings = {
@@ -47,13 +61,31 @@ export function ContentCalendarPage({
   onRegenerate,
   onRemoveFromQueue,
   onAddToQueue,
+  hasSubscriptions = true,
+  hasTasteProfile = true,
+  services = [],
+  onGenreSelect,
+  onServiceAdd,
 }: ContentCalendarPageProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [selectedRelease, setSelectedRelease] = useState<ContentRelease | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [emptyStateStep, setEmptyStateStep] = useState(1)
+  const [firstSavingsPopupDismissed, setFirstSavingsPopupDismissed] = useState(false)
+
+  // Check if this is a new user (no subscriptions or taste profile)
+  const isNewUser = !hasSubscriptions || !hasTasteProfile
 
   // Extract data from plan or use defaults
   const savings: Savings = plan?.savings ?? emptySavings
+
+  // Compute whether to show first savings popup
+  const showFirstSavingsPopup =
+    plan !== null &&
+    savings.annual_savings > 0 &&
+    !hasSeenFirstSavings() &&
+    !isNewUser &&
+    !firstSavingsPopupDismissed
   const watchQueue: WatchSlot[] = plan?.watch_queue ?? []
   const subscriptionWindows: SubscriptionWindow[] = plan?.subscription_windows ?? []
   const thisWeekActions: ThisWeekAction[] = plan?.this_week_actions ?? []
@@ -95,6 +127,22 @@ export function ContentCalendarPage({
     handleCloseModal()
   }
 
+  // Empty state handlers
+  const handleGenreSelect = (genres: string[]) => {
+    onGenreSelect?.(genres)
+    setEmptyStateStep(2)
+  }
+
+  const handleServiceAdd = (serviceId: string, price: number) => {
+    onServiceAdd?.(serviceId, price)
+    setEmptyStateStep(3)
+  }
+
+  const handleSkipToCalendar = () => {
+    // User wants to skip the guided setup
+    setEmptyStateStep(3)
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -106,40 +154,61 @@ export function ContentCalendarPage({
     )
   }
 
+  // Show empty state for new users
+  if (isNewUser && emptyStateStep < 3) {
+    return (
+      <EmptyState
+        currentStep={emptyStateStep}
+        services={services}
+        onGenreSelect={handleGenreSelect}
+        onServiceAdd={handleServiceAdd}
+        onSkipToCalendar={handleSkipToCalendar}
+      />
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Section 1: Optimizer Summary */}
-      <OptimizerSummary
-        savings={savings}
-        actions={thisWeekActions}
-        onApplyAll={onApplyAll}
-        onRegenerate={onRegenerate}
-        isLoading={isLoading}
-      />
+      <div data-tooltip="savings">
+        <OptimizerSummary
+          savings={savings}
+          actions={thisWeekActions}
+          onApplyAll={onApplyAll}
+          onRegenerate={onRegenerate}
+          isLoading={isLoading}
+        />
+      </div>
 
       {/* Section 2: Watch Queue */}
-      <WatchQueue
-        slots={watchQueue}
-        onRemove={onRemoveFromQueue}
-        onPlanBinge={handlePlanBinge}
-        onAddToWatchlist={handleAddToWatchlist}
-      />
+      <div data-tooltip="queue">
+        <WatchQueue
+          slots={watchQueue}
+          onRemove={onRemoveFromQueue}
+          onPlanBinge={handlePlanBinge}
+          onAddToWatchlist={handleAddToWatchlist}
+        />
+      </div>
 
       {/* Section 3: Calendar View */}
-      <CalendarView
-        windows={subscriptionWindows}
-        releases={releases}
-        currentMonth={currentMonth}
-        onMonthChange={setCurrentMonth}
-        onSelectRelease={handleSelectRelease}
-      />
+      <div data-tooltip="calendar">
+        <CalendarView
+          windows={subscriptionWindows}
+          releases={releases}
+          currentMonth={currentMonth}
+          onMonthChange={setCurrentMonth}
+          onSelectRelease={handleSelectRelease}
+        />
+      </div>
 
       {/* Section 4: Upcoming Releases */}
-      <UpcomingReleases
-        releases={releases}
-        onAddToQueue={onAddToQueue}
-        onViewDetails={handleSelectRelease}
-      />
+      <div data-tooltip="releases">
+        <UpcomingReleases
+          releases={releases}
+          onAddToQueue={onAddToQueue}
+          onViewDetails={handleSelectRelease}
+        />
+      </div>
 
       {/* Release Detail Modal */}
       <ReleaseDetailModal
@@ -149,6 +218,13 @@ export function ContentCalendarPage({
         onAddToQueue={handleAddToQueueFromModal}
         onPlanBinge={handlePlanBingeFromModal}
         onSetReminder={handleSetReminder}
+      />
+
+      {/* First Savings Celebration Popup */}
+      <FirstSavingsPopup
+        savingsAmount={savings.annual_savings}
+        isVisible={showFirstSavingsPopup}
+        onDismiss={() => setFirstSavingsPopupDismissed(true)}
       />
     </div>
   )
