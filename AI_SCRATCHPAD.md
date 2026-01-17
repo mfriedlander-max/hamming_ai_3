@@ -1621,6 +1621,106 @@ Code used `'custom'` as reminder type but database only allows `'cancel'` | `'re
 
 ---
 
+## 2026-01-17: UX-6 New User Experience Complete
+
+**Branch:** `feature/ux-6-new-user-experience` (worktree at `.worktrees/ux-6-new-user-experience`)
+
+**Goal:** Brand new user understands app and sees value in 30 seconds through guided onboarding inline with the calendar.
+
+**What was built:**
+
+### EmptyState Component (TDD)
+- `src/components/calendar-unified/EmptyState.tsx` (7 tests): 3-step guided setup
+  - Step 1: Genre selection with InlineTastePicker
+  - Step 2: Service addition with QuickAddService
+  - Step 3: Loading/calculating state
+  - Step indicators with icons (Sparkles, Calendar, DollarSign)
+  - Skip option to jump directly to calendar
+
+### InlineTastePicker Component (TDD)
+- `src/components/calendar-unified/InlineTastePicker.tsx` (6 tests): Quick genre selection
+  - Uses GENRES from lib/constants.ts
+  - Multi-select toggle for genre chips
+  - Loading state during save
+  - Skip and Save Preferences buttons
+
+### QuickAddService Component (TDD)
+- `src/components/calendar-unified/QuickAddService.tsx` (6 tests): Fast subscription addition
+  - Service dropdown from Supabase
+  - Price input with auto-fill from base_price
+  - Validation for required fields
+  - Skip and Add Service buttons
+
+### Tooltip Component (TDD)
+- `src/components/calendar-unified/Tooltip.tsx` (5 tests): Progressive disclosure
+  - Dark background with arrow pointer
+  - Position variants (top, bottom, left, right)
+  - Auto-dismiss with timeout
+  - "Got it" dismiss button
+
+### Tooltip Configuration
+- `src/lib/calendar-unified/tooltips.ts`: Centralized tooltip config
+  - CALENDAR_TOOLTIPS constant with 5 tooltip definitions
+  - localStorage-based "seen" tracking
+  - Helper functions: getSeenTooltips, markTooltipSeen, hasSeenTooltip, resetSeenTooltips
+
+### FirstSavingsPopup Component (TDD)
+- `src/components/calendar-unified/FirstSavingsPopup.tsx` (4 tests): Celebration moment
+  - Modal overlay with confetti-style decorations
+  - Large savings number display
+  - "Awesome!" dismiss button
+  - localStorage flag to show only once
+
+### ContentCalendarPage Updates
+- Added empty state detection (hasSubscriptions, hasTasteProfile props)
+- Added data-tooltip attributes to all sections
+  - savings, queue, calendar, releases
+- Integrated FirstSavingsPopup trigger on first savings > 0
+- Added handlers for genre selection and service addition
+
+### Calendar Page Client
+- `src/app/(app)/calendar/CalendarPageClient.tsx`: Data fetching layer
+  - Fetches user subscriptions, taste profile, services
+  - Fetches optimizer plan and calendar releases
+  - Handles all CRUD operations with toast notifications
+  - Passes new user props to ContentCalendarPage
+
+**Tests:** 907 passing (+28 new)
+- EmptyState.test.tsx: 7 tests
+- InlineTastePicker.test.tsx: 6 tests
+- QuickAddService.test.tsx: 6 tests
+- Tooltip.test.tsx: 5 tests
+- FirstSavingsPopup.test.tsx: 4 tests
+
+**Verification:**
+- Lint: PASS (4 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 907/907 PASS
+- Build: PASS
+
+**Files created:**
+- src/components/calendar-unified/EmptyState.tsx
+- src/components/calendar-unified/EmptyState.test.tsx
+- src/components/calendar-unified/InlineTastePicker.tsx
+- src/components/calendar-unified/InlineTastePicker.test.tsx
+- src/components/calendar-unified/QuickAddService.tsx
+- src/components/calendar-unified/QuickAddService.test.tsx
+- src/components/calendar-unified/Tooltip.tsx
+- src/components/calendar-unified/Tooltip.test.tsx
+- src/components/calendar-unified/FirstSavingsPopup.tsx
+- src/components/calendar-unified/FirstSavingsPopup.test.tsx
+- src/lib/calendar-unified/tooltips.ts
+- src/app/(app)/calendar/CalendarPageClient.tsx
+
+**Files modified:**
+- src/components/calendar-unified/ContentCalendarPage.tsx (empty state + popup integration)
+- src/components/calendar-unified/index.ts (exports)
+- src/app/(app)/calendar/page.tsx (use CalendarPageClient)
+
+**Status:** Merged to dev
+
+---
+
 ## 2026-01-16: UX-5 Remove Old Pages Complete
 
 **Branch:** `feature/ux-5-remove-old-pages` (worktree at `.worktrees/ux-5-remove-old-pages`)
