@@ -7,6 +7,7 @@ import { TasteProfileEditor } from '@/components/settings/TasteProfileEditor'
 import { EmailAccountsManager } from '@/components/settings/EmailAccountsManager'
 import { SubscriptionDetector } from '@/components/settings/SubscriptionDetector'
 import { NotificationPreferences } from '@/components/settings/NotificationPreferences'
+import { VacationMode } from '@/components/settings/VacationMode'
 import type { ConnectedEmail } from '@/lib/email/types'
 
 interface SettingsClientProps {
@@ -50,11 +51,15 @@ export function SettingsClient({
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="profile">
+          <TabsContent value="profile" className="space-y-6">
             <TasteProfileEditor
               initialGenres={initialGenres}
               initialFavoriteShows={initialFavoriteShows}
             />
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Auto-Pilot</h3>
+              <VacationMode />
+            </div>
           </TabsContent>
 
           <TabsContent value="accounts" className="space-y-6">

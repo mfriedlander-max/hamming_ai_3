@@ -69,6 +69,12 @@ vi.mock('@/lib/auto-pilot/deadline-handler', () => ({
   ),
 }))
 
+// Mock vacation-mode
+vi.mock('@/lib/edge-cases/vacation-mode', () => ({
+  isOnVacation: vi.fn(() => Promise.resolve(false)),
+  checkAndAutoDisableVacation: vi.fn(() => Promise.resolve(false)),
+}))
+
 describe('POST /api/auto-pilot/execute', () => {
   beforeEach(() => {
     vi.clearAllMocks()

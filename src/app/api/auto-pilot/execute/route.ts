@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { executeActions } from '@/lib/auto-pilot/action-executor'
 import { checkDeadlines } from '@/lib/auto-pilot/deadline-detector'
 import { handleAllDeadlines } from '@/lib/auto-pilot/deadline-handler'
+import { isOnVacation, checkAndAutoDisableVacation } from '@/lib/edge-cases/vacation-mode'
 import type { ThisWeekAction, OptimizedPlan, WatchIntent } from '@/lib/optimizer-v2/types'
 import type { ExecutionResult } from '@/lib/auto-pilot/types'
 
@@ -27,6 +28,24 @@ export async function POST(request: Request) {
   }
 
   const { dry_run } = await request.json()
+
+  // 0. Check vacation mode - skip execution if user is on vacation
+  await checkAndAutoDisableVacation(user.id) // Auto-disable if return date passed
+  const onVacation = await isOnVacation(user.id)
+
+  if (onVacation) {
+    return NextResponse.json({
+      result: {
+        actions_executed: 0,
+        actions_skipped: 0,
+        actions_failed: 0,
+        notifications_sent: 0,
+        errors: [],
+      },
+      message: 'Skipped - user is on vacation',
+      skipped_due_to_vacation: true,
+    })
+  }
 
   // 1. Fetch user's cached optimizer plan
   const { data: planData, error: planError } = await supabase
