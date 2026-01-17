@@ -265,3 +265,8 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** lib/auto-pilot/*, app/api/auto-pilot/execute/route.ts, app/api/optimizer-v2/apply/route.ts, supabase/migrations/011_auto_pilot.sql, vercel.json
 **Summary:** Complete auto-pilot library: action-executor (8 tests), deadline-detector (6 tests), deadline-handler (6 tests), behavior-tracker (7 tests), notification-sender (5 tests). Execute cron route (4 tests), apply plan route (4 tests). Database tables for auto_actions and user_behavior_patterns. Vercel cron configured for daily 9 AM UTC execution. 40 new tests (844 total).
 
+### feature/ux-7-edge-cases (merged 2026-01-17)
+**Goal:** Edge case handling - content changes, price changes, user absence, overloaded queues, vacation mode
+**Files:** lib/edge-cases/*, app/api/edge-cases/check/route.ts, app/api/vacation-mode/route.ts, components/settings/VacationMode.tsx, supabase/migrations/012_vacation_mode.sql, app/api/auto-pilot/execute/route.ts, components/calendar-unified/WatchQueue.tsx
+**Summary:** Complete edge-cases library: content-monitor (6 tests), price-monitor (5 tests), activity-monitor (5 tests), vacation-mode (6 tests), queue-manager (5 tests). Edge cases check API route (5 tests). VacationMode settings component (5 tests). Auto-pilot skips users on vacation. WatchQueue shows queue health indicator. Database migration adds vacation columns to profiles, activity tracking to user_behavior_patterns, and service_price_history table. 43 new tests (950 total).
+

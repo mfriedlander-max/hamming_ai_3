@@ -26,10 +26,11 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Direct Cancellation: Cancel subscriptions via external service URLs
 - [x] UX-1: Optimizer Brain (unified watch intent system)
 - [x] UX-2: Auto-Pilot (automatic subscription management)
+- [x] UX-7: Edge Case Handling (vacation mode, queue health, content/price monitoring)
 
 ## Current Status
 
-UX Overhaul Phase 2 complete! 844 tests passing. Auto-pilot system enables automatic subscription management: executes optimizer plans without user effort, handles missed deadlines gracefully, and tracks user behavior patterns. Daily Vercel cron runs at 9 AM UTC to process scheduled actions. Includes action executor, deadline detector/handler, behavior tracker, and notification sender modules.
+UX Overhaul Phase 7 complete! 950 tests passing. Edge case handling system enables graceful handling of real-world chaos: vacation mode pauses all auto-pilot actions, queue health detection warns of overloaded schedules, and monitors track content changes (TMDB), price changes, and user activity patterns. Auto-pilot now respects vacation status and auto-disables vacation on return date.
 
 ## Tech Stack
 
