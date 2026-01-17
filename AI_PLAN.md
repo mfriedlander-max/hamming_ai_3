@@ -265,6 +265,26 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** lib/auto-pilot/*, app/api/auto-pilot/execute/route.ts, app/api/optimizer-v2/apply/route.ts, supabase/migrations/011_auto_pilot.sql, vercel.json
 **Summary:** Complete auto-pilot library: action-executor (8 tests), deadline-detector (6 tests), deadline-handler (6 tests), behavior-tracker (7 tests), notification-sender (5 tests). Execute cron route (4 tests), apply plan route (4 tests). Database tables for auto_actions and user_behavior_patterns. Vercel cron configured for daily 9 AM UTC execution. 40 new tests (844 total).
 
+### feature/ux-3-unified-calendar (merged 2026-01-15)
+**Goal:** Unified Content Calendar page with 4 sections (optimizer summary, watch queue, calendar view, upcoming releases)
+**Files:** components/calendar-unified/OptimizerSummary.tsx, components/calendar-unified/WatchQueue.tsx, components/calendar-unified/CalendarView.tsx, components/calendar-unified/UpcomingReleases.tsx, components/calendar-unified/ReleaseDetailModal.tsx, components/calendar-unified/ContentCalendarPage.tsx, lib/optimizer-v2/types.ts
+**Summary:** Built unified calendar hub with 4 integrated sections. OptimizerSummary (8 tests) shows savings and this-week actions. WatchQueue (8 tests) displays prioritized queue with friend badges. CalendarView (10 tests) shows service lanes with subscription windows. UpcomingReleases (8 tests) for content discovery. ReleaseDetailModal (6 tests) for details. ContentCalendarPage (6 tests) orchestrates all sections. Added Calendar-prefixed types. 46 new tests (890 total).
+
+### feature/ux-4-one-tap-actions (merged 2026-01-15)
+**Goal:** Queue API and one-tap action handlers for calendar interactions
+**Files:** lib/queue/types.ts, app/api/queue/route.ts, app/api/queue/binge/route.ts, app/api/queue/watch-together/route.ts, app/api/queue/reorder/route.ts, app/api/calendar/actions/route.ts, lib/calendar-unified/action-handlers.ts, lib/calendar-unified/use-calendar-actions.ts, components/calendar-unified/DraggableQueueItem.tsx
+**Summary:** Queue CRUD API (8 tests), binge planning API (4 tests), watch-together API (4 tests), calendar actions API (6 tests). Client action handlers (9 tests) wrap all endpoints. useCalendarActions hook (6 tests) with loading/error states. DraggableQueueItem (4 tests) with @dnd-kit sortable. 41 new tests (931 total).
+
+### feature/ux-5-remove-old-pages (merged 2026-01-16)
+**Goal:** Remove redundant pages merged into unified calendar, simplify navigation
+**Files:** app/(app)/recommendations/page.tsx (deleted), app/(app)/optimizer/page.tsx (deleted), app/(app)/binge/page.tsx (deleted), components/recommendations/* (deleted), components/binge/* (deleted), lib/optimizer/* (moved to legacy), components/optimizer/* (moved to legacy), components/layout/sidebar.tsx, middleware.ts, next.config.ts
+**Summary:** Removed 3 pages (recommendations, optimizer, binge), deleted 15 component files, moved 14 files to legacy folders. Sidebar reduced from 9 to 6 items: Dashboard, Content Calendar, Household, Friends, Reminders, Settings. Added permanent redirects for old URLs. Changed default redirect from /dashboard to /calendar. -52 tests (879 total).
+
+### feature/ux-6-new-user-experience (merged 2026-01-17)
+**Goal:** Brand new user understands app and sees value in 30 seconds through guided onboarding
+**Files:** components/calendar-unified/EmptyState.tsx, components/calendar-unified/InlineTastePicker.tsx, components/calendar-unified/QuickAddService.tsx, components/calendar-unified/Tooltip.tsx, components/calendar-unified/FirstSavingsPopup.tsx, lib/calendar-unified/tooltips.ts, app/(app)/calendar/CalendarPageClient.tsx, components/calendar-unified/ContentCalendarPage.tsx
+**Summary:** EmptyState (7 tests) with 3-step guided setup. InlineTastePicker (6 tests) for quick genre selection. QuickAddService (6 tests) for fast subscription addition. Tooltip (5 tests) for progressive disclosure. FirstSavingsPopup (4 tests) for celebration moment. ContentCalendarPage updated with empty state detection and data-tooltip attributes. CalendarPageClient handles data fetching. 28 new tests (907 total).
+
 ### feature/ux-7-edge-cases (merged 2026-01-17)
 **Goal:** Edge case handling - content changes, price changes, user absence, overloaded queues, vacation mode
 **Files:** lib/edge-cases/*, app/api/edge-cases/check/route.ts, app/api/vacation-mode/route.ts, components/settings/VacationMode.tsx, supabase/migrations/012_vacation_mode.sql, app/api/auto-pilot/execute/route.ts, components/calendar-unified/WatchQueue.tsx

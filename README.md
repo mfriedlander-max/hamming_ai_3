@@ -26,6 +26,10 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] Direct Cancellation: Cancel subscriptions via external service URLs
 - [x] UX-1: Optimizer Brain (unified watch intent system)
 - [x] UX-2: Auto-Pilot (automatic subscription management)
+- [x] UX-3: Unified Content Calendar (4-section hub page)
+- [x] UX-4: One-Tap Actions (queue API, drag-drop, action handlers)
+- [x] UX-5: Remove Old Pages (simplified navigation to 6 items)
+- [x] UX-6: New User Experience (guided onboarding, tooltips, first savings popup)
 - [x] UX-7: Edge Case Handling (vacation mode, queue health, content/price monitoring)
 - [x] UX-8: Social Integration (friend activity, watch together, spoiler alerts)
 
