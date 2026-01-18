@@ -8,6 +8,7 @@ import { EmailAccountsManager } from '@/components/settings/EmailAccountsManager
 import { SubscriptionDetector } from '@/components/settings/SubscriptionDetector'
 import { NotificationPreferences } from '@/components/settings/NotificationPreferences'
 import { VacationMode } from '@/components/settings/VacationMode'
+import { DarkModeToggle } from '@/components/settings/DarkModeToggle'
 import type { ConnectedEmail } from '@/lib/email/types'
 
 interface SettingsClientProps {
@@ -59,6 +60,10 @@ export function SettingsClient({
             <div className="border-t pt-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Auto-Pilot</h3>
               <VacationMode />
+            </div>
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Appearance</h3>
+              <DarkModeToggle />
             </div>
           </TabsContent>
 

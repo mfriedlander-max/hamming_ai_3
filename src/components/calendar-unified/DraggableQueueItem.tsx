@@ -53,7 +53,9 @@ export function DraggableQueueItem({
   } = useSortable({ id: slot.intent_id })
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: isDragging
+      ? `${CSS.Transform.toString(transform)} scale(1.05)`
+      : CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
     touchAction: 'none' as const,

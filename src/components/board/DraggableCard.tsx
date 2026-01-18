@@ -25,7 +25,9 @@ export function DraggableCard({
   })
 
   const style = {
-    transform: CSS.Translate.toString(transform),
+    transform: isDragging
+      ? `${CSS.Translate.toString(transform)} scale(1.05)`
+      : CSS.Translate.toString(transform),
     opacity: isDragging ? 0.5 : 1,
     cursor: isDragging ? 'grabbing' : 'grab',
   }

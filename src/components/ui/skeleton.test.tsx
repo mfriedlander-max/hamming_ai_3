@@ -84,4 +84,11 @@ describe('Skeleton', () => {
     expect(skeleton).toHaveClass('h-4')
     expect(skeleton).toHaveClass('w-3/4')
   })
+
+  it('renders shimmer variant with shimmer animation class', () => {
+    const { container } = render(<Skeleton variant="shimmer" />)
+    const skeleton = container.querySelector('div')
+    expect(skeleton).toHaveClass('animate-shimmer')
+    expect(skeleton).not.toHaveClass('animate-pulse')
+  })
 })

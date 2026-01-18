@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Home, Bell, LogOut, Menu, X, Settings, Calendar, Users, UsersRound } from "lucide-react";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { BottomNav } from "./BottomNav";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
@@ -133,6 +134,9 @@ export function Sidebar() {
       <div className="hidden md:block fixed top-4 right-4 z-40">
         <NotificationBell />
       </div>
+
+      {/* Mobile bottom navigation */}
+      <BottomNav />
     </>
   );
 }

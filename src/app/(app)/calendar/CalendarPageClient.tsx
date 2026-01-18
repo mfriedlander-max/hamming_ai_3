@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { ContentCalendarPage } from '@/components/calendar-unified'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/components/ui/toast'
+import { fireConfetti } from '@/components/ui/confetti'
 import type {
   CalendarOptimizedPlan,
   ContentRelease,
@@ -119,6 +120,7 @@ export function CalendarPageClient() {
 
       if (response.ok) {
         toast({ message: 'Plan applied successfully!', type: 'success' })
+        fireConfetti() // Celebrate!
         fetchData() // Refresh data
       } else {
         throw new Error('Failed to apply plan')
