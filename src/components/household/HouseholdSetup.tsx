@@ -58,8 +58,8 @@ export function HouseholdSetup({ onCreate, onJoin }: HouseholdSetupProps) {
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader className="text-center">
-        <div className="mx-auto h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mb-2">
-          <Home className="h-6 w-6 text-gray-600" />
+        <div className="mx-auto h-12 w-12 rounded-full bg-accent flex items-center justify-center mb-2">
+          <Home className="h-6 w-6 text-muted-foreground" />
         </div>
         <CardTitle>Set Up Household</CardTitle>
         <CardDescription>

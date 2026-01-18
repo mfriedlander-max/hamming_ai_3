@@ -9,8 +9,8 @@ export default function FriendsPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Social</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Social</h1>
+        <p className="text-muted-foreground mt-1">
           Connect with friends, share activity, and collaborate on watchlists
         </p>
       </div>

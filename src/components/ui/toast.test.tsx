@@ -51,7 +51,7 @@ describe('Toast', () => {
   it('applies default styling for info type', () => {
     render(<Toast message="Info" type="info" onDismiss={() => {}} />)
     const toast = screen.getByRole('alert')
-    expect(toast).toHaveClass('bg-gray-50')
+    expect(toast).toHaveClass('bg-muted')
   })
 })
 

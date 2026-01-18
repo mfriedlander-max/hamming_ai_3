@@ -90,8 +90,8 @@ export function HouseholdClient({
       {/* Header with actions */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{household.name}</h1>
-          <p className="text-gray-600">Manage your household and shared subscriptions</p>
+          <h1 className="text-2xl font-bold text-foreground">{household.name}</h1>
+          <p className="text-muted-foreground">Manage your household and shared subscriptions</p>
         </div>
         <div className="flex gap-2">
           {isOwner && (

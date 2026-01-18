@@ -33,7 +33,7 @@ function formatReleaseDate(date: string): string {
 function getMatchColor(score: number): string {
   if (score >= 80) return 'text-green-600'
   if (score >= 60) return 'text-yellow-600'
-  return 'text-gray-500'
+  return 'text-muted-foreground'
 }
 
 export function UpcomingReleases({
@@ -62,10 +62,10 @@ export function UpcomingReleases({
             {releases.map((release) => (
               <div
                 key={release.id}
-                className="flex items-center gap-4 p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-4 p-3 rounded-lg border hover:bg-muted transition-colors"
               >
                 {/* Poster placeholder */}
-                <div className="w-12 h-16 bg-gray-200 rounded flex items-center justify-center shrink-0">
+                <div className="w-12 h-16 bg-muted rounded flex items-center justify-center shrink-0">
                   {release.type === 'movie' ? (
                     <Film className="h-6 w-6 text-gray-400" />
                   ) : (
@@ -89,7 +89,7 @@ export function UpcomingReleases({
                       )}
                     </div>
                   </button>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <span>{release.service_name}</span>
                     <span className="text-gray-400">•</span>
                     <span>{formatReleaseDate(release.release_date)}</span>
@@ -105,7 +105,7 @@ export function UpcomingReleases({
                   <div className={`text-lg font-bold ${getMatchColor(release.taste_match_score)}`}>
                     {release.taste_match_score}%
                   </div>
-                  <div className="text-xs text-gray-500">Match</div>
+                  <div className="text-xs text-muted-foreground">Match</div>
                 </div>
 
                 {/* Add button */}
@@ -125,7 +125,7 @@ export function UpcomingReleases({
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             <Sparkles className="h-10 w-10 mx-auto mb-2 text-gray-300" />
             <p className="font-medium">No upcoming releases</p>
             <p className="text-sm">Check back later for new content</p>

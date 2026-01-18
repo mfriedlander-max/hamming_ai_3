@@ -37,11 +37,11 @@ export function InviteModal({ inviteCode, isOpen, onClose }: InviteModalProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Share this code with family members to let them join your household.
           </p>
 
-          <div className="flex items-center gap-2 p-4 bg-gray-100 rounded-lg">
+          <div className="flex items-center gap-2 p-4 bg-accent rounded-lg">
             <code className="flex-1 text-2xl font-mono font-bold text-center tracking-wider">
               {inviteCode}
             </code>
@@ -65,7 +65,7 @@ export function InviteModal({ inviteCode, isOpen, onClose }: InviteModalProps) {
             </Button>
           </div>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             This code can be used multiple times. Share it only with people you trust.
           </p>
         </div>

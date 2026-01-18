@@ -17,10 +17,10 @@ export function NotificationDropdown({
   onDismiss,
 }: NotificationDropdownProps) {
   return (
-    <div className="w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+    <div className="w-80 bg-card rounded-lg shadow-lg border border-border overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+        <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
         {notifications.length > 0 && (
           <button
             type="button"
@@ -36,7 +36,7 @@ export function NotificationDropdown({
       <div className="max-h-96 overflow-y-auto">
         {notifications.length === 0 ? (
           <div className="px-4 py-8 text-center">
-            <p className="text-sm text-gray-500">No notifications</p>
+            <p className="text-sm text-muted-foreground">No notifications</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-100">

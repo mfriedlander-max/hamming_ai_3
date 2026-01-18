@@ -115,7 +115,7 @@ export function SubscriptionDetector({
         )}
 
         {detected && detected.length === 0 && (
-          <div className="text-center py-6 text-gray-500">
+          <div className="text-center py-6 text-muted-foreground">
             <p>No new subscriptions found.</p>
             <p className="text-sm mt-2">
               All detected services are already in your subscription list.
@@ -146,8 +146,8 @@ export function SubscriptionDetector({
                     className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                   />
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">{sub.service_name}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="font-medium text-foreground">{sub.service_name}</p>
+                    <p className="text-sm text-muted-foreground">
                       Detected from {sub.detected_from}
                     </p>
                   </div>
@@ -156,7 +156,7 @@ export function SubscriptionDetector({
                       ? 'bg-green-100 text-green-700'
                       : sub.confidence === 'medium'
                       ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-gray-100 text-gray-700'
+                      : 'bg-accent text-gray-700'
                   }`}>
                     {sub.confidence} confidence
                   </span>

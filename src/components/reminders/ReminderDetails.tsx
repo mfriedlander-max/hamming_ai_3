@@ -24,10 +24,10 @@ export function ReminderDetails({ reminders, onDelete }: ReminderDetailsProps) {
       {reminders.map((reminder) => (
         <div
           key={reminder.id}
-          className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+          className="flex items-center justify-between rounded-lg border border-border bg-card p-4 shadow-sm"
         >
           <div className="flex flex-col gap-1">
-            <span className="font-medium text-gray-900">
+            <span className="font-medium text-foreground">
               {reminder.subscription.service_name}
             </span>
             <div className="flex items-center gap-2">
@@ -40,7 +40,7 @@ export function ReminderDetails({ reminders, onDelete }: ReminderDetailsProps) {
               >
                 {reminder.type === 'cancel' ? 'Cancel' : 'Resubscribe'}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-muted-foreground">
                 {formatDate(reminder.trigger_date)}
               </span>
             </div>

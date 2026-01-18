@@ -15,7 +15,7 @@ export function WatchlistCard({ watchlist, onClick, onDelete }: WatchlistCardPro
 
   return (
     <div
-      className="flex items-start gap-3 p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer"
+      className="flex items-start gap-3 p-4 bg-card rounded-lg border border-border hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer"
       onClick={() => onClick(watchlist.id)}
       onKeyDown={(e) => e.key === 'Enter' && onClick(watchlist.id)}
       tabIndex={0}
@@ -28,8 +28,8 @@ export function WatchlistCard({ watchlist, onClick, onDelete }: WatchlistCardPro
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 truncate">{watchlist.name}</p>
-        <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+        <p className="font-medium text-foreground truncate">{watchlist.name}</p>
+        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
             <Users className="h-3.5 w-3.5" />
             {memberCount} {memberCount === 1 ? 'member' : 'members'}

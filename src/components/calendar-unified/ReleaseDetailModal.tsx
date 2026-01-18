@@ -46,7 +46,7 @@ function formatReleaseDate(date: string): string {
 function getMatchColor(score: number): string {
   if (score >= 80) return 'text-green-600'
   if (score >= 60) return 'text-yellow-600'
-  return 'text-gray-500'
+  return 'text-muted-foreground'
 }
 
 export function ReleaseDetailModal({
@@ -92,14 +92,14 @@ export function ReleaseDetailModal({
           {/* Match score and release date */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-500" />
+              <Calendar className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">{formatReleaseDate(release.release_date)}</span>
             </div>
             <div className="text-center">
               <span className={`text-2xl font-bold ${getMatchColor(release.taste_match_score)}`}>
                 {release.taste_match_score}%
               </span>
-              <span className="text-sm text-gray-500 ml-1">Match</span>
+              <span className="text-sm text-muted-foreground ml-1">Match</span>
             </div>
           </div>
 
@@ -116,12 +116,12 @@ export function ReleaseDetailModal({
 
           {/* Overview */}
           {release.overview && (
-            <p className="text-sm text-gray-600">{release.overview}</p>
+            <p className="text-sm text-muted-foreground">{release.overview}</p>
           )}
 
           {/* Additional info */}
           {(release.runtime || release.season_count) && (
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-muted-foreground">
               {release.type === 'movie' && release.runtime && (
                 <span>{release.runtime} min</span>
               )}

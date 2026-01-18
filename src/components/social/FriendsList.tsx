@@ -23,12 +23,12 @@ function LoadingSkeleton() {
       {Array.from({ length: 3 }).map((_, i) => (
         <div
           key={i}
-          className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gray-200 animate-pulse"
+          className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border animate-pulse"
         >
-          <div className="w-10 h-10 bg-gray-200 rounded-full" />
+          <div className="w-10 h-10 bg-muted rounded-full" />
           <div className="flex-1">
-            <div className="h-4 bg-gray-200 rounded w-32 mb-2" />
-            <div className="h-3 bg-gray-200 rounded w-24" />
+            <div className="h-4 bg-muted rounded w-32 mb-2" />
+            <div className="h-3 bg-muted rounded w-24" />
           </div>
         </div>
       ))}
@@ -55,9 +55,9 @@ export function FriendsList({
       {/* Header with Add Friend button */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-gray-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Friends</h2>
-          <span className="text-sm text-gray-500">({friends.length})</span>
+          <Users className="h-5 w-5 text-muted-foreground" />
+          <h2 className="text-lg font-semibold text-foreground">Friends</h2>
+          <span className="text-sm text-muted-foreground">({friends.length})</span>
         </div>
         <Button onClick={onAddFriend} size="sm">
           <UserPlus className="h-4 w-4 mr-2" />
@@ -89,7 +89,7 @@ export function FriendsList({
       {friends.length === 0 ? (
         <div className="text-center py-12">
           <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500">No friends yet</p>
+          <p className="text-muted-foreground">No friends yet</p>
           <p className="text-sm text-gray-400 mt-1">
             Add friends to see their subscription activity
           </p>

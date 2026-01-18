@@ -88,8 +88,8 @@ export default async function DashboardPage() {
     <div className="p-8">
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">My Subscriptions</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-foreground mb-2">My Subscriptions</h1>
+          <p className="text-muted-foreground">
             Welcome back{profile?.name ? `, ${profile.name}` : ''}
           </p>
         </div>
@@ -99,8 +99,8 @@ export default async function DashboardPage() {
           </Button>
           {typedSubscriptions.length > 0 && (
             <div className="text-right">
-              <p className="text-sm text-gray-500">Monthly Spend</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-sm text-muted-foreground">Monthly Spend</p>
+              <p className="text-2xl font-bold text-foreground">
                 ${totalMonthlyCost.toFixed(2)}
               </p>
             </div>

@@ -91,7 +91,7 @@ export function NotificationPreferences() {
       <div className="space-y-6">
         <div className="animate-pulse space-y-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-16 bg-gray-100 rounded-lg" />
+            <div key={i} className="h-16 bg-accent rounded-lg" />
           ))}
         </div>
       </div>
@@ -100,7 +100,7 @@ export function NotificationPreferences() {
 
   if (!preferences) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-muted-foreground">
         Failed to load preferences
       </div>
     )
@@ -108,7 +108,7 @@ export function NotificationPreferences() {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-muted-foreground">
         Choose which notifications you want to receive
       </p>
 
@@ -116,11 +116,11 @@ export function NotificationPreferences() {
         {preferenceItems.map((item) => (
           <div
             key={item.key}
-            className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+            className="flex items-center justify-between p-4 bg-muted rounded-lg"
           >
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900">{item.label}</p>
-              <p className="text-xs text-gray-500">{item.description}</p>
+              <p className="text-sm font-medium text-foreground">{item.label}</p>
+              <p className="text-xs text-muted-foreground">{item.description}</p>
             </div>
             <Switch
               checked={preferences[item.key]}

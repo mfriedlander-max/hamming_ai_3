@@ -38,8 +38,8 @@ export function SettingsClient({
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Settings</h1>
-        <p className="text-gray-600">
+        <h1 className="text-2xl font-bold text-foreground mb-2">Settings</h1>
+        <p className="text-muted-foreground">
           Manage your preferences and connected accounts.
         </p>
       </div>
@@ -57,12 +57,12 @@ export function SettingsClient({
               initialGenres={initialGenres}
               initialFavoriteShows={initialFavoriteShows}
             />
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Auto-Pilot</h3>
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-medium text-foreground mb-4">Auto-Pilot</h3>
               <VacationMode />
             </div>
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Appearance</h3>
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-medium text-foreground mb-4">Appearance</h3>
               <DarkModeToggle />
             </div>
           </TabsContent>

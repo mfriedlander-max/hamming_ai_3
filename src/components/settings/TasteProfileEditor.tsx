@@ -75,7 +75,7 @@ export function TasteProfileEditor({
             value={favoriteShows}
             onChange={(e) => setFavoriteShows(e.target.value)}
           />
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             Enter your favorite shows separated by commas.
           </p>
         </CardContent>

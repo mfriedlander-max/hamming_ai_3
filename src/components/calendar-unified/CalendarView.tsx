@@ -143,7 +143,7 @@ export function CalendarView({
               {dayLabels.map((day) => (
                 <span
                   key={day}
-                  className="absolute text-xs text-gray-500 -translate-x-1/2"
+                  className="absolute text-xs text-muted-foreground -translate-x-1/2"
                   style={{ left: `${getPositionPercentage(day, daysInMonth)}%` }}
                 >
                   {day}
@@ -220,7 +220,7 @@ export function CalendarView({
             })}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             <Calendar className="h-10 w-10 mx-auto mb-2 text-gray-300" />
             <p className="font-medium">No subscription windows</p>
             <p className="text-sm">Generate an optimizer plan to see your schedule</p>

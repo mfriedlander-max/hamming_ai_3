@@ -156,14 +156,14 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
     return (
       <div className="p-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-48 mx-auto" />
+          <div className="h-8 bg-muted rounded w-48 mx-auto" />
           <div className="space-y-3">
-            <div className="h-12 bg-gray-200 rounded" />
-            <div className="h-12 bg-gray-200 rounded" />
-            <div className="h-12 bg-gray-200 rounded" />
+            <div className="h-12 bg-muted rounded" />
+            <div className="h-12 bg-muted rounded" />
+            <div className="h-12 bg-muted rounded" />
           </div>
         </div>
-        <p className="text-center text-gray-500 mt-4">Loading calendar...</p>
+        <p className="text-center text-muted-foreground mt-4">Loading calendar...</p>
       </div>
     )
   }
@@ -193,7 +193,7 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
             <ChevronLeft className="h-5 w-5" />
           </Button>
 
-          <h1 className="text-xl font-semibold text-gray-900">
+          <h1 className="text-xl font-semibold text-foreground">
             {formatMonthDisplay(currentMonth)}
           </h1>
 
@@ -214,10 +214,10 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
 
         <div className="text-center py-12">
           <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No Subscriptions
           </h3>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Add streaming services to see upcoming content releases.
           </p>
         </div>
@@ -238,7 +238,7 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
           <ChevronLeft className="h-5 w-5" />
         </Button>
 
-        <h1 className="text-xl font-semibold text-gray-900">
+        <h1 className="text-xl font-semibold text-foreground">
           {formatMonthDisplay(currentMonth)}
         </h1>
 
@@ -258,7 +258,7 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
       </header>
 
       {/* Day markers */}
-      <div className="flex items-center gap-4 mb-4 text-xs text-gray-500">
+      <div className="flex items-center gap-4 mb-4 text-xs text-muted-foreground">
         <div className="w-32 flex-shrink-0" />
         <div className="flex-1 flex justify-between px-2">
           <span>1</span>
@@ -286,7 +286,7 @@ export function ContentCalendar({ initialMonth }: ContentCalendarProps) {
       </div>
 
       {/* Legend */}
-      <div className="mt-8 flex items-center gap-6 text-sm text-gray-600">
+      <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-blue-500" />
           <span>Movie</span>

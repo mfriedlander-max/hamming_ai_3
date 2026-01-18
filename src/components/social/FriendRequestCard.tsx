@@ -28,7 +28,7 @@ export function FriendRequestCard({
   const initial = getInitial(request.requester_name, request.requester_email)
 
   return (
-    <div className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gray-200">
+    <div className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border">
       {/* Avatar */}
       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center text-white font-medium">
         {initial}
@@ -36,8 +36,8 @@ export function FriendRequestCard({
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 truncate">{displayName}</p>
-        <p className="text-sm text-gray-500">Wants to be your friend</p>
+        <p className="font-medium text-foreground truncate">{displayName}</p>
+        <p className="text-sm text-muted-foreground">Wants to be your friend</p>
       </div>
 
       {/* Actions */}
@@ -47,7 +47,7 @@ export function FriendRequestCard({
           variant="outline"
           onClick={() => onDecline(request.id)}
           disabled={isProcessing}
-          className="text-gray-600 hover:text-red-600 hover:border-red-300"
+          className="text-muted-foreground hover:text-red-600 hover:border-red-300"
         >
           <X className="h-4 w-4 mr-1" />
           Decline

@@ -43,23 +43,23 @@ export function NotificationCard({ notification, onMarkRead, onDismiss }: Notifi
     <div
       role="article"
       data-testid="notification-card"
-      className={`w-full text-left p-3 flex items-start gap-3 hover:bg-gray-50 transition-colors cursor-pointer ${
+      className={`w-full text-left p-3 flex items-start gap-3 hover:bg-muted transition-colors cursor-pointer ${
         !notification.read ? 'bg-blue-50/50' : ''
       }`}
       onClick={handleClick}
       onKeyDown={(e) => e.key === 'Enter' && handleClick()}
       tabIndex={0}
     >
-      <div className={`flex-shrink-0 p-2 rounded-full bg-gray-100 ${iconColor}`} data-testid="notification-icon">
+      <div className={`flex-shrink-0 p-2 rounded-full bg-accent ${iconColor}`} data-testid="notification-icon">
         <Icon className="h-4 w-4" />
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className={`text-sm text-gray-900 ${!notification.read ? 'font-semibold' : 'font-medium'}`}>
+        <p className={`text-sm text-foreground ${!notification.read ? 'font-semibold' : 'font-medium'}`}>
           {notification.title}
         </p>
         {notification.body && (
-          <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{notification.body}</p>
+          <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{notification.body}</p>
         )}
         <p className="text-xs text-gray-400 mt-1">{formatRelativeTime(notification.created_at)}</p>
       </div>
@@ -68,7 +68,7 @@ export function NotificationCard({ notification, onMarkRead, onDismiss }: Notifi
         type="button"
         onClick={handleDismiss}
         aria-label="Dismiss notification"
-        className="flex-shrink-0 p-1 rounded-full hover:bg-gray-200 text-gray-400 hover:text-gray-600"
+        className="flex-shrink-0 p-1 rounded-full hover:bg-muted text-gray-400 hover:text-muted-foreground"
       >
         <X className="h-4 w-4" />
       </button>

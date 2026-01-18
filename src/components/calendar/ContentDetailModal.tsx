@@ -86,7 +86,7 @@ export function ContentDetailModal({
 
           {/* Poster placeholder */}
           {release.poster_url && (
-            <div className="relative aspect-[2/3] w-32 bg-gray-200 rounded-lg overflow-hidden">
+            <div className="relative aspect-[2/3] w-32 bg-muted rounded-lg overflow-hidden">
               {/* Image would go here */}
             </div>
           )}

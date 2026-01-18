@@ -96,7 +96,7 @@ export function WatchQueue({
                 <li
                   key={slot.intent_id}
                   className={`p-3 rounded-lg border ${
-                    urgent ? 'border-amber-300 bg-amber-50' : 'border-gray-200 bg-gray-50'
+                    urgent ? 'border-amber-300 bg-amber-50' : 'border-border bg-muted'
                   }`}
                   role="listitem"
                 >
@@ -117,7 +117,7 @@ export function WatchQueue({
                           </Badge>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground">
                         <span>{slot.service_name}</span>
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
@@ -177,7 +177,7 @@ export function WatchQueue({
             })}
           </ul>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             <Play className="h-10 w-10 mx-auto mb-2 text-gray-300" />
             <p className="font-medium">Your queue is empty</p>
             <p className="text-sm">Add content from Upcoming Releases to get started</p>

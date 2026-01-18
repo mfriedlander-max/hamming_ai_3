@@ -59,9 +59,9 @@ export function SubscriptionCard({
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold text-gray-900">
+        <p className="text-2xl font-bold text-foreground">
           ${monthly_cost.toFixed(2)}
-          <span className="text-sm font-normal text-gray-500">/mo</span>
+          <span className="text-sm font-normal text-muted-foreground">/mo</span>
         </p>
       </CardContent>
       <CardFooter className="flex gap-2">

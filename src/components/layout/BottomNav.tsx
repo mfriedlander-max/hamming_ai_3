@@ -17,7 +17,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800"
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background/80 backdrop-blur-lg border-t border-border"
       role="navigation"
       aria-label="Mobile navigation"
     >
@@ -34,8 +34,8 @@ export function BottomNav() {
               className={cn(
                 'flex flex-col items-center justify-center w-full h-full gap-1 transition-colors',
                 isActive
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
               )}
             >
               <Icon className="h-5 w-5" />

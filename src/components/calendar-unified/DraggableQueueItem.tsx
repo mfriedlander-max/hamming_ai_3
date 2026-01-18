@@ -69,7 +69,7 @@ export function DraggableQueueItem({
       ref={setNodeRef}
       style={style}
       className={`p-3 rounded-lg border ${
-        urgent ? 'border-amber-300 bg-amber-50' : 'border-gray-200 bg-gray-50'
+        urgent ? 'border-amber-300 bg-amber-50' : 'border-border bg-muted'
       } ${isDragging ? 'shadow-lg z-50' : ''}`}
       role="listitem"
     >
@@ -78,7 +78,7 @@ export function DraggableQueueItem({
         <button
           {...attributes}
           {...listeners}
-          className="mr-2 p-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+          className="mr-2 p-1 text-gray-400 hover:text-muted-foreground cursor-grab active:cursor-grabbing"
           aria-label="Drag to reorder"
         >
           <GripVertical className="h-4 w-4" />
@@ -100,7 +100,7 @@ export function DraggableQueueItem({
               </Badge>
             )}
           </div>
-          <div className="flex items-center gap-3 text-sm text-gray-600">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span>{slot.service_name}</span>
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />

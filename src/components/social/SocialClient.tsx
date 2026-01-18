@@ -286,11 +286,11 @@ export function SocialClient() {
         <TabsContent value="watchlists" className="mt-6">
           {isWatchlistDetailLoading ? (
             <div className="space-y-4 animate-pulse">
-              <div className="h-8 bg-gray-100 rounded w-48" />
-              <div className="h-12 bg-gray-100 rounded" />
+              <div className="h-8 bg-accent rounded w-48" />
+              <div className="h-12 bg-accent rounded" />
               <div className="grid gap-3 sm:grid-cols-2">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-32 bg-gray-100 rounded-lg" />
+                  <div key={i} className="h-32 bg-accent rounded-lg" />
                 ))}
               </div>
             </div>
@@ -305,7 +305,7 @@ export function SocialClient() {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">My Watchlists</h2>
+                <h2 className="text-lg font-semibold text-foreground">My Watchlists</h2>
                 <Button size="sm" onClick={handleCreateWatchlist}>
                   <Plus className="h-4 w-4 mr-2" />
                   New Watchlist
@@ -315,13 +315,13 @@ export function SocialClient() {
               {isWatchlistsLoading ? (
                 <div className="space-y-3 animate-pulse">
                   {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="h-20 bg-gray-100 rounded-lg" />
+                    <div key={i} className="h-20 bg-accent rounded-lg" />
                   ))}
                 </div>
               ) : watchlists.length === 0 ? (
                 <div className="text-center py-12">
                   <List className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No watchlists yet</p>
+                  <p className="text-muted-foreground">No watchlists yet</p>
                   <p className="text-sm text-gray-400 mt-1">
                     Create a watchlist to share with friends
                   </p>

@@ -72,8 +72,8 @@ export default async function RemindersPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Reminders</h1>
-        <p className="text-gray-600">
+        <h1 className="text-2xl font-bold text-foreground mb-2">Reminders</h1>
+        <p className="text-muted-foreground">
           Manage your cancel and resubscribe reminders.
         </p>
       </div>

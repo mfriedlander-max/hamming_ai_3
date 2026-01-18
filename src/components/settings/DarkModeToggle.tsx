@@ -48,9 +48,9 @@ export function DarkModeToggle() {
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         {isDark ? (
-          <Moon className="h-4 w-4 text-gray-500" />
+          <Moon className="h-4 w-4 text-muted-foreground" />
         ) : (
-          <Sun className="h-4 w-4 text-gray-500" />
+          <Sun className="h-4 w-4 text-muted-foreground" />
         )}
         <span className="text-sm font-medium">Dark Mode</span>
       </div>

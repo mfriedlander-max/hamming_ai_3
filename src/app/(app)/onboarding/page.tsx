@@ -67,7 +67,7 @@ export default function OnboardingPage() {
                   ? 'bg-primary'
                   : s < step
                   ? 'bg-primary/50'
-                  : 'bg-gray-200'
+                  : 'bg-muted'
               }`}
             />
           ))}

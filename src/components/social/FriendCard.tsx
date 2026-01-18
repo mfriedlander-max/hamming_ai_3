@@ -29,7 +29,7 @@ export function FriendCard({ friend, onRemove, isRemoving = false }: FriendCardP
   const initial = getInitial(friend.name, friend.email)
 
   return (
-    <div className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+    <div className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border hover:border-gray-300 transition-colors">
       {/* Avatar */}
       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium">
         {initial}
@@ -37,8 +37,8 @@ export function FriendCard({ friend, onRemove, isRemoving = false }: FriendCardP
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 truncate">{displayName}</p>
-        <p className="text-sm text-gray-500">
+        <p className="font-medium text-foreground truncate">{displayName}</p>
+        <p className="text-sm text-muted-foreground">
           Friends since {formatDate(friend.friends_since)}
         </p>
       </div>

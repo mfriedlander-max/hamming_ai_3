@@ -105,16 +105,16 @@ export function VacationMode() {
 
   if (loading) {
     return (
-      <div className="p-4 bg-gray-50 rounded-lg animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/3 mb-2" />
-        <div className="h-4 bg-gray-200 rounded w-2/3" />
+      <div className="p-4 bg-muted rounded-lg animate-pulse">
+        <div className="h-6 bg-muted rounded w-1/3 mb-2" />
+        <div className="h-4 bg-muted rounded w-2/3" />
       </div>
     )
   }
 
   if (!status) {
     return (
-      <div className="text-center py-4 text-gray-500">
+      <div className="text-center py-4 text-muted-foreground">
         Failed to load vacation status
       </div>
     )
@@ -122,12 +122,12 @@ export function VacationMode() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+      <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
         <div className="flex items-center gap-3">
           <Plane className="h-5 w-5 text-blue-500" />
           <div>
-            <p className="text-sm font-medium text-gray-900">Vacation Mode</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm font-medium text-foreground">Vacation Mode</p>
+            <p className="text-xs text-muted-foreground">
               Pause all automatic actions while you&apos;re away
             </p>
           </div>
@@ -153,7 +153,7 @@ export function VacationMode() {
           )}
 
           <div className="space-y-2">
-            <label htmlFor="return-date" className="block text-xs text-gray-600">
+            <label htmlFor="return-date" className="block text-xs text-muted-foreground">
               Return Date (optional)
             </label>
             <div className="flex gap-2">

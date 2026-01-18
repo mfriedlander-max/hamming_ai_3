@@ -52,10 +52,10 @@ export function EmptyState({
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-8">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           Welcome to SubCycle
         </h1>
-        <p className="text-gray-600 text-lg">
+        <p className="text-muted-foreground text-lg">
           Start saving on streaming subscriptions in 3 easy steps
         </p>
       </div>
@@ -68,20 +68,20 @@ export function EmptyState({
               className={`flex items-center justify-center w-10 h-10 rounded-full ${
                 currentStep >= step.number
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-500'
+                  : 'bg-muted text-muted-foreground'
               }`}
             >
               <step.icon className="h-5 w-5" />
             </div>
             <span
               className={`ml-2 text-sm ${
-                currentStep >= step.number ? 'text-gray-900' : 'text-gray-500'
+                currentStep >= step.number ? 'text-foreground' : 'text-muted-foreground'
               }`}
             >
               {step.label}
             </span>
             {index < steps.length - 1 && (
-              <div className="w-8 h-0.5 bg-gray-200 mx-4" />
+              <div className="w-8 h-0.5 bg-muted mx-4" />
             )}
           </div>
         ))}
@@ -186,7 +186,7 @@ export function EmptyState({
               <h2 className="text-lg font-semibold mb-2">
                 Calculating your savings...
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 We&apos;re analyzing your subscriptions to find the best schedule.
               </p>
             </div>

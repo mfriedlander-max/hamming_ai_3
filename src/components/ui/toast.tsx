@@ -88,7 +88,7 @@ interface ToastProps {
 }
 
 const typeStyles: Record<ToastType, string> = {
-  info: 'bg-gray-50 text-gray-800 border-gray-200',
+  info: 'bg-muted text-gray-800 border-border',
   success: 'bg-green-50 text-green-800 border-green-200',
   error: 'bg-red-50 text-red-800 border-red-200',
 }

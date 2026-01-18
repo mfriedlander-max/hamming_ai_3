@@ -115,7 +115,7 @@ describe('NotificationDropdown', () => {
 
     // Check that the dropdown has proper styling
     const dropdown = container.firstChild as HTMLElement
-    expect(dropdown).toHaveClass('bg-white')
+    expect(dropdown).toHaveClass('bg-card')
     expect(dropdown).toHaveClass('rounded-lg')
     expect(dropdown).toHaveClass('shadow-lg')
   })

@@ -93,8 +93,8 @@ export function RemindersClient({ initialReminders }: RemindersClientProps) {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-1">No reminders</h3>
-        <p className="text-gray-500">
+        <h3 className="text-lg font-medium text-foreground mb-1">No reminders</h3>
+        <p className="text-muted-foreground">
           Set reminders from your subscription cards to get notified about upcoming actions.
         </p>
       </div>

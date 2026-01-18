@@ -75,7 +75,7 @@ export function SetReminderModal({
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-sm text-gray-600">{reminderText}</p>
+          <p className="text-sm text-muted-foreground">{reminderText}</p>
 
           <div>
             <label htmlFor="reminder-date" className="block text-sm font-medium text-gray-700 mb-1">

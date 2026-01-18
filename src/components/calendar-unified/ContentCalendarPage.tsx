@@ -203,7 +203,7 @@ export function ContentCalendarPage({
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-primary" />
-          <p className="text-gray-600">Loading your optimized plan...</p>
+          <p className="text-muted-foreground">Loading your optimized plan...</p>
         </div>
       </div>
     )

@@ -28,8 +28,8 @@ function NavContent({ pathname, onNavClick, onSignOut }: NavContentProps) {
   return (
     <>
       <div className="p-6">
-        <h1 className="text-xl font-bold text-gray-900">SubCycle</h1>
-        <p className="text-sm text-gray-500">Smart subscription manager</p>
+        <h1 className="text-xl font-bold text-foreground">SubCycle</h1>
+        <p className="text-sm text-muted-foreground">Smart subscription manager</p>
       </div>
 
       <nav className="flex-1 px-4">
@@ -44,8 +44,8 @@ function NavContent({ pathname, onNavClick, onSignOut }: NavContentProps) {
                   onClick={onNavClick}
                   className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-accent text-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -57,10 +57,10 @@ function NavContent({ pathname, onNavClick, onSignOut }: NavContentProps) {
         </ul>
       </nav>
 
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-border">
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-600 hover:text-gray-900"
+          className="w-full justify-start text-muted-foreground hover:text-foreground"
           onClick={onSignOut}
         >
           <LogOut className="h-5 w-5 mr-3" />
@@ -90,16 +90,16 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile header with hamburger */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 z-40">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-background border-b border-border flex items-center justify-between px-4 z-40">
         <div className="flex items-center">
           <button
             onClick={() => setIsOpen(true)}
-            className="p-2 -ml-2 rounded-md hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-md hover:bg-accent transition-colors"
             aria-label="Open menu"
           >
-            <Menu className="h-6 w-6 text-gray-600" />
+            <Menu className="h-6 w-6 text-muted-foreground" />
           </button>
-          <span className="ml-3 font-bold text-gray-900">SubCycle</span>
+          <span className="ml-3 font-bold text-foreground">SubCycle</span>
         </div>
         <NotificationBell />
       </div>
@@ -112,13 +112,13 @@ export function Sidebar() {
             onClick={() => setIsOpen(false)}
             aria-label="Close menu"
           />
-          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-white flex flex-col shadow-xl">
+          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-background flex flex-col shadow-xl">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-md hover:bg-gray-100 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-md hover:bg-accent transition-colors"
               aria-label="Close menu"
             >
-              <X className="h-5 w-5 text-gray-600" />
+              <X className="h-5 w-5 text-muted-foreground" />
             </button>
             <NavContent pathname={pathname} onNavClick={handleNavClick} onSignOut={handleSignOut} />
           </aside>
@@ -126,7 +126,7 @@ export function Sidebar() {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 bg-white border-r border-gray-200 flex-col">
+      <aside className="hidden md:flex w-64 bg-background border-r border-border flex-col">
         <NavContent pathname={pathname} onNavClick={handleNavClick} onSignOut={handleSignOut} />
       </aside>
 

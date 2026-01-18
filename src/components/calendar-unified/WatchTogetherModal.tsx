@@ -74,7 +74,7 @@ export function WatchTogetherModal({
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Invite friends to watch <strong>{contentTitle}</strong> together
           </p>
 
@@ -83,7 +83,7 @@ export function WatchTogetherModal({
             <label className="text-sm font-medium">Select friends</label>
             <div className="space-y-2 max-h-40 overflow-y-auto border rounded-md p-2">
               {friends.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-2">
+                <p className="text-sm text-muted-foreground text-center py-2">
                   No friends to invite
                 </p>
               ) : (

@@ -69,8 +69,8 @@ export default async function HouseholdPage() {
     return (
       <div className="p-8 max-w-2xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Household</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-foreground">Household</h1>
+          <p className="text-muted-foreground">
             Create or join a household to share subscriptions with family members.
           </p>
         </div>

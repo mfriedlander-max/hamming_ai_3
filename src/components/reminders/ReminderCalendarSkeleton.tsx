@@ -7,7 +7,7 @@ export function ReminderCalendarSkeleton() {
   const calendarCells = Array.from({ length: 35 }, (_, i) => i)
 
   return (
-    <div className="w-full bg-white rounded-lg border">
+    <div className="w-full bg-card rounded-lg border">
       {/* Header with month/year and navigation */}
       <div className="flex items-center justify-between p-4 border-b">
         {/* Previous button skeleton */}
@@ -25,7 +25,7 @@ export function ReminderCalendarSkeleton() {
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className="p-2 text-center text-sm font-medium text-gray-500"
+            className="p-2 text-center text-sm font-medium text-muted-foreground"
           >
             {day}
           </div>

@@ -24,20 +24,20 @@ export function MemberCard({ member, isCurrentUser, canRemove, onRemove }: Membe
   }
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg">
+    <div className="flex items-center gap-3 p-3 bg-card border border-border rounded-lg">
       {/* Avatar */}
-      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-medium">
+      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-medium">
         {initial}
       </div>
 
       {/* Name and badges */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-medium text-gray-900 truncate">
+          <span className="font-medium text-foreground truncate">
             {displayName}
           </span>
           {isCurrentUser && (
-            <span className="text-xs text-gray-500">(You)</span>
+            <span className="text-xs text-muted-foreground">(You)</span>
           )}
         </div>
         {isOwner && (
@@ -55,7 +55,7 @@ export function MemberCard({ member, isCurrentUser, canRemove, onRemove }: Membe
           size="sm"
           onClick={handleRemove}
           aria-label={isCurrentUser ? 'Leave household' : 'Remove member'}
-          className="text-gray-500 hover:text-red-600"
+          className="text-muted-foreground hover:text-red-600"
         >
           {isCurrentUser ? (
             <>

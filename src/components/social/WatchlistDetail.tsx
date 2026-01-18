@@ -33,9 +33,9 @@ function ItemCard({
   const Icon = isMovie ? Film : Tv
 
   return (
-    <div className="flex gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+    <div className="flex gap-3 p-3 bg-card rounded-lg border border-border hover:border-gray-300 transition-colors">
       {/* Poster or placeholder */}
-      <div className="flex-shrink-0 w-16 h-24 bg-gray-100 rounded overflow-hidden relative">
+      <div className="flex-shrink-0 w-16 h-24 bg-accent rounded overflow-hidden relative">
         {item.poster_path ? (
           <Image
             src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
@@ -53,8 +53,8 @@ function ItemCard({
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 truncate">{item.title}</p>
-        <p className="text-sm text-gray-500 capitalize">{item.content_type}</p>
+        <p className="font-medium text-foreground truncate">{item.title}</p>
+        <p className="text-sm text-muted-foreground capitalize">{item.content_type}</p>
         {item.added_by_name && (
           <p className="text-xs text-gray-400 mt-2">Added by {item.added_by_name}</p>
         )}
@@ -92,11 +92,11 @@ export function WatchlistDetail({
             type="button"
             onClick={onBack}
             aria-label="Back to watchlists"
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-full hover:bg-accent transition-colors"
           >
-            <ArrowLeft className="h-5 w-5 text-gray-600" />
+            <ArrowLeft className="h-5 w-5 text-muted-foreground" />
           </button>
-          <h2 className="text-xl font-semibold text-gray-900">{watchlist.name}</h2>
+          <h2 className="text-xl font-semibold text-foreground">{watchlist.name}</h2>
         </div>
 
         {isOwner && (
@@ -109,7 +109,7 @@ export function WatchlistDetail({
 
       {/* Member avatars */}
       <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-500">Members:</span>
+        <span className="text-sm text-muted-foreground">Members:</span>
         <div className="flex -space-x-2">
           {watchlist.members.slice(0, 5).map((member) => (
             <div
@@ -121,7 +121,7 @@ export function WatchlistDetail({
             </div>
           ))}
           {watchlist.members.length > 5 && (
-            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-medium ring-2 ring-white">
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-xs font-medium ring-2 ring-white">
               +{watchlist.members.length - 5}
             </div>
           )}
@@ -132,7 +132,7 @@ export function WatchlistDetail({
       {watchlist.items.length === 0 ? (
         <div className="text-center py-12">
           <Film className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500">No items yet</p>
+          <p className="text-muted-foreground">No items yet</p>
           <p className="text-sm text-gray-400 mt-1">
             Add movies and shows to this watchlist
           </p>

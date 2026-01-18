@@ -29,7 +29,7 @@ function getActionIcon(actionType: string) {
     case 'set_reminder':
       return <Calendar className="h-4 w-4 text-purple-500" />
     default:
-      return <CheckCircle className="h-4 w-4 text-gray-500" />
+      return <CheckCircle className="h-4 w-4 text-muted-foreground" />
   }
 }
 
@@ -92,7 +92,7 @@ export function OptimizerSummary({
             <div className="text-6xl font-bold text-green-600">
               ${savings.annual_savings}
             </div>
-            <div className="text-sm text-gray-600">Annual Savings</div>
+            <div className="text-sm text-muted-foreground">Annual Savings</div>
           </div>
           <div className="flex-1">
             <div className="flex justify-between text-sm mb-1">
@@ -104,14 +104,14 @@ export function OptimizerSummary({
               aria-valuenow={savings.savings_percentage}
               aria-valuemin={0}
               aria-valuemax={100}
-              className="h-3 bg-gray-200 rounded-full overflow-hidden"
+              className="h-3 bg-muted rounded-full overflow-hidden"
             >
               <div
                 className="h-full bg-green-500 transition-all duration-500"
                 style={{ width: `${savings.savings_percentage}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-muted-foreground mt-1">
               <span>Current: ${savings.current_annual_cost}/yr</span>
               <span>Optimized: ${savings.optimized_annual_cost}/yr</span>
             </div>
@@ -126,17 +126,17 @@ export function OptimizerSummary({
               {actions.map((action) => (
                 <div
                   key={action.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     {getActionIcon(action.action_type)}
                     <div>
                       <div className="font-medium">{action.service_name}</div>
-                      <div className="text-sm text-gray-500">{action.reason}</div>
+                      <div className="text-sm text-muted-foreground">{action.reason}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600 bg-gray-200 px-2 py-1 rounded">
+                    <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">
                       {formatActionType(action.action_type)}
                     </span>
                     <span className="text-xs text-gray-400">
@@ -150,7 +150,7 @@ export function OptimizerSummary({
               ))}
             </div>
           ) : (
-            <div className="text-center py-6 text-gray-500">
+            <div className="text-center py-6 text-muted-foreground">
               <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
               <p>No actions needed this week!</p>
               <p className="text-sm">Your subscriptions are optimized.</p>

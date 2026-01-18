@@ -42,7 +42,7 @@ export function FirstSavingsPopup({
 
         <button
           onClick={handleDismiss}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 z-10"
+          className="absolute top-3 right-3 text-gray-400 hover:text-muted-foreground z-10"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
@@ -55,11 +55,11 @@ export function FirstSavingsPopup({
             </div>
           </div>
 
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl font-bold text-foreground mb-2">
             Congratulations!
           </h2>
 
-          <p className="text-gray-600 mb-4">
+          <p className="text-muted-foreground mb-4">
             You could save
           </p>
 
@@ -67,10 +67,10 @@ export function FirstSavingsPopup({
             <span className="text-5xl font-bold text-green-600">
               ${formattedSavings}
             </span>
-            <span className="text-gray-500 text-lg ml-1">per year</span>
+            <span className="text-muted-foreground text-lg ml-1">per year</span>
           </div>
 
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-muted-foreground mb-6">
             by optimizing your streaming subscriptions
           </p>
 

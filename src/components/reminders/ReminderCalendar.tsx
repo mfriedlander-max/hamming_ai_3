@@ -98,7 +98,7 @@ export function ReminderCalendar({
   }
 
   return (
-    <div className="w-full bg-white rounded-lg border">
+    <div className="w-full bg-card rounded-lg border">
       {/* Header with month/year and navigation */}
       <div className="flex items-center justify-between p-3 sm:p-4 border-b">
         <Button
@@ -131,7 +131,7 @@ export function ReminderCalendar({
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className="p-1 sm:p-2 text-center text-xs sm:text-sm font-medium text-gray-500"
+            className="p-1 sm:p-2 text-center text-xs sm:text-sm font-medium text-muted-foreground"
           >
             {day}
           </div>
@@ -157,7 +157,7 @@ export function ReminderCalendar({
               onClick={() => handleDayClick(day)}
               className={`
                 min-h-[44px] sm:min-h-[80px] p-1 sm:p-2 border-b border-r
-                ${hasReminder ? 'cursor-pointer hover:bg-gray-50' : ''}
+                ${hasReminder ? 'cursor-pointer hover:bg-muted' : ''}
                 ${isSelected ? 'ring-2 ring-blue-500 ring-inset' : ''}
               `}
             >

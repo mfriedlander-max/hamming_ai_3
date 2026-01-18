@@ -39,7 +39,7 @@ export function HouseholdInsights({
               <div
                 key={member.id}
                 data-testid="member-avatar"
-                className="h-10 w-10 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-gray-600 font-medium"
+                className="h-10 w-10 rounded-full bg-muted border-2 border-white flex items-center justify-center text-muted-foreground font-medium"
                 title={name}
               >
                 {initial}
@@ -47,7 +47,7 @@ export function HouseholdInsights({
             )
           })}
           {members.length > 5 && (
-            <div className="h-10 w-10 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-gray-600 text-sm font-medium">
+            <div className="h-10 w-10 rounded-full bg-gray-300 border-2 border-white flex items-center justify-center text-muted-foreground text-sm font-medium">
               +{members.length - 5}
             </div>
           )}
@@ -59,15 +59,15 @@ export function HouseholdInsights({
             <DollarSign className="h-5 w-5 text-green-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-600">Monthly Household Spend</p>
-            <p className="text-xl font-bold text-gray-900">${monthlySpend.toFixed(2)}</p>
+            <p className="text-sm text-muted-foreground">Monthly Household Spend</p>
+            <p className="text-xl font-bold text-foreground">${monthlySpend.toFixed(2)}</p>
           </div>
         </div>
 
         {/* Combined Genres */}
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Film className="h-4 w-4 text-gray-500" />
+            <Film className="h-4 w-4 text-muted-foreground" />
             <h4 className="text-sm font-medium text-gray-700">
               {genreCount > 0 ? `${genreCount} genres` : 'No genres'} combined
             </h4>
@@ -79,7 +79,7 @@ export function HouseholdInsights({
               </Badge>
             ))}
             {genreCount === 0 && (
-              <span className="text-sm text-gray-500">Add taste profiles to see combined genres</span>
+              <span className="text-sm text-muted-foreground">Add taste profiles to see combined genres</span>
             )}
           </div>
         </div>
@@ -87,7 +87,7 @@ export function HouseholdInsights({
         {/* Combined Shows */}
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Tv className="h-4 w-4 text-gray-500" />
+            <Tv className="h-4 w-4 text-muted-foreground" />
             <h4 className="text-sm font-medium text-gray-700">
               {showCount > 0 ? `${showCount} shows` : 'No shows'} across household
             </h4>
@@ -104,7 +104,7 @@ export function HouseholdInsights({
               </Badge>
             )}
             {showCount === 0 && (
-              <span className="text-sm text-gray-500">Add taste profiles to see combined shows</span>
+              <span className="text-sm text-muted-foreground">Add taste profiles to see combined shows</span>
             )}
           </div>
         </div>

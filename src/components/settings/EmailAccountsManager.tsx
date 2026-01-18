@@ -87,7 +87,7 @@ export function EmailAccountsManager({
 
         {connectedEmails.length === 0 ? (
           <div className="text-center py-6">
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               No email accounts connected yet.
             </p>
             <Button onClick={handleConnect} disabled={isConnecting}>
@@ -99,7 +99,7 @@ export function EmailAccountsManager({
             {connectedEmails.map((email) => (
               <div
                 key={email.id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-muted rounded-lg"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
@@ -112,8 +112,8 @@ export function EmailAccountsManager({
                     </svg>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{email.email}</p>
-                    <p className="text-sm text-gray-500">Gmail</p>
+                    <p className="font-medium text-foreground">{email.email}</p>
+                    <p className="text-sm text-muted-foreground">Gmail</p>
                   </div>
                 </div>
                 <Button

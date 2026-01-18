@@ -66,7 +66,7 @@ export function CancelSubscriptionModal({
         <div className="space-y-4 py-4">
           {hasCancelUrl ? (
             <>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 This will open {service.name}&apos;s cancellation page in a new tab.
               </p>
 
@@ -83,7 +83,7 @@ export function CancelSubscriptionModal({
               </label>
             </>
           ) : (
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               No cancellation link available for this service. Please visit the service&apos;s website directly to manage your subscription.
             </p>
           )}
