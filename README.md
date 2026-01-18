@@ -36,7 +36,7 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 
 ## Current Status
 
-**UX Overhaul Complete!** 978 tests passing. All 9 UX phases done. The app now features dark mode with persistence, confetti celebrations on Apply All, mobile bottom navigation, shimmer skeleton animations, haptic feedback support, and enhanced drag previews. Instagram-level smoothness achieved.
+**UX Overhaul Complete!** 978 tests passing. All 9 UX phases done. Full dark mode support across the entire app (sidebar, content, navigation, all components). Features include confetti celebrations on Apply All, mobile bottom navigation, shimmer skeleton animations, haptic feedback support, and enhanced drag previews. Instagram-level smoothness achieved.
 
 ## Tech Stack
 

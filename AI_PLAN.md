@@ -300,3 +300,8 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** components/ui/confetti.tsx, components/ui/skeleton.tsx, components/settings/DarkModeToggle.tsx, components/layout/BottomNav.tsx, lib/haptics.ts, components/layout/sidebar.tsx, app/(app)/settings/SettingsClient.tsx, app/(app)/calendar/CalendarPageClient.tsx, components/board/DraggableCard.tsx, components/calendar-unified/DraggableQueueItem.tsx
 **Summary:** DarkModeToggle (2 tests) with useSyncExternalStore and localStorage persistence. BottomNav (1 test) mobile navigation with 4 items. Confetti (1 test) celebration on Apply All. Haptics (1 test) vibration utility. Skeleton shimmer variant (1 test). Drag ghost scale(1.05) effect. Settings Appearance section. 6 new tests (978 total). UX Overhaul complete!
 
+### dark-mode-fix (direct to dev, 2026-01-17)
+**Goal:** Full dark mode support across entire app
+**Files:** ~60 files updated - layout.tsx, sidebar.tsx, BottomNav.tsx, switch.tsx, all page components, calendar-unified/*, subscriptions/*, settings/*, social/*, household/*, notifications/*, reminders/*
+**Summary:** Replaced hardcoded Tailwind colors (bg-gray-50, text-gray-900, etc.) with CSS variables (bg-background, text-foreground, text-muted-foreground, border-border, bg-muted, bg-accent, bg-card, bg-input). Fixed Switch component track/thumb visibility. Updated 2 tests. Dark mode now affects sidebar, content area, navigation, and all components. 978 tests passing.
+
