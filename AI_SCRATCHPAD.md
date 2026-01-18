@@ -2113,3 +2113,45 @@ Added permanent redirects:
 **UX Overhaul Complete!** All 9 UX phases implemented with 978 tests passing.
 
 ---
+
+## 2026-01-17: Dark Mode Fix - Full App Support
+
+**Branch:** dev (direct commit)
+
+**Issue:** Dark mode toggle only affected cards, not the entire app. Text remained black on dark background making it unreadable.
+
+**Root Cause:** Hardcoded Tailwind color classes (bg-gray-50, text-gray-900, etc.) instead of CSS variables that respond to dark mode.
+
+**Solution:** Updated ~60 files to use CSS variables:
+- `bg-gray-50` → `bg-background` or `bg-muted`
+- `text-gray-900` → `text-foreground`
+- `text-gray-600/500` → `text-muted-foreground`
+- `border-gray-200` → `border-border`
+- `bg-white` → `bg-card` or `bg-background`
+- `bg-gray-100` → `bg-accent`
+
+**Key Files Updated:**
+- `src/app/(app)/layout.tsx` - main content bg-background
+- `src/components/layout/sidebar.tsx` - all nav colors
+- `src/components/layout/BottomNav.tsx` - mobile nav colors
+- `src/components/ui/switch.tsx` - bg-input for track visibility
+- All page components, calendar, social, household, settings
+
+**Switch Fix:**
+- Track background: `bg-muted` → `bg-input` for better contrast
+- Thumb: `bg-card` → `bg-background` for visibility in dark mode
+
+**Tests Updated:**
+- `toast.test.tsx`: bg-gray-50 → bg-muted
+- `NotificationDropdown.test.tsx`: bg-white → bg-card
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+- Visual: Dark mode works across entire app
+
+**Status:** Committed to dev
+
+---
