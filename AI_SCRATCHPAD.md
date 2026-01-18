@@ -2008,6 +2008,108 @@ Added permanent redirects:
 - src/lib/calendar-unified/action-handlers.ts (message parameter)
 - src/lib/calendar-unified/use-calendar-actions.ts (hook update)
 
-**Status:** Ready for merge to dev
+**Status:** Merged to dev
+
+---
+
+## 2026-01-17: UX-9 Polish & Dark Mode Complete
+
+**Branch:** `feature/ux-9-polish` (worktree at `.worktrees/ux-9-polish`)
+
+**Goal:** Instagram-level smoothness and delight. Final polish for the SubCycle app.
+
+**What was built:**
+
+### Skeleton Shimmer Variant (TDD, 1 test)
+- `src/components/ui/skeleton.tsx`: Added shimmer animation variant
+  - New `variant` prop: 'pulse' (default) | 'shimmer'
+  - CSS keyframes animation for shimmer effect
+  - Gradient moving left-to-right
+
+### DarkModeToggle Component (TDD, 2 tests)
+- `src/components/settings/DarkModeToggle.tsx`: Theme toggle
+  - Uses `useSyncExternalStore` for external state management
+  - Persists to localStorage key `subcycle_theme`
+  - Sun/Moon icons from lucide-react
+  - Toggles `dark` class on `<html>` element
+
+### Confetti Component (TDD, 1 test)
+- `src/components/ui/confetti.tsx`: Celebration animation
+  - Uses canvas-confetti library
+  - `fireConfetti()` function with green/gold particles
+  - Triggered on Apply All success
+
+### Haptics Utility (TDD, 1 test)
+- `src/lib/haptics.ts`: Mobile haptic feedback
+  - `triggerHaptic(intensity)` function
+  - Supports 'light', 'medium', 'heavy' intensities
+  - Uses navigator.vibrate API
+  - Graceful degradation on unsupported devices
+
+### BottomNav Component (TDD, 1 test)
+- `src/components/layout/BottomNav.tsx`: Mobile bottom navigation
+  - Fixed to bottom on mobile (`md:hidden`)
+  - 4 nav items: Dashboard, Calendar, Friends, Settings
+  - Active state highlighting based on pathname
+  - Glass-morphism background with backdrop blur
+
+### Drag Ghost Enhancement
+- `src/components/board/DraggableCard.tsx`: Added `scale(1.05)` when dragging
+- `src/components/calendar-unified/DraggableQueueItem.tsx`: Added `scale(1.05)` when dragging
+  - Creates "lift" effect during drag operations
+
+### Settings Integration
+- `src/app/(app)/settings/SettingsClient.tsx`: Added "Appearance" section with DarkModeToggle
+
+### Calendar Integration
+- `src/app/(app)/calendar/CalendarPageClient.tsx`: Added confetti on Apply All success
+
+### Layout Integration
+- `src/components/layout/sidebar.tsx`: Added BottomNav import and render
+
+**Dependencies Added:**
+- canvas-confetti
+- @types/canvas-confetti (dev)
+
+**Tests:** 978 passing (+6 new)
+- skeleton.test.tsx: +1 test (shimmer variant)
+- DarkModeToggle.test.tsx: 2 tests
+- confetti.test.tsx: 1 test
+- haptics.test.ts: 1 test
+- BottomNav.test.tsx: 1 test
+
+**Test Fix:**
+- `src/components/layout/sidebar.test.tsx`: Updated to use `getAllByRole` instead of `getByRole` due to duplicate links (sidebar + BottomNav)
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+
+**Files created:**
+- src/components/settings/DarkModeToggle.tsx
+- src/components/settings/DarkModeToggle.test.tsx
+- src/components/ui/confetti.tsx
+- src/components/ui/confetti.test.tsx
+- src/lib/haptics.ts
+- src/lib/haptics.test.ts
+- src/components/layout/BottomNav.tsx
+- src/components/layout/BottomNav.test.tsx
+
+**Files modified:**
+- src/components/ui/skeleton.tsx (shimmer variant)
+- src/components/ui/skeleton.test.tsx (shimmer test)
+- src/app/(app)/settings/SettingsClient.tsx (DarkModeToggle)
+- src/app/(app)/calendar/CalendarPageClient.tsx (confetti)
+- src/components/layout/sidebar.tsx (BottomNav)
+- src/components/layout/sidebar.test.tsx (getAllByRole fix)
+- src/components/board/DraggableCard.tsx (scale effect)
+- src/components/calendar-unified/DraggableQueueItem.tsx (scale effect)
+- package.json (canvas-confetti dependency)
+
+**Status:** Merged to dev
+
+**UX Overhaul Complete!** All 9 UX phases implemented with 978 tests passing.
 
 ---

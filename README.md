@@ -32,10 +32,11 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] UX-6: New User Experience (guided onboarding, tooltips, first savings popup)
 - [x] UX-7: Edge Case Handling (vacation mode, queue health, content/price monitoring)
 - [x] UX-8: Social Integration (friend activity, watch together, spoiler alerts)
+- [x] UX-9: Polish & Dark Mode (confetti, haptics, shimmer skeletons, mobile bottom nav)
 
 ## Current Status
 
-UX Overhaul Phase 8 complete! 972 tests passing. Social integration enhances the calendar experience with friend activity signals. Calendar releases now show friend_watching badges when friends have content queued, WatchQueue displays friend names for shared items ("Shared by Alice"), and Watch Together modal lets users invite friends to watch content together. Backend supports spoiler alerts for TV shows when friends are ahead/behind.
+**UX Overhaul Complete!** 978 tests passing. All 9 UX phases done. The app now features dark mode with persistence, confetti celebrations on Apply All, mobile bottom navigation, shimmer skeleton animations, haptic feedback support, and enhanced drag previews. Instagram-level smoothness achieved.
 
 ## Tech Stack
 

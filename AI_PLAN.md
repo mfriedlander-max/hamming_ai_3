@@ -295,3 +295,8 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** lib/social-integration/*, app/api/calendar/route.ts, lib/calendar/types.ts, lib/optimizer-v2/types.ts, components/calendar-unified/WatchQueue.tsx, components/calendar-unified/WatchTogetherModal.tsx, components/calendar-unified/ContentCalendarPage.tsx, lib/calendar-unified/action-handlers.ts, lib/calendar-unified/use-calendar-actions.ts
 **Summary:** Complete social-integration library: friend-activity (5 tests), share-handler (4 tests), watch-together (4 tests), spoiler-alert (3 tests). Calendar API enriches releases with friend_watching flag. WatchQueue shows friend names ("Shared by Alice") and Watch Together button (2 tests). WatchTogetherModal for inviting friends (3 tests). ContentCalendarPage integrates modal with friend fetching. 22 new tests (972 total).
 
+### feature/ux-9-polish (merged 2026-01-17)
+**Goal:** Final UX polish - dark mode, confetti celebrations, mobile bottom navigation, haptic feedback, shimmer skeletons
+**Files:** components/ui/confetti.tsx, components/ui/skeleton.tsx, components/settings/DarkModeToggle.tsx, components/layout/BottomNav.tsx, lib/haptics.ts, components/layout/sidebar.tsx, app/(app)/settings/SettingsClient.tsx, app/(app)/calendar/CalendarPageClient.tsx, components/board/DraggableCard.tsx, components/calendar-unified/DraggableQueueItem.tsx
+**Summary:** DarkModeToggle (2 tests) with useSyncExternalStore and localStorage persistence. BottomNav (1 test) mobile navigation with 4 items. Confetti (1 test) celebration on Apply All. Haptics (1 test) vibration utility. Skeleton shimmer variant (1 test). Drag ghost scale(1.05) effect. Settings Appearance section. 6 new tests (978 total). UX Overhaul complete!
+
