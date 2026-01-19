@@ -189,12 +189,19 @@ src/
 - [x] Services query column name mismatch
 - [x] Watch Queue display (queue_items integration)
 - [x] Duplicate queue item handling (friendly 409 response)
+- [x] Calendar subscription windows (schema mismatch fix)
 
 ## Current Status
 
 **978 tests passing.** All phases complete. Production-ready.
 
 The app successfully syncs content from TMDB (82 items matched across Disney+, AMC+, Netflix) and displays it in the unified Content Calendar. All social features, household mode, and automation systems are functional.
+
+**Content Calendar** fully functional:
+- Optimizer Summary shows savings potential
+- Watch Queue displays added items with actions
+- Calendar View shows subscription windows with service lanes
+- Upcoming Releases lists content with taste match scores
 
 **Watch Queue** fully functional:
 - Add content via "Add to Queue" button

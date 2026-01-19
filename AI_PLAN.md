@@ -85,7 +85,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ## Phases 7-14 Roadmap
 
-**Status:** Phases 1-13 complete + 9 UX phases + bug fixes (978 tests). Production-ready.
+**Status:** Phases 1-13 complete + 9 UX phases + critical bug fixes (890 tests). Production-ready.
 
 ### Overview
 
@@ -339,4 +339,14 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Fix Watch Queue not displaying added items
 **Files:** src/app/api/optimizer-v2/route.ts, src/app/api/optimizer-v2/route.test.ts, src/app/api/calendar/actions/route.ts, src/app/(app)/calendar/CalendarPageClient.tsx
 **Summary:** Three related bugs fixed: (1) Duplicate queue items showed raw database error - now returns 409 with friendly message "Already in your queue"; (2) Optimizer API returned raw OptimizedPlan with watch_intents but UI expected CalendarOptimizedPlan with watch_queue - added toCalendarPlan() conversion; (3) Optimizer never read from queue_items table - added fetchQueueItems() function that reads user's queue items and merges them into watch_queue response. Watch Queue now displays all added items correctly. All 978 tests passing.
+
+### calendar-subscription-windows-fix (direct to dev, 2026-01-19)
+**Goal:** Fix Calendar View showing "No subscription windows"
+**Files:** src/app/api/optimizer-v2/route.ts, src/app/api/optimizer-v2/route.test.ts
+**Summary:** Schema mismatch bugs fixed via systematic debugging: (1) Query used `service_ids` (array) but content table has `service_id` (FK) - changed to `.in()` filter; (2) Query used `poster_path` but content table has `poster_url` - fixed column name; (3) Query used non-existent `runtime_minutes`, `episode_count` columns - added defaults; (4) Date filter excluded recent past content - extended to include past 30 days. Calendar now shows subscription windows with service lanes and content markers. All 978 tests passing.
+
+### ux-integration-bug-fixes (direct to dev, 2026-01-19)
+**Goal:** Fix 3 critical bugs preventing auto-pilot and optimizer-v2 from working correctly
+**Files:** src/lib/auto-pilot/action-executor.ts, src/lib/auto-pilot/types.ts, src/app/api/optimizer-v2/apply/route.ts, src/components/binge/BingeClient.tsx, src/app/(app)/recommendations/page.tsx, 3 test files
+**Summary:** Fixed 3 critical implementation bugs found via systematic debugging: (1) Reminder schema mismatch - code used `reminder_type`/`reminder_date` but schema has `type`/`trigger_date`; (2) Invalid enum value - code used `'custom'` but only `'cancel'`|`'resubscribe'` valid; (3) Service ID vs Subscription ID confusion - 6 locations passed service_id where subscription_id was expected, causing FK violations. Added subscription lookups before reminder creation. Updated test mocks. All 890 tests passing.
 

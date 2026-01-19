@@ -19,6 +19,7 @@ function createTableMock(data: unknown, error: unknown = null) {
     gte: vi.fn().mockReturnThis(),
     lte: vi.fn().mockReturnThis(),
     overlaps: vi.fn().mockResolvedValue({ data, error }),
+    in: vi.fn().mockResolvedValue({ data, error }),
     upsert: vi.fn().mockResolvedValue({ data: null, error: null }),
   }
   // Make select return the chain
@@ -26,6 +27,7 @@ function createTableMock(data: unknown, error: unknown = null) {
   chainMock.eq.mockReturnValue(chainMock)
   chainMock.gte.mockReturnValue(chainMock)
   chainMock.lte.mockReturnValue(chainMock)
+  // Note: .in() resolves at end of chain, not returns this
   return chainMock
 }
 

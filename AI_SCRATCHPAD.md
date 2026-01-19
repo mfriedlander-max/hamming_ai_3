@@ -2555,3 +2555,52 @@ The `toCalendarPlan()` converter function existed but was never called.
 **Status:** Committed to dev
 
 ---
+
+## 2026-01-19: Calendar Subscription Windows Fix
+
+**Branch:** direct to dev
+
+**Problem:** Calendar View showed "No subscription windows" even though:
+- Optimizer Summary showed $461.64 annual savings
+- Watch Queue displayed items correctly
+- Upcoming Releases showed 6 items
+
+**Root Cause Analysis (Systematic Debugging):**
+
+Traced data flow from API to UI. Discovered multiple schema mismatches in optimizer-v2 route:
+
+### Issue 1: Column Name Mismatch (service_ids vs service_id)
+Content table (migration 013) has `service_id` (singular FK), but query used `service_ids` (array) with `.overlaps()` filter.
+
+**Fix:** Changed to `.in('service_id', serviceIds)` and wrapped result in array for type compatibility.
+
+### Issue 2: Column Name Mismatch (poster_url vs poster_path)
+Content table has `poster_url`, query selected `poster_path`.
+
+**Fix:** Changed select to use `poster_url`, mapped to `poster_path` in transform.
+
+### Issue 3: Non-Existent Columns
+Query selected `runtime_minutes` and `episode_count` which don't exist in content table.
+
+**Fix:** Removed from select, added defaults (120min movies, 45min TV, 10 episodes).
+
+### Issue 4: Date Filter Too Strict
+Query only fetched content with `release_date >= today`, but content in database had release dates Jan 5-14 (before Jan 19).
+
+**Fix:** Extended date range to include past 30 days (recently released content is still watchable).
+
+**Files Modified:**
+- `src/app/api/optimizer-v2/route.ts` - Fixed query columns and date range
+- `src/app/api/optimizer-v2/route.test.ts` - Added `.in()` mock
+
+**Verification:**
+- Tests: 978/978 PASS
+- Calendar View now shows:
+  - Netflix subscription window: "2026-01-16 - 2026-01-30"
+  - Content markers for 6 releases
+  - Watch Queue: 7 items
+- Optimizer Summary: $446.15 savings (97%), Optimized: $15.49/yr
+
+**Status:** Committed to dev
+
+---

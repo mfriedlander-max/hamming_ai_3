@@ -116,8 +116,10 @@ async function fetchOptimizerInputs(
     })
   )
 
-  // Fetch content releases for next 90 days
+  // Fetch content releases: past 30 days (recently released, still watchable) + next 90 days
   const now = new Date()
+  const startDate = new Date(now)
+  startDate.setDate(startDate.getDate() - 30)  // Include recent past content
   const endDate = new Date(now)
   endDate.setDate(endDate.getDate() + 90)
 
@@ -126,11 +128,11 @@ async function fetchOptimizerInputs(
   const { data: content } = await supabase
     .from('content')
     .select(
-      'tmdb_id, title, type, release_date, genres, service_ids, poster_path, runtime_minutes, episode_count'
+      'tmdb_id, title, type, release_date, genres, service_id, poster_url'
     )
-    .gte('release_date', now.toISOString().split('T')[0])
+    .gte('release_date', startDate.toISOString().split('T')[0])
     .lte('release_date', endDate.toISOString().split('T')[0])
-    .overlaps('service_ids', serviceIds)
+    .in('service_id', serviceIds)
 
   const transformedContent: ContentReleaseInput[] = (content || []).map(
     (item) => ({
@@ -139,10 +141,10 @@ async function fetchOptimizerInputs(
       type: item.type as 'movie' | 'tv',
       release_date: item.release_date,
       genres: item.genres || [],
-      service_ids: item.service_ids || [],
-      poster_path: item.poster_path,
-      runtime_minutes: item.runtime_minutes,
-      episode_count: item.episode_count,
+      service_ids: [item.service_id],  // Wrap single FK in array for type compatibility
+      poster_path: item.poster_url,  // Map poster_url to poster_path for type compatibility
+      runtime_minutes: item.type === 'movie' ? 120 : 45,  // Default runtimes (not in table)
+      episode_count: item.type === 'tv' ? 10 : undefined,  // Default episodes (not in table)
     })
   )
 
