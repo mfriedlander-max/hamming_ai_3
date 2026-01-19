@@ -90,7 +90,7 @@ export function ActivityFeed({
 
             <div className="flex-1 min-w-0">
               <p className="text-sm text-foreground">{message}</p>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1" suppressHydrationWarning>
                 {formatRelativeTime(activity.created_at)}
               </p>
             </div>

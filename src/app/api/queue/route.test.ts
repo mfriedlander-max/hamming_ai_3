@@ -63,7 +63,9 @@ describe('Queue API', () => {
         from: vi.fn().mockReturnValue({
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
-              order: vi.fn().mockResolvedValue({ data: mockQueueItems, error: null }),
+              eq: vi.fn().mockReturnValue({
+                order: vi.fn().mockResolvedValue({ data: mockQueueItems, error: null }),
+              }),
             }),
           }),
         }),
@@ -177,11 +179,11 @@ describe('Queue API', () => {
       expect(response.status).toBe(401)
     })
 
-    it('deletes a queue item', async () => {
+    it('soft-deletes a queue item by setting removed=true', async () => {
       const mockSupabase = {
         auth: { getUser: vi.fn().mockResolvedValue({ data: { user: mockUser } }) },
         from: vi.fn().mockReturnValue({
-          delete: vi.fn().mockReturnValue({
+          update: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
               eq: vi.fn().mockResolvedValue({ error: null }),
             }),

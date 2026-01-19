@@ -350,3 +350,8 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** src/lib/auto-pilot/action-executor.ts, src/lib/auto-pilot/types.ts, src/app/api/optimizer-v2/apply/route.ts, src/components/binge/BingeClient.tsx, src/app/(app)/recommendations/page.tsx, 3 test files
 **Summary:** Fixed 3 critical implementation bugs found via systematic debugging: (1) Reminder schema mismatch - code used `reminder_type`/`reminder_date` but schema has `type`/`trigger_date`; (2) Invalid enum value - code used `'custom'` but only `'cancel'`|`'resubscribe'` valid; (3) Service ID vs Subscription ID confusion - 6 locations passed service_id where subscription_id was expected, causing FK violations. Added subscription lookups before reminder creation. Updated test mocks. All 890 tests passing.
 
+### calendar-bug-fixes-round-2 (direct to dev, 2026-01-19)
+**Goal:** Fix 5 bugs found during E2E testing of Content Calendar page
+**Files:** src/lib/optimizer-v2/subscription-optimizer.ts, src/app/(app)/calendar/CalendarPageClient.tsx, src/components/calendar-unified/UpcomingReleases.tsx, src/app/api/queue/route.ts, src/app/api/optimizer-v2/route.ts, src/components/social/ActivityFeed.tsx, src/components/social/FriendCard.tsx, supabase/migrations/016_queue_items_removed.sql
+**Summary:** Fixed 5 bugs: (1) Calendar only shows Netflix lane - added baseline windows for all active subscriptions; (2) Upcoming Releases only shows Netflix - extended date range to match optimizer-v2; (3) "Upcoming" shows past dates - renamed to "Recent & Upcoming"; (4) Queue Remove doesn't persist - implemented soft-delete with `removed` column; (5) Hydration error on Friends page - added suppressHydrationWarning to timestamps. All 978 tests passing.
+

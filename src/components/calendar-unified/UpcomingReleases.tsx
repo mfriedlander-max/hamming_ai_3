@@ -48,10 +48,10 @@ export function UpcomingReleases({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5" />
-          Upcoming Releases
+          Recent & Upcoming
           {hasReleases && (
             <Badge variant="secondary" className="ml-auto">
-              {releases.length} upcoming
+              {releases.length} releases
             </Badge>
           )}
         </CardTitle>

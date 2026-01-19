@@ -109,6 +109,27 @@ export function calculateSubscriptionWindows(
     })
   }
 
+  // Add baseline windows for active subscriptions without scheduled content
+  // This ensures all active subscriptions appear in the calendar view
+  const today = new Date().toISOString().split('T')[0]
+  for (const subscription of subscriptions) {
+    if (subscription.status !== 'active') continue
+
+    // Check if we already have a window for this service
+    const hasWindow = windows.some((w) => w.service_id === subscription.service_id)
+    if (hasWindow) continue
+
+    // Create a baseline window showing the subscription is active
+    windows.push({
+      service_id: subscription.service_id,
+      service_name: subscription.service_name,
+      subscribe_date: today,
+      cancel_date: addDays(today, 30),
+      monthly_cost: subscription.monthly_cost,
+      reason: `Active subscription - no scheduled content`,
+    })
+  }
+
   return windows
 }
 

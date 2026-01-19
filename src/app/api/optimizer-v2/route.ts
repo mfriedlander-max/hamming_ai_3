@@ -166,7 +166,7 @@ async function fetchOptimizerInputs(
 }
 
 /**
- * Fetch user's queue items from the database
+ * Fetch user's queue items from the database (excluding removed items)
  */
 async function fetchQueueItems(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -176,6 +176,7 @@ async function fetchQueueItems(
     .from('queue_items')
     .select('id, tmdb_id, title, service_id, service_name, content_type, poster_path, duration_minutes, priority, source, deadline')
     .eq('user_id', userId)
+    .eq('removed', false)
     .order('priority', { ascending: true })
 
   return (queueItems || []).map((item) => ({
@@ -190,6 +191,22 @@ async function fetchQueueItems(
     deadline: item.deadline,
     poster_path: item.poster_path,
   }))
+}
+
+/**
+ * Fetch tmdb_ids of removed items to filter out optimizer suggestions
+ */
+async function fetchRemovedTmdbIds(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<Set<number>> {
+  const { data: removedItems } = await supabase
+    .from('queue_items')
+    .select('tmdb_id')
+    .eq('user_id', userId)
+    .eq('removed', true)
+
+  return new Set((removedItems || []).map((item) => item.tmdb_id))
 }
 
 /**
@@ -285,14 +302,25 @@ export async function POST(request: Request): Promise<NextResponse<CalendarOptim
     // Convert to CalendarOptimizedPlan format
     const calendarPlan = toCalendarPlan(rawPlan, inputs.subscriptions)
 
-    // Fetch user's queue items and merge into watch_queue
+    // Fetch user's queue items and removed items
     const queueItems = await fetchQueueItems(supabase, user.id)
+    const removedTmdbIds = await fetchRemovedTmdbIds(supabase, user.id)
+
+    // Get titles of removed items for filtering optimizer suggestions
+    const { data: removedItems } = await supabase
+      .from('queue_items')
+      .select('title')
+      .eq('user_id', user.id)
+      .eq('removed', true)
+    const removedTitles = new Set((removedItems || []).map(item => item.title.toLowerCase()))
 
     // Queue items take priority - they're what the user explicitly added
     // Merge: queue items first, then optimizer suggestions that aren't duplicates
+    // Also exclude items the user has removed
     const queueTitles = new Set(queueItems.map(item => item.title.toLowerCase()))
     const optimizerItems = calendarPlan.watch_queue.filter(
-      item => !queueTitles.has(item.title.toLowerCase())
+      item => !queueTitles.has(item.title.toLowerCase()) &&
+              !removedTitles.has(item.title.toLowerCase())
     )
 
     const finalPlan: CalendarOptimizedPlan = {

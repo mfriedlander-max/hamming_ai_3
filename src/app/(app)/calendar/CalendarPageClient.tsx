@@ -81,11 +81,15 @@ export function CalendarPageClient() {
         }
 
         // Fetch calendar releases
-        // Get date range: current month through 3 months ahead
+        // Get date range: 30 days back (recent releases) through 90 days ahead
+        // This matches the optimizer-v2 date range to ensure all synced content appears
         const now = new Date()
-        const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
-        const endMonth = new Date(now.getFullYear(), now.getMonth() + 3, 0)
-        const endDate = `${endMonth.getFullYear()}-${String(endMonth.getMonth() + 1).padStart(2, '0')}-${String(endMonth.getDate()).padStart(2, '0')}`
+        const startDateObj = new Date(now)
+        startDateObj.setDate(startDateObj.getDate() - 30)
+        const startDate = startDateObj.toISOString().split('T')[0]
+        const endDateObj = new Date(now)
+        endDateObj.setDate(endDateObj.getDate() + 90)
+        const endDate = endDateObj.toISOString().split('T')[0]
         const calendarResponse = await fetch(`/api/calendar?start=${startDate}&end=${endDate}`)
         if (calendarResponse.ok) {
           const calendarData = await calendarResponse.json()

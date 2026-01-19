@@ -41,6 +41,17 @@ describe('subscription-optimizer', () => {
   ]
 
   describe('calculateSubscriptionWindows', () => {
+    // Use single-service list when testing window behavior to avoid baseline windows
+    const netflixOnly: UserSubscription[] = [
+      {
+        id: 's1',
+        service_id: 'netflix',
+        service_name: 'Netflix',
+        monthly_cost: 15.99,
+        status: 'active',
+      },
+    ]
+
     it('creates windows for services with scheduled content', () => {
       const schedule: WatchSlot[] = [
         { intent_id: 'i1', date: '2026-01-20', duration_minutes: 120 },
@@ -54,7 +65,7 @@ describe('subscription-optimizer', () => {
       const windows = calculateSubscriptionWindows(
         schedule,
         intentServiceMap,
-        mockSubscriptions
+        netflixOnly
       )
 
       expect(windows).toHaveLength(1)
@@ -74,7 +85,7 @@ describe('subscription-optimizer', () => {
       const windows = calculateSubscriptionWindows(
         schedule,
         intentServiceMap,
-        mockSubscriptions
+        netflixOnly
       )
 
       expect(windows).toHaveLength(2)
@@ -177,11 +188,15 @@ describe('subscription-optimizer', () => {
       expect(result.savings.current_yearly).toBeGreaterThan(0)
     })
 
-    it('handles empty schedule', () => {
+    it('handles empty schedule by creating baseline windows for active subscriptions', () => {
       const result = optimizeSubscriptions([], new Map(), mockSubscriptions)
 
-      expect(result.windows).toHaveLength(0)
-      expect(result.savings.optimized_yearly).toBe(0)
+      // With no scheduled content, baseline windows are created for active subscriptions
+      // mockSubscriptions has 2 active subscriptions (Netflix, Hulu) and 1 paused (Disney+)
+      expect(result.windows).toHaveLength(2)
+      expect(result.windows.map(w => w.service_id).sort()).toEqual(['hulu', 'netflix'])
+      // All baseline windows are counted as "optimized" cost since they have no scheduled content
+      expect(result.savings.optimized_yearly).toBeGreaterThan(0)
     })
   })
 })

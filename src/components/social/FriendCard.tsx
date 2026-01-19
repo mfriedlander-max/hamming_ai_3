@@ -38,7 +38,7 @@ export function FriendCard({ friend, onRemove, isRemoving = false }: FriendCardP
       {/* Info */}
       <div className="flex-1 min-w-0">
         <p className="font-medium text-foreground truncate">{displayName}</p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground" suppressHydrationWarning>
           Friends since {formatDate(friend.friends_since)}
         </p>
       </div>

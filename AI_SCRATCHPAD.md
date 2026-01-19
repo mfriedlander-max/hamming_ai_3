@@ -2604,3 +2604,90 @@ Query only fetched content with `release_date >= today`, but content in database
 **Status:** Committed to dev
 
 ---
+
+## 2026-01-19: Content Calendar Bug Fixes - Round 2
+
+**Branch:** direct to dev
+
+**Context:** E2E testing with Playwright MCP revealed 5 additional bugs after the subscription windows fix.
+
+### Bugs Found & Fixed
+
+#### Bug #1: Calendar Only Shows Netflix Lane (High)
+**Symptoms:** User has 3 active subscriptions (Netflix, Disney+, AMC+) but Calendar View only shows Netflix lane.
+
+**Root Cause:** `calculateSubscriptionWindows()` only created windows for services with scheduled watch slots. If Disney+/AMC+ content didn't match user's taste genres, no intents → no slots → no windows → no calendar lanes.
+
+**Fix:** In `subscription-optimizer.ts`, added baseline windows for all active subscriptions even without scheduled content:
+```typescript
+for (const subscription of subscriptions) {
+  if (subscription.status !== 'active') continue
+  const hasWindow = windows.some((w) => w.service_id === subscription.service_id)
+  if (hasWindow) continue
+  // Create baseline window showing subscription exists
+}
+```
+
+**Files:** `src/lib/optimizer-v2/subscription-optimizer.ts`, `subscription-optimizer.test.ts`
+
+#### Bug #2: Upcoming Releases Only Shows Netflix (High)
+**Symptoms:** 6 items in Upcoming Releases, all Netflix. Disney+ and AMC+ content not appearing.
+
+**Root Cause:** CalendarPageClient date range (Jan 1 - Mar 31) didn't match optimizer-v2 range (30 days back - 90 days ahead), so content with recent release dates wasn't queried.
+
+**Fix:** Extended date range in CalendarPageClient to match optimizer-v2 (30 days back, 90 days ahead).
+
+**Files:** `src/app/(app)/calendar/CalendarPageClient.tsx`
+
+#### Bug #3: "Upcoming Releases" Shows Past Dates (Medium)
+**Symptoms:** Items show release dates Jan 5-14, but today is Jan 19. These are past releases.
+
+**Root Cause:** Optimizer-v2 extended date range to include past 30 days (recent releases), but UI label was misleading.
+
+**Fix:** Renamed section header from "Upcoming Releases" to "Recent & Upcoming".
+
+**Files:** `src/components/calendar-unified/UpcomingReleases.tsx`
+
+#### Bug #4: Watch Queue Remove Doesn't Persist (Medium)
+**Symptoms:** Click Remove → toast shows "Removed" → page refresh → item reappears.
+
+**Root Cause:** Optimizer regenerates watch_queue from watch_intents on every API call, ignoring manual removals.
+
+**Fix:** Implemented soft-delete pattern:
+1. Created migration 016 adding `removed BOOLEAN DEFAULT FALSE` to queue_items
+2. Changed DELETE /api/queue to `.update({ removed: true })` instead of `.delete()`
+3. Updated GET /api/queue to filter `.eq('removed', false)`
+4. Added `fetchRemovedTmdbIds()` to optimizer-v2 route to filter removed items
+
+**Files:** 
+- `supabase/migrations/016_queue_items_removed.sql` (new)
+- `src/app/api/queue/route.ts`
+- `src/app/api/optimizer-v2/route.ts`
+- `src/app/api/queue/route.test.ts`
+
+#### Bug #5: Hydration Error on Friends Page (Low)
+**Symptoms:** Console error "A tree hydrated but some attributes of the server rendered HTML didn't match the client prop..."
+
+**Root Cause:** `formatRelativeTime()` uses `Date.now()` which produces different results between server render and client hydration. Also `toLocaleDateString()` in FriendCard can differ by locale.
+
+**Fix:** Added `suppressHydrationWarning` to timestamp elements in ActivityFeed and FriendCard.
+
+**Files:**
+- `src/components/social/ActivityFeed.tsx`
+- `src/components/social/FriendCard.tsx`
+
+### Test Updates
+Updated tests affected by the fixes:
+- `subscription-optimizer.test.ts`: Changed "handles empty schedule" test to expect baseline windows, used single-service list for window behavior tests
+- `queue/route.test.ts`: Updated mock for `.eq().eq()` chain and `.update()` instead of `.delete()`
+
+**Verification:**
+- Tests: 978/978 PASS
+- Build: PASS
+- Calendar View: All 3 subscription lanes visible
+- Watch Queue: Items persist when removed
+- Friends page: No hydration errors
+
+**Migration Needed:** `supabase db push` for migration 016
+
+**Status:** All 5 bugs fixed, tests passing, committed to dev
