@@ -2,15 +2,17 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { generateOptimizedPlan } from '@/lib/optimizer-v2/optimizer'
 import { shouldRecalculate } from '@/lib/optimizer-v2/recalculator'
-import type {
-  OptimizerInputs,
-  OptimizedPlan,
-  OptimizeResponse,
-  UserSubscription,
-  WatchlistItemInput,
-  FriendShareInput,
-  BingePlanInput,
-  ContentReleaseInput,
+import {
+  toCalendarPlan,
+  type OptimizerInputs,
+  type OptimizedPlan,
+  type UserSubscription,
+  type WatchlistItemInput,
+  type FriendShareInput,
+  type BingePlanInput,
+  type ContentReleaseInput,
+  type CalendarWatchSlot,
+  type CalendarOptimizedPlan,
 } from '@/lib/optimizer-v2/types'
 
 /**
@@ -162,6 +164,33 @@ async function fetchOptimizerInputs(
 }
 
 /**
+ * Fetch user's queue items from the database
+ */
+async function fetchQueueItems(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<CalendarWatchSlot[]> {
+  const { data: queueItems } = await supabase
+    .from('queue_items')
+    .select('id, tmdb_id, title, service_id, service_name, content_type, poster_path, duration_minutes, priority, source, deadline')
+    .eq('user_id', userId)
+    .order('priority', { ascending: true })
+
+  return (queueItems || []).map((item) => ({
+    intent_id: item.id,
+    title: item.title,
+    service_id: item.service_id,
+    service_name: item.service_name,
+    scheduled_date: '', // User-added items don't have scheduled dates yet
+    duration_minutes: item.duration_minutes || 120,
+    priority_score: 100 - (item.priority || 1), // Higher priority items come first
+    source: item.source || 'manual',
+    deadline: item.deadline,
+    poster_path: item.poster_path,
+  }))
+}
+
+/**
  * Get cached plan from database
  */
 async function getCachedPlan(
@@ -204,7 +233,12 @@ async function savePlanToCache(
   )
 }
 
-export async function POST(request: Request): Promise<NextResponse<OptimizeResponse | { error: string }>> {
+interface CalendarOptimizeResponse {
+  plan: CalendarOptimizedPlan
+  from_cache: boolean
+}
+
+export async function POST(request: Request): Promise<NextResponse<CalendarOptimizeResponse | { error: string }>> {
   try {
     const supabase = await createClient()
 
@@ -224,26 +258,49 @@ export async function POST(request: Request): Promise<NextResponse<OptimizeRespo
     // Fetch inputs
     const inputs = await fetchOptimizerInputs(supabase, user.id)
 
+    let rawPlan: OptimizedPlan
+    let fromCache = false
+
     // Check cache unless force refresh
     if (!forceRefresh) {
       const cached = await getCachedPlan(supabase, user.id)
       if (cached && !shouldRecalculate(inputs, cached.plan)) {
-        return NextResponse.json({
-          plan: cached.plan,
-          from_cache: true,
-        })
+        rawPlan = cached.plan
+        fromCache = true
+      } else {
+        // Generate new plan
+        rawPlan = generateOptimizedPlan(inputs)
+        // Save to cache
+        await savePlanToCache(supabase, user.id, rawPlan)
       }
+    } else {
+      // Generate new plan
+      rawPlan = generateOptimizedPlan(inputs)
+      // Save to cache
+      await savePlanToCache(supabase, user.id, rawPlan)
     }
 
-    // Generate new plan
-    const plan = generateOptimizedPlan(inputs)
+    // Convert to CalendarOptimizedPlan format
+    const calendarPlan = toCalendarPlan(rawPlan, inputs.subscriptions)
 
-    // Save to cache
-    await savePlanToCache(supabase, user.id, plan)
+    // Fetch user's queue items and merge into watch_queue
+    const queueItems = await fetchQueueItems(supabase, user.id)
+
+    // Queue items take priority - they're what the user explicitly added
+    // Merge: queue items first, then optimizer suggestions that aren't duplicates
+    const queueTitles = new Set(queueItems.map(item => item.title.toLowerCase()))
+    const optimizerItems = calendarPlan.watch_queue.filter(
+      item => !queueTitles.has(item.title.toLowerCase())
+    )
+
+    const finalPlan: CalendarOptimizedPlan = {
+      ...calendarPlan,
+      watch_queue: [...queueItems, ...optimizerItems],
+    }
 
     return NextResponse.json({
-      plan,
-      from_cache: false,
+      plan: finalPlan,
+      from_cache: fromCache,
     })
   } catch (error) {
     console.error('Error generating optimized plan:', error)

@@ -79,6 +79,12 @@ describe('/api/optimizer-v2', () => {
         if (table === 'optimizer_plans') {
           return createTableMock(null, { code: 'PGRST116' })
         }
+        if (table === 'queue_items') {
+          const mock = createTableMock([])
+          mock.eq.mockReturnThis()
+          mock.order = vi.fn().mockResolvedValue({ data: [], error: null })
+          return mock
+        }
         return createTableMock(null)
       })
 
@@ -101,7 +107,7 @@ describe('/api/optimizer-v2', () => {
 
       expect(response.status).toBe(200)
       expect(data.plan).toBeDefined()
-      expect(data.plan.watch_intents).toBeDefined()
+      expect(data.plan.watch_queue).toBeDefined()
       expect(data.plan.savings).toBeDefined()
     })
 
@@ -155,6 +161,12 @@ describe('/api/optimizer-v2', () => {
         if (table === 'optimizer_plans') {
           return createTableMock(null, { code: 'PGRST116' })
         }
+        if (table === 'queue_items') {
+          const mock = createTableMock([])
+          mock.eq.mockReturnThis()
+          mock.order = vi.fn().mockResolvedValue({ data: [], error: null })
+          return mock
+        }
         return createTableMock(null)
       })
 
@@ -177,7 +189,7 @@ describe('/api/optimizer-v2', () => {
 
       expect(response.status).toBe(200)
       expect(data.plan).toBeDefined()
-      expect(data.plan.watch_intents.length).toBeGreaterThan(0)
+      expect(data.plan.watch_queue.length).toBeGreaterThan(0)
     })
 
     it('returns from_cache when plan exists and is fresh', async () => {
@@ -218,6 +230,12 @@ describe('/api/optimizer-v2', () => {
         }
         if (table === 'content') {
           return createTableMock([])
+        }
+        if (table === 'queue_items') {
+          const mock = createTableMock([])
+          mock.eq.mockReturnThis()
+          mock.order = vi.fn().mockResolvedValue({ data: [], error: null })
+          return mock
         }
         return createTableMock(null)
       })
