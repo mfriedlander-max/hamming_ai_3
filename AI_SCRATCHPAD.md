@@ -2491,3 +2491,67 @@ Code queried for column `base_price` but database schema (001_initial_schema.sql
 **Status:** Committed to dev
 
 ---
+
+## 2026-01-18: Watch Queue Display Fix
+
+**Branch:** `dev` (direct commits)
+
+**Problems Identified:**
+1. Duplicate queue items showed raw database error instead of friendly message
+2. Watch Queue section showed "empty" even after adding items
+3. Optimizer API returned `watch_intents` but UI expected `watch_queue`
+
+**Root Cause Analysis:**
+
+### Issue 1: Duplicate Constraint Error
+API returned raw Postgres error `duplicate key value violates unique constraint "queue_items_user_id_tmdb_id_content_type_key"` instead of user-friendly message.
+
+**Fix:** Added error code check in `handleAddToQueue()`:
+```typescript
+if (error.code === '23505') {
+  return NextResponse.json({ error: 'This item is already in your queue' }, { status: 409 })
+}
+```
+
+Client updated to show info toast for 409: "Already in your queue"
+
+### Issue 2: Queue Items Not Read from Database
+Optimizer API never fetched from `queue_items` table. The `watch_queue` in the response came from internal `watch_intents` computed by the optimizer algorithm, not from user-added queue items.
+
+**Fix:** Added `fetchQueueItems()` function that:
+- Reads from `queue_items` table
+- Transforms to `CalendarWatchSlot` format
+- Merges with optimizer suggestions (user items take priority)
+
+### Issue 3: Response Format Mismatch
+`generateOptimizedPlan()` returns `OptimizedPlan` with `watch_intents`, but `CalendarPageClient` expects `CalendarOptimizedPlan` with `watch_queue`.
+
+The `toCalendarPlan()` converter function existed but was never called.
+
+**Fix:** Updated POST handler to:
+1. Call `toCalendarPlan()` to convert response format
+2. Fetch user's `queue_items`
+3. Merge into `watch_queue` (user items first, then optimizer suggestions)
+
+**Files Modified:**
+- `src/app/api/calendar/actions/route.ts` - 409 response for duplicates
+- `src/app/(app)/calendar/CalendarPageClient.tsx` - info toast for 409
+- `src/app/api/optimizer-v2/route.ts` - fetchQueueItems + toCalendarPlan
+- `src/app/api/optimizer-v2/route.test.ts` - added queue_items mock
+
+**Verification:**
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Add to Queue: 201 Created ✓
+- Duplicate: 409 + info toast ✓
+- Watch Queue: Shows items ✓
+
+**E2E Test:**
+1. Clicked "Add to queue" on "The Rip"
+2. Toast: "Added to queue"
+3. Watch Queue section: "3 items" (HIS & HERS, People We Meet on Vacation, The Rip)
+4. Clicked same item again → Toast: "Already in your queue"
+
+**Status:** Committed to dev
+
+---

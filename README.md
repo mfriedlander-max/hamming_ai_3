@@ -186,6 +186,9 @@ src/
 - [x] TMDB content sync & calendar data flow
 - [x] Social/Friends API errors
 - [x] Calendar Add to Queue action
+- [x] Services query column name mismatch
+- [x] Watch Queue display (queue_items integration)
+- [x] Duplicate queue item handling (friendly 409 response)
 
 ## Current Status
 
@@ -193,7 +196,11 @@ src/
 
 The app successfully syncs content from TMDB (82 items matched across Disney+, AMC+, Netflix) and displays it in the unified Content Calendar. All social features, household mode, and automation systems are functional.
 
-**Pending:** Run `supabase db push` to apply migrations 014-015 for full watchlist and queue functionality.
+**Watch Queue** fully functional:
+- Add content via "Add to Queue" button
+- Items appear in Watch Queue section
+- Duplicate handling with friendly messages
+- Remove items via queue controls
 
 ## License
 

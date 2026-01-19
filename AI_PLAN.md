@@ -335,3 +335,8 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** CalendarPageClient.tsx, QuickAddService.tsx, ContentCalendarPage.tsx, EmptyState.tsx, QuickAddService.test.tsx
 **Summary:** Code queried for `base_price` but database schema uses `default_price`. Fixed column name mismatch in 5 files. Services query now returns 200. Add to Queue now works (201 Created). All 978 tests passing.
 
+### watch-queue-display-fix (direct to dev, 2026-01-18)
+**Goal:** Fix Watch Queue not displaying added items
+**Files:** src/app/api/optimizer-v2/route.ts, src/app/api/optimizer-v2/route.test.ts, src/app/api/calendar/actions/route.ts, src/app/(app)/calendar/CalendarPageClient.tsx
+**Summary:** Three related bugs fixed: (1) Duplicate queue items showed raw database error - now returns 409 with friendly message "Already in your queue"; (2) Optimizer API returned raw OptimizedPlan with watch_intents but UI expected CalendarOptimizedPlan with watch_queue - added toCalendarPlan() conversion; (3) Optimizer never read from queue_items table - added fetchQueueItems() function that reads user's queue items and merges them into watch_queue response. Watch Queue now displays all added items correctly. All 978 tests passing.
+
