@@ -11,11 +11,11 @@ interface FriendRequestCardProps {
   isProcessing?: boolean
 }
 
-function getInitial(name: string | null, email: string): string {
+function getInitial(name: string | null | undefined): string {
   if (name) {
     return name.charAt(0).toUpperCase()
   }
-  return email.charAt(0).toUpperCase()
+  return '?'
 }
 
 export function FriendRequestCard({
@@ -24,8 +24,8 @@ export function FriendRequestCard({
   onDecline,
   isProcessing = false,
 }: FriendRequestCardProps) {
-  const displayName = request.requester_name || request.requester_email
-  const initial = getInitial(request.requester_name, request.requester_email)
+  const displayName = request.requester_name || 'Unknown'
+  const initial = getInitial(request.requester_name)
 
   return (
     <div className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border">

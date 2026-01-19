@@ -30,7 +30,7 @@ export async function GET(request: Request): Promise<NextResponse<ActivityRespon
       service_id,
       created_at,
       profile:profiles!activity_feed_user_id_fkey(id, name),
-      service:services!activity_feed_service_id_fkey(id, name, logo_path)
+      service:services!activity_feed_service_id_fkey(id, name, logo_url)
     `
     )
     .order('created_at', { ascending: false })
@@ -45,7 +45,7 @@ export async function GET(request: Request): Promise<NextResponse<ActivityRespon
   const activities: ActivityItem[] = data.slice(0, limit).map((item) => {
     // Supabase returns joined tables as arrays
     const profileArr = item.profile as { id: string; name: string | null }[] | null
-    const serviceArr = item.service as { id: string; name: string; logo_path: string | null }[] | null
+    const serviceArr = item.service as { id: string; name: string; logo_url: string | null }[] | null
     const profile = Array.isArray(profileArr) ? profileArr[0] : profileArr
     const service = Array.isArray(serviceArr) ? serviceArr[0] : serviceArr
 
@@ -56,7 +56,7 @@ export async function GET(request: Request): Promise<NextResponse<ActivityRespon
       action: item.action,
       service_id: item.service_id,
       service_name: service?.name || 'Unknown Service',
-      service_logo: service?.logo_path || null,
+      service_logo: service?.logo_url || null,
       created_at: item.created_at,
     }
   })

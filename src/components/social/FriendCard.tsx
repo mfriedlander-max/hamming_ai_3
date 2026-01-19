@@ -17,16 +17,16 @@ function formatDate(dateString: string): string {
   })
 }
 
-function getInitial(name: string | null, email: string): string {
+function getInitial(name: string | null | undefined): string {
   if (name) {
     return name.charAt(0).toUpperCase()
   }
-  return email.charAt(0).toUpperCase()
+  return '?'
 }
 
 export function FriendCard({ friend, onRemove, isRemoving = false }: FriendCardProps) {
-  const displayName = friend.name || friend.email
-  const initial = getInitial(friend.name, friend.email)
+  const displayName = friend.name || 'Unknown'
+  const initial = getInitial(friend.name)
 
   return (
     <div className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border hover:border-gray-300 transition-colors">

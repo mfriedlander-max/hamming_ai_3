@@ -266,6 +266,7 @@ export interface CalendarOptimizedPlan {
 
 export interface ContentRelease {
   id: string
+  tmdb_id?: number  // TMDB ID for adding to queue
   title: string
   release_date: string
   service_id: string

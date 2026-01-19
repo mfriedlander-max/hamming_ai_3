@@ -7,7 +7,6 @@ const mockRequest: FriendRequest = {
   id: 'req-1',
   requester_id: 'user-456',
   requester_name: 'Jane Smith',
-  requester_email: 'jane@example.com',
   created_at: '2026-01-10T10:00:00Z',
 }
 
@@ -19,12 +18,12 @@ describe('FriendRequestCard', () => {
     expect(screen.getByText('Jane Smith')).toBeInTheDocument()
   })
 
-  it('renders requester email when name is null', () => {
+  it('renders "Unknown" when name is null', () => {
     const requestWithoutName = { ...mockRequest, requester_name: null }
     render(
       <FriendRequestCard request={requestWithoutName} onAccept={vi.fn()} onDecline={vi.fn()} />
     )
-    expect(screen.getByText('jane@example.com')).toBeInTheDocument()
+    expect(screen.getByText('Unknown')).toBeInTheDocument()
   })
 
   it('renders Accept and Decline buttons', () => {

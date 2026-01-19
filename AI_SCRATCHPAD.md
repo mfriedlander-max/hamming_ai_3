@@ -2269,6 +2269,94 @@ After: Calendar, Dashboard, Friends, Settings
 
 ---
 
+## 2026-01-18: Social/Friends Page Bugs + Calendar Actions Fix
+
+**Branch:** `dev` (direct commit)
+
+**Problems Found:**
+1. Friends API 500 - `column profiles.email does not exist`
+2. Activity API 500 - `column services.logo_path does not exist` (should be `logo_url`)
+3. Watchlists API 500 - Infinite recursion in RLS policy for `watchlist_members`
+4. Calendar Add to Queue 400 - Client sends wrong request format
+5. Queue Items 500 - Table `queue_items` never created
+
+**Root Causes:**
+
+### Bug 1: Friends API queries email from profiles
+The `profiles` table only has: `id`, `created_at`, `name`, `watch_speed`, `vacation_mode`.
+Email is in `auth.users`, not joinable. Query selected nonexistent `profiles.email`.
+
+### Bug 2: Activity API wrong column name
+Query selected `logo_path` but column is named `logo_url` in `services` table.
+
+### Bug 3: Watchlists RLS infinite recursion
+Policy on `watchlist_members` referenced itself:
+```sql
+SELECT USING (watchlist_id IN (SELECT watchlist_id FROM watchlist_members WHERE user_id = auth.uid()))
+```
+PostgreSQL evaluates policy → queries same table → evaluates policy → infinite loop.
+
+### Bug 4: Calendar actions request mismatch
+Client sent: `{ action: 'add_to_queue', release_id, title, service_id }`
+API expected: `{ action: 'add_to_queue', release: { id, tmdb_id, title, content_type, ... } }`
+
+### Bug 5: Missing queue_items table
+Table was never created in any migration.
+
+**Fixes Applied:**
+
+1. **Friends API** - Remove email from queries, make email optional in types
+   - `src/app/api/friends/route.ts` - Remove email from profile select
+   - `src/lib/social/types.ts` - Make email optional: `email?: string | null`
+   - POST now accepts `user_id` or `name` instead of email lookup
+
+2. **Activity API** - Change `logo_path` to `logo_url`
+   - `src/app/api/activity/route.ts` - Fixed column name
+
+3. **Watchlists RLS** - Created migration to fix recursion
+   - `supabase/migrations/014_fix_watchlist_rls.sql`
+   - Uses `watchlists.created_by` for ownership checks instead of self-referencing
+
+4. **Calendar Actions** - Fixed request format
+   - `src/app/(app)/calendar/CalendarPageClient.tsx`
+   - Include `tmdb_id` in transformation
+   - Send full `release` object to API
+   - Fixed `queue_item_id` param name
+
+5. **Queue Items Table** - Created migration
+   - `supabase/migrations/015_queue_items.sql`
+   - Creates `queue_items` table with RLS policies
+
+**Component Updates:**
+- `src/components/social/FriendCard.tsx` - Show "Unknown" instead of email
+- `src/components/social/FriendRequestCard.tsx` - Show "Unknown" instead of email
+- `src/lib/optimizer-v2/types.ts` - Added `tmdb_id` to ContentRelease
+
+**Test Updates:**
+- `src/app/api/friends/route.test.ts` - Updated to use `user_id` param
+- `src/components/social/FriendCard.test.tsx` - Test "Unknown" fallback
+- `src/components/social/FriendRequestCard.test.tsx` - Test "Unknown" fallback
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+- Friends API: 200 ✓
+- Activity API: Needs migration
+- Watchlists API: Needs migration
+- Calendar Add to Queue: Needs queue_items migration
+
+**Note:** User needs to run migrations 014 and 015 against Supabase:
+```bash
+supabase db push
+# or apply manually via SQL Editor
+```
+
+**Status:** Committed to dev
+
+---
+
 ## 2026-01-18: Calendar Data Flow Bug Fix
 
 **Branch:** `dev` (direct commit)

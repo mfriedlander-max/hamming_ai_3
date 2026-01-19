@@ -15,7 +15,7 @@ export interface Friend {
   id: string
   user_id: string
   name: string | null
-  email: string
+  email?: string | null  // Email not available from profiles table
   friends_since: string
 }
 
@@ -23,7 +23,7 @@ export interface FriendRequest {
   id: string
   requester_id: string
   requester_name: string | null
-  requester_email: string
+  requester_email?: string | null  // Email not available from profiles table
   created_at: string
 }
 

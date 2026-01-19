@@ -7,7 +7,6 @@ const mockFriend: Friend = {
   id: 'f-1',
   user_id: 'user-456',
   name: 'John Doe',
-  email: 'john@example.com',
   friends_since: '2026-01-01T00:00:00Z',
 }
 
@@ -17,10 +16,10 @@ describe('FriendCard', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument()
   })
 
-  it('renders friend email when name is null', () => {
+  it('renders "Unknown" when name is null', () => {
     const friendWithoutName = { ...mockFriend, name: null }
     render(<FriendCard friend={friendWithoutName} onRemove={vi.fn()} />)
-    expect(screen.getByText('john@example.com')).toBeInTheDocument()
+    expect(screen.getByText('Unknown')).toBeInTheDocument()
   })
 
   it('renders "Friends since" date', () => {

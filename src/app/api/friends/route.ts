@@ -22,8 +22,8 @@ export async function GET(): Promise<NextResponse<FriendsResponse | { error: str
       addressee_id,
       status,
       created_at,
-      requester:profiles!friendships_requester_id_fkey(id, name, email),
-      addressee:profiles!friendships_addressee_id_fkey(id, name, email)
+      requester:profiles!friendships_requester_id_fkey(id, name),
+      addressee:profiles!friendships_addressee_id_fkey(id, name)
     `)
     .or(`requester_id.eq.${user.id},addressee_id.eq.${user.id}`)
 
@@ -38,8 +38,8 @@ export async function GET(): Promise<NextResponse<FriendsResponse | { error: str
 
   for (const friendship of friendships || []) {
     // Supabase returns joined tables as arrays
-    const requesterArr = friendship.requester as { id: string; name: string | null; email: string }[] | null
-    const addresseeArr = friendship.addressee as { id: string; name: string | null; email: string }[] | null
+    const requesterArr = friendship.requester as { id: string; name: string | null }[] | null
+    const addresseeArr = friendship.addressee as { id: string; name: string | null }[] | null
     const requester = Array.isArray(requesterArr) ? requesterArr[0] : requesterArr
     const addressee = Array.isArray(addresseeArr) ? addresseeArr[0] : addresseeArr
 
@@ -53,7 +53,6 @@ export async function GET(): Promise<NextResponse<FriendsResponse | { error: str
           id: friendship.id,
           user_id: friendProfile.id,
           name: friendProfile.name,
-          email: friendProfile.email,
           friends_since: friendship.created_at,
         })
       }
@@ -64,7 +63,6 @@ export async function GET(): Promise<NextResponse<FriendsResponse | { error: str
           id: friendship.id,
           requester_id: friendship.requester_id,
           requester_name: requester.name,
-          requester_email: requester.email,
           created_at: friendship.created_at,
         })
       }
@@ -86,20 +84,38 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   const body = await request.json()
-  const { email } = body
+  const { user_id, name } = body
 
-  if (!email) {
-    return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+  // Support lookup by user_id or name
+  let targetUser: { id: string } | null = null
+
+  if (user_id) {
+    // Direct lookup by user_id
+    const { data, error: userError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user_id)
+      .single()
+
+    if (!userError && data) {
+      targetUser = data
+    }
+  } else if (name) {
+    // Lookup by name (case-insensitive)
+    const { data, error: userError } = await supabase
+      .from('profiles')
+      .select('id')
+      .ilike('name', name)
+      .single()
+
+    if (!userError && data) {
+      targetUser = data
+    }
+  } else {
+    return NextResponse.json({ error: 'user_id or name is required' }, { status: 400 })
   }
 
-  // Find user by email
-  const { data: targetUser, error: userError } = await supabase
-    .from('profiles')
-    .select('id, email')
-    .eq('email', email.toLowerCase())
-    .single()
-
-  if (userError || !targetUser) {
+  if (!targetUser) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 

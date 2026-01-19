@@ -98,6 +98,7 @@ export function CalendarPageClient() {
                 // Transform API response to ContentRelease format expected by components
                 allReleases.push({
                   id: release.id,
+                  tmdb_id: release.tmdb_id,  // Include for add_to_queue action
                   title: release.title,
                   release_date: release.release_date,
                   service_id: service.service_id,
@@ -175,12 +176,12 @@ export function CalendarPageClient() {
     }
   }
 
-  const handleRemoveFromQueue = async (intentId: string) => {
+  const handleRemoveFromQueue = async (queueItemId: string) => {
     try {
       const response = await fetch('/api/calendar/actions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'remove_from_queue', intent_id: intentId }),
+        body: JSON.stringify({ action: 'remove_from_queue', queue_item_id: queueItemId }),
       })
 
       if (response.ok) {
@@ -202,15 +203,25 @@ export function CalendarPageClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'add_to_queue',
-          release_id: release.id,
-          title: release.title,
-          service_id: release.service_id,
+          release: {
+            id: release.id,
+            tmdb_id: release.tmdb_id ?? 0,
+            title: release.title,
+            content_type: release.type === 'series' ? 'tv' : 'movie',
+            service_id: release.service_id,
+            service_name: release.service_name,
+            duration_minutes: release.runtime ?? 120,  // Default 2 hours for movies
+            poster_path: release.poster_path,
+          },
         }),
       })
 
       if (response.ok) {
         toast({ message: 'Added to queue', type: 'success' })
         fetchData()
+      } else {
+        const error = await response.json()
+        toast({ message: error.error || 'Failed to add to queue', type: 'error' })
       }
     } catch {
       toast({

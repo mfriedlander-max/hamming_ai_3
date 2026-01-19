@@ -107,14 +107,14 @@ describe('/api/friends', () => {
 
       const request = new Request('http://localhost/api/friends', {
         method: 'POST',
-        body: JSON.stringify({ email: 'friend@example.com' }),
+        body: JSON.stringify({ user_id: 'user-456' }),
       })
 
       const response = await POST(request)
       expect(response.status).toBe(401)
     })
 
-    it('should return 400 if email is missing', async () => {
+    it('should return 400 if user_id and name are missing', async () => {
       const request = new Request('http://localhost/api/friends', {
         method: 'POST',
         body: JSON.stringify({}),
@@ -127,13 +127,13 @@ describe('/api/friends', () => {
     it('should return 400 if trying to add self', async () => {
       // Mock the profile lookup to return the same user
       mockSingle.mockResolvedValue({
-        data: { id: 'user-123', email: 'self@example.com' },
+        data: { id: 'user-123' },
         error: null,
       })
 
       const request = new Request('http://localhost/api/friends', {
         method: 'POST',
-        body: JSON.stringify({ email: 'self@example.com' }),
+        body: JSON.stringify({ user_id: 'user-123' }),
       })
 
       const response = await POST(request)
@@ -145,12 +145,12 @@ describe('/api/friends', () => {
     it('should return 404 if user not found', async () => {
       mockSingle.mockResolvedValue({
         data: null,
-        error: null,
+        error: { code: 'PGRST116' },
       })
 
       const request = new Request('http://localhost/api/friends', {
         method: 'POST',
-        body: JSON.stringify({ email: 'notfound@example.com' }),
+        body: JSON.stringify({ user_id: 'not-found-user' }),
       })
 
       const response = await POST(request)
@@ -164,11 +164,11 @@ describe('/api/friends', () => {
       mockSelect.mockImplementation(() => {
         callCount++
         if (callCount === 1) {
-          // Profile lookup
+          // Profile lookup by user_id
           return {
             eq: vi.fn().mockReturnValue({
               single: vi.fn().mockResolvedValue({
-                data: { id: 'user-456', email: 'friend@example.com' },
+                data: { id: 'user-456' },
                 error: null,
               }),
             }),
@@ -198,7 +198,7 @@ describe('/api/friends', () => {
 
       const request = new Request('http://localhost/api/friends', {
         method: 'POST',
-        body: JSON.stringify({ email: 'friend@example.com' }),
+        body: JSON.stringify({ user_id: 'user-456' }),
       })
 
       const response = await POST(request)
