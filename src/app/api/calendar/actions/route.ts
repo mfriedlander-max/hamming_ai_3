@@ -164,6 +164,10 @@ async function handleAddToQueue(
     .single()
 
   if (error) {
+    // Handle duplicate key constraint (item already in queue)
+    if (error.code === '23505') {
+      return NextResponse.json({ error: 'This item is already in your queue' }, { status: 409 })
+    }
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 

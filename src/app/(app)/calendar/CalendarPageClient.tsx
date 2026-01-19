@@ -219,6 +219,9 @@ export function CalendarPageClient() {
       if (response.ok) {
         toast({ message: 'Added to queue', type: 'success' })
         fetchData()
+      } else if (response.status === 409) {
+        // Item already in queue - not an error, just informational
+        toast({ message: 'Already in your queue', type: 'info' })
       } else {
         const error = await response.json()
         toast({ message: error.error || 'Failed to add to queue', type: 'error' })
