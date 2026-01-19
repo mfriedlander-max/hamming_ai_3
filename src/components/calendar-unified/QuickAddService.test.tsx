@@ -3,9 +3,9 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { QuickAddService } from './QuickAddService'
 
 const mockServices = [
-  { id: 'netflix', name: 'Netflix', base_price: 15.99 },
-  { id: 'hulu', name: 'Hulu', base_price: 7.99 },
-  { id: 'disney-plus', name: 'Disney+', base_price: 10.99 },
+  { id: 'netflix', name: 'Netflix', default_price: 15.99 },
+  { id: 'hulu', name: 'Hulu', default_price: 7.99 },
+  { id: 'disney-plus', name: 'Disney+', default_price: 10.99 },
 ]
 
 describe('QuickAddService', () => {

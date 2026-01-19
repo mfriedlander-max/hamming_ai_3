@@ -11,7 +11,7 @@ interface EmptyStateProps {
   onServiceAdd: (serviceId: string, price: number) => void
   onSkipToCalendar: () => void
   currentStep?: number
-  services?: Array<{ id: string; name: string; base_price: number }>
+  services?: Array<{ id: string; name: string; default_price: number }>
 }
 
 export function EmptyState({

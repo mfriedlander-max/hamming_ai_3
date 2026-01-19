@@ -29,7 +29,7 @@ type SubscriptionWindow = CalendarSubscriptionWindow
 interface Service {
   id: string
   name: string
-  base_price: number
+  default_price: number
 }
 
 interface ContentCalendarPageProps {

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 interface Service {
   id: string
   name: string
-  base_price: number
+  default_price: number
 }
 
 interface QuickAddServiceProps {
@@ -30,7 +30,7 @@ export function QuickAddService({
     setSelectedServiceId(serviceId)
     const service = services.find((s) => s.id === serviceId)
     if (service) {
-      setPrice(service.base_price.toString())
+      setPrice(service.default_price.toString())
     }
   }
 

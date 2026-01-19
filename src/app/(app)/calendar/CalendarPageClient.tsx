@@ -13,7 +13,7 @@ import type {
 interface Service {
   id: string
   name: string
-  base_price: number
+  default_price: number
 }
 
 export function CalendarPageClient() {
@@ -60,7 +60,7 @@ export function CalendarPageClient() {
       // Fetch services for empty state
       const { data: servicesData } = await supabase
         .from('services')
-        .select('id, name, base_price')
+        .select('id, name, default_price')
         .order('name')
 
       setServices(servicesData ?? [])
