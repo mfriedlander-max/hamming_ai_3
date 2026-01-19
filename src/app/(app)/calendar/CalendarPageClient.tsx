@@ -67,6 +67,9 @@ export function CalendarPageClient() {
 
       // Only fetch optimizer plan if user has subscriptions
       if ((subscriptions?.length ?? 0) > 0) {
+        // Sync content from TMDB (populates the content table)
+        await fetch('/api/content/sync', { method: 'POST' })
+
         // Fetch optimizer plan
         const planResponse = await fetch('/api/optimizer-v2', {
           method: 'POST',
@@ -78,18 +81,35 @@ export function CalendarPageClient() {
         }
 
         // Fetch calendar releases
-        const calendarResponse = await fetch('/api/calendar')
+        // Get date range: current month through 3 months ahead
+        const now = new Date()
+        const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
+        const endMonth = new Date(now.getFullYear(), now.getMonth() + 3, 0)
+        const endDate = `${endMonth.getFullYear()}-${String(endMonth.getMonth() + 1).padStart(2, '0')}-${String(endMonth.getDate()).padStart(2, '0')}`
+        const calendarResponse = await fetch(`/api/calendar?start=${startDate}&end=${endDate}`)
         if (calendarResponse.ok) {
           const calendarData = await calendarResponse.json()
-          // Flatten releases from all services
+          // Flatten releases from all months and services
+          // API returns { months: [{ month, services: [{ service_id, service_name, releases }] }] }
           const allReleases: ContentRelease[] = []
-          for (const service of calendarData.services || []) {
-            for (const release of service.releases || []) {
-              allReleases.push({
-                ...release,
-                service_id: service.service_id,
-                service_name: service.service_name,
-              })
+          for (const month of calendarData.months || []) {
+            for (const service of month.services || []) {
+              for (const release of service.releases || []) {
+                // Transform API response to ContentRelease format expected by components
+                allReleases.push({
+                  id: release.id,
+                  title: release.title,
+                  release_date: release.release_date,
+                  service_id: service.service_id,
+                  service_name: service.service_name,
+                  // Transform 'tv' to 'series' for component compatibility
+                  type: release.type === 'tv' ? 'series' : 'movie',
+                  // Map match_score to taste_match_score
+                  taste_match_score: release.match_score ?? 0,
+                  poster_path: release.poster_url,
+                  friend_watching: release.friend_watching,
+                })
+              }
             }
           }
           setReleases(allReleases)

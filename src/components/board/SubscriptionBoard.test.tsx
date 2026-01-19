@@ -205,7 +205,7 @@ describe('SubscriptionBoard', () => {
     expect(screen.getByTestId('subscription-board')).toBeInTheDocument()
   })
 
-  it('has horizontal scroll container for mobile', () => {
+  it('has 2x2 grid layout', () => {
     render(
       <SubscriptionBoard
         subscriptions={[]}
@@ -216,6 +216,6 @@ describe('SubscriptionBoard', () => {
     )
 
     const container = screen.getByTestId('subscription-board')
-    expect(container).toHaveClass('overflow-x-auto')
+    expect(container).toHaveClass('grid', 'grid-cols-1', 'md:grid-cols-2')
   })
 })

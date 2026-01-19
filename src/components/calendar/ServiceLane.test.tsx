@@ -13,6 +13,8 @@ describe('ServiceLane', () => {
       release_date: '2026-01-10',
       poster_url: '/poster1.jpg',
       genres: ['Action'],
+      match_score: 85,
+      match_reason: 'Matches your Action taste',
     },
     {
       id: 'content-2',
@@ -22,6 +24,8 @@ describe('ServiceLane', () => {
       release_date: '2026-01-25',
       poster_url: '/poster2.jpg',
       genres: ['Drama'],
+      match_score: 60,
+      match_reason: 'Matches your Drama taste',
     },
   ]
 

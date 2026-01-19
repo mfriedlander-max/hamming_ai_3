@@ -53,14 +53,11 @@ describe('TMDBClient', () => {
 
       const result = await client.getUpcomingMovies()
 
+      // TMDB v3 uses api_key query param, not Bearer token
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('api.themoviedb.org/3/movie/upcoming'),
-        expect.objectContaining({
-          headers: {
-            Authorization: `Bearer ${mockApiKey}`,
-            'Content-Type': 'application/json',
-          },
-        })
+        expect.stringMatching(
+          /api\.themoviedb\.org\/3\/movie\/upcoming.*api_key=test-api-key-12345/
+        )
       )
       expect(result).toEqual(mockResponse)
     })
@@ -104,14 +101,11 @@ describe('TMDBClient', () => {
 
       const result = await client.getUpcomingTVShows()
 
+      // TMDB v3 uses api_key query param, not Bearer token
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('api.themoviedb.org/3/tv/on_the_air'),
-        expect.objectContaining({
-          headers: {
-            Authorization: `Bearer ${mockApiKey}`,
-            'Content-Type': 'application/json',
-          },
-        })
+        expect.stringMatching(
+          /api\.themoviedb\.org\/3\/tv\/on_the_air.*api_key=test-api-key-12345/
+        )
       )
       expect(result).toEqual(mockResponse)
     })
@@ -143,11 +137,11 @@ describe('TMDBClient', () => {
 
       const result = await client.getMoviesByProvider(8) // Netflix provider ID
 
+      // TMDB v3 uses api_key query param
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringMatching(
-          /api\.themoviedb\.org\/3\/discover\/movie.*with_watch_providers=8/
-        ),
-        expect.any(Object)
+          /api\.themoviedb\.org\/3\/discover\/movie.*with_watch_providers=8.*api_key=test-api-key-12345/
+        )
       )
       expect(result).toEqual(mockResponse)
     })
@@ -179,11 +173,11 @@ describe('TMDBClient', () => {
 
       const result = await client.getTVShowsByProvider(384) // HBO Max provider ID
 
+      // TMDB v3 uses api_key query param
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringMatching(
-          /api\.themoviedb\.org\/3\/discover\/tv.*with_watch_providers=384/
-        ),
-        expect.any(Object)
+          /api\.themoviedb\.org\/3\/discover\/tv.*with_watch_providers=384.*api_key=test-api-key-12345/
+        )
       )
       expect(result).toEqual(mockResponse)
     })

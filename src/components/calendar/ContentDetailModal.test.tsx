@@ -12,6 +12,8 @@ describe('ContentDetailModal', () => {
     release_date: '2026-01-15',
     poster_url: '/poster.jpg',
     genres: ['Action', 'Drama', 'Sci-Fi'],
+    match_score: 75,
+    match_reason: 'Matches your Action, Drama taste',
   }
 
   const defaultProps = {

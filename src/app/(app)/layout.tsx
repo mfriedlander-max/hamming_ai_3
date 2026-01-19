@@ -43,7 +43,7 @@ export default async function AppLayout({
     <ToastProviderWrapper>
       <div className="flex min-h-screen">
         <Sidebar />
-        <main className="flex-1 bg-background pt-14 md:pt-0">
+        <main className="flex-1 bg-background pt-14 md:pt-0 md:pr-16">
           {children}
         </main>
       </div>

@@ -145,7 +145,7 @@ export function SubscriptionBoard({
     >
       <div
         data-testid="subscription-board"
-        className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         {COLUMNS.map((column) => (
           <BoardColumn

@@ -15,7 +15,10 @@ interface ContentRow {
   type: 'movie' | 'tv'
   release_date: string
   genres: string[]
-  service_ids: string[]
+  service_id: string
+  poster_url: string | null
+  match_score: number
+  match_reason: string
 }
 
 interface SubscriptionRow {
@@ -80,12 +83,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const subscribedServiceIds = subscriptions.map((sub) => sub.service_id)
 
     // Fetch content that's available on user's subscribed services
+    // New schema: content is per-user, per-service with service_id FK
     const { data: content, error: contentError } = await supabase
       .from('content')
-      .select('id, tmdb_id, title, type, release_date, genres, service_ids')
+      .select('id, tmdb_id, title, type, release_date, genres, service_id, poster_url, match_score, match_reason')
+      .eq('user_id', user.id)
       .gte('release_date', startDate)
       .lte('release_date', endDate)
-      .overlaps('service_ids', subscribedServiceIds)
+      .in('service_id', subscribedServiceIds)
 
     if (contentError) {
       console.error('Error fetching content:', contentError)
@@ -126,13 +131,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
         // Filter content for this service and month
         const serviceContent = (content ?? []).filter((c: ContentRow) => {
-          // Check if content is on this service
-          if (!c.service_ids.includes(sub.service_id)) {
+          // Check if content is on this service (new schema uses service_id, not service_ids)
+          if (c.service_id !== sub.service_id) {
             return false
           }
 
           // Check if release date is in this month
-          const releaseMonth = c.release_date.substring(0, 7)
+          const releaseMonth = c.release_date?.substring(0, 7)
           return releaseMonth === monthStr
         })
 
@@ -144,8 +149,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             title: c.title,
             type: c.type,
             release_date: c.release_date,
-            poster_url: null, // Can be enhanced later with TMDB poster URLs
+            poster_url: c.poster_url,
             genres: c.genres,
+            match_score: c.match_score,
+            match_reason: c.match_reason,
           })
         )
 

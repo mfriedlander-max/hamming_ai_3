@@ -144,6 +144,7 @@ describe('matchContentToTaste', () => {
         type: 'movie',
         release_date: '2026-03-01',
         genres: ['Action', 'Science Fiction'],
+        poster_url: 'https://image.tmdb.org/t/p/w500/matrix.jpg',
         match_score: 40, // 2 genre overlaps
         match_reason: expect.stringContaining('Action'),
       })
@@ -218,6 +219,7 @@ describe('matchContentToTaste', () => {
         type: 'tv',
         release_date: '2026-04-15',
         genres: ['Drama'],
+        poster_url: 'https://image.tmdb.org/t/p/w500/bb.jpg',
         match_score: 40, // Title match
         match_reason: expect.stringContaining('Breaking Bad'),
       })

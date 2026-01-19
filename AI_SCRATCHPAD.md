@@ -2155,3 +2155,221 @@ Added permanent redirects:
 **Status:** Committed to dev
 
 ---
+
+## 2026-01-18: Dashboard Layout Fix - Fit-to-Screen & Consistent Padding
+
+**Branch:** dev (direct commit)
+
+**Issues Fixed:**
+
+### Issue 1: Dashboard Horizontal Scrolling
+The Kanban board had 4 horizontal columns causing horizontal scroll on smaller screens.
+
+**Solution:** Changed from horizontal flex layout to 2x2 CSS grid:
+- `SubscriptionBoard.tsx`: `flex gap-4 overflow-x-auto` → `grid grid-cols-1 md:grid-cols-2 gap-4`
+- Top row: Active | Consider Canceling
+- Bottom row: Paused | Scheduled
+- Responsive: 1 column on mobile, 2x2 on desktop
+
+### Issue 2: Dashboard Not Fitting Viewport
+Page scrolled instead of fitting screen height.
+
+**Solution:** Viewport-height layout with flexbox:
+- `dashboard/page.tsx`: Added `h-[calc(100vh-3.5rem)] md:h-screen flex flex-col`
+- Header section: `shrink-0` (fixed height)
+- Board wrapper: `flex-1 min-h-0` (fills remaining space, allows overflow)
+- `DashboardClient.tsx`: `h-full flex flex-col` with `flex-1 min-h-0 overflow-auto` for board
+
+### Issue 3: Inconsistent Page Padding
+Pages had different padding making sidebar appear to change width.
+
+**Solution:** Standardized all pages to `p-6 md:p-8`:
+- `calendar/page.tsx` - simplified wrapper
+- `friends/page.tsx` - added padding wrapper
+- `household/page.tsx` - both branches standardized
+- `reminders/page.tsx` - `p-8` → `p-6 md:p-8`
+- `settings/SettingsClient.tsx` - `p-8` → `p-6 md:p-8`
+
+### BoardColumn Updates
+- Removed fixed `min-w-[85vw] md:min-w-[280px]`
+- Added `flex flex-col` for proper height distribution
+- `CardContent`: `flex-1 overflow-y-auto min-h-[120px]` for vertical scrolling
+
+### Test Fix
+- `SubscriptionBoard.test.tsx`: Updated test from checking `overflow-x-auto` to checking `grid`, `grid-cols-1`, `md:grid-cols-2`
+- Renamed test from "has horizontal scroll container for mobile" to "has 2x2 grid layout"
+
+**Files Modified:**
+- `src/app/(app)/dashboard/page.tsx` - viewport layout
+- `src/components/subscriptions/DashboardClient.tsx` - flex layout
+- `src/components/board/SubscriptionBoard.tsx` - CSS grid
+- `src/components/board/BoardColumn.tsx` - removed fixed width
+- `src/components/board/SubscriptionBoard.test.tsx` - grid test
+- `src/app/(app)/calendar/page.tsx` - standardized padding
+- `src/app/(app)/friends/page.tsx` - added padding
+- `src/app/(app)/household/page.tsx` - standardized both branches
+- `src/app/(app)/reminders/page.tsx` - standardized padding
+- `src/app/(app)/settings/SettingsClient.tsx` - standardized padding
+
+**Verification:**
+- Lint: PASS (5 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+
+**Visual Results:**
+- Dashboard fits viewport - no page scrolling
+- Kanban shows 2x2 grid layout
+- Board section scrolls vertically if content overflows
+- All pages have consistent content spacing
+- Mobile responsive (stacks to 1 column)
+
+**Status:** Committed to dev
+
+---
+
+## 2026-01-18: Navigation Reorder & Dashboard Cleanup
+
+**Branch:** `dev` (direct commit)
+
+**Changes:**
+1. **Reordered sidebar navigation:** Calendar first, Dashboard second
+2. **Reordered mobile BottomNav:** Calendar, Dashboard, Friends, Settings
+3. **Removed "Edit Preferences" button** from dashboard header
+4. **Moved "Add Subscription" button** inside scrollable board area (avoids notification bell overlap)
+
+### Sidebar Navigation (sidebar.tsx)
+Before: Dashboard, Calendar, Household, Friends, Reminders, Settings
+After: Calendar, Dashboard, Household, Friends, Reminders, Settings
+
+### Mobile BottomNav (BottomNav.tsx)
+Before: Dashboard, Calendar, Friends, Settings
+After: Calendar, Dashboard, Friends, Settings
+
+### Dashboard Button Changes
+- Removed `Edit Preferences` button (linked to /settings) from dashboard header
+- Moved `Add Subscription` button from fixed position to inside scrollable board area
+- Prevents overlap with notification bell at `fixed top-4 right-4`
+
+**Files Modified:**
+- `src/components/layout/sidebar.tsx` - reordered navItems
+- `src/components/layout/BottomNav.tsx` - reordered navItems
+- `src/app/(app)/dashboard/page.tsx` - removed Edit Preferences button, removed unused Link import
+- `src/components/subscriptions/DashboardClient.tsx` - moved Add button inside overflow area
+
+**Verification:**
+- Lint: PASS (5 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+
+**Note:** Middleware already redirects root `/` to `/calendar`, so no middleware changes needed.
+
+**Status:** Committed to dev
+
+---
+
+## 2026-01-18: Calendar Data Flow Bug Fix
+
+**Branch:** `dev` (direct commit)
+
+**Problem:**
+TMDB content sync was working successfully (82 items matched: Disney+ 22, AMC+ 26, Netflix 34) but the calendar UI showed empty. Content synced but never displayed.
+
+**Root Cause Analysis:**
+
+### Bug 1: Client reads wrong response structure
+**File:** `src/app/(app)/calendar/CalendarPageClient.tsx` line 94
+
+```typescript
+// WRONG - API returns { months: [...] }
+for (const service of calendarData.services || []) {
+
+// CORRECT - need to iterate months first
+for (const month of calendarData.months || []) {
+  for (const service of month.services || []) {
+```
+
+### Bug 2: Type mismatch between API and components
+**API returns:**
+- `type: 'movie' | 'tv'`
+- `match_score: number`
+
+**Components expect:**
+- `type: 'movie' | 'series'`
+- `taste_match_score: number`
+
+### Bug 3: Calendar types missing score fields
+**File:** `src/lib/calendar/types.ts`
+
+ContentRelease interface was missing `match_score` and `match_reason` fields that the database returns.
+
+**Fixes Applied:**
+
+1. **Updated CalendarPageClient** to iterate months correctly and transform types:
+   - `release.type === 'tv' ? 'series' : 'movie'`
+   - `taste_match_score: release.match_score ?? 0`
+
+2. **Updated calendar types** to add required fields:
+   ```typescript
+   export interface ContentRelease {
+     // ... existing fields
+     match_score: number      // Added
+     match_reason: string     // Added
+   }
+   ```
+
+3. **Updated 9 test files** with new required fields:
+   - `src/components/calendar/ContentCalendar.test.tsx`
+   - `src/components/calendar/ContentDetailModal.test.tsx`
+   - `src/components/calendar/ContentMarker.test.tsx`
+   - `src/components/calendar/ServiceLane.test.tsx`
+   - `src/lib/calendar/utils.test.ts`
+   - `src/lib/optimizer-legacy/analyzer.test.ts`
+   - `src/lib/tmdb/client.test.ts`
+   - `src/app/api/calendar/route.test.ts`
+
+4. **Updated TMDB client tests** to test api_key query param (v3 auth) instead of Bearer token
+
+**Verification:**
+- Lint: PASS
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+
+**Files Modified:**
+- `src/app/(app)/calendar/CalendarPageClient.tsx` - fixed months iteration, type transformation
+- `src/lib/calendar/types.ts` - added match_score, match_reason fields
+- 9 test files - updated mock data with new required fields
+
+**Status:** Committed to dev
+
+---
+
+## 2026-01-18: Notification Bell Overlap Fix
+
+**Branch:** `dev` (direct commit)
+
+**Problem:**
+The notification bell is positioned `fixed top-4 right-4 z-40` on desktop, floating over page content. Page content with right-aligned elements (dashboard "Monthly Spend", calendar "Regenerate"/"Apply All" buttons) overlapped the bell.
+
+**Solution:**
+Added `md:pr-16` to the `<main>` element in `src/app/(app)/layout.tsx`. This creates 4rem (64px) right padding on desktop, preventing content from reaching the bell area.
+
+**Why this approach:**
+- Single change in one place (layout.tsx)
+- Prevents future pages from having the same issue
+- Mobile unchanged (bell is in header bar, not fixed)
+
+**File Modified:**
+- `src/app/(app)/layout.tsx` - added `md:pr-16` to main element
+
+**Verification:**
+- Lint: PASS (5 warnings - pre-existing)
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Build: PASS
+
+**Status:** Committed to dev
+
+---

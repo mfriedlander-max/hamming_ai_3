@@ -86,7 +86,8 @@ describe('/api/calendar', () => {
         { id: 'sub-2', service_id: 'service-2', service: { name: 'Disney+' } },
       ]
 
-      const mockContent = [
+      // Content with new schema: service_id (single FK), match_score, match_reason
+      const mockContentNetflix = [
         {
           id: 'content-1',
           tmdb_id: 1001,
@@ -94,18 +95,42 @@ describe('/api/calendar', () => {
           type: 'movie',
           release_date: '2026-01-15',
           genres: ['Action'],
-          service_ids: ['service-1'],
+          service_id: 'service-1',
+          poster_url: null,
+          match_score: 80,
+          match_reason: 'Matches your Action taste',
         },
         {
-          id: 'content-2',
+          id: 'content-2a',
           tmdb_id: 1002,
           title: 'Show B',
           type: 'tv',
           release_date: '2026-02-20',
           genres: ['Drama'],
-          service_ids: ['service-1', 'service-2'],
+          service_id: 'service-1',
+          poster_url: null,
+          match_score: 60,
+          match_reason: 'Matches your Drama taste',
         },
       ]
+
+      const mockContentDisney = [
+        {
+          id: 'content-2b',
+          tmdb_id: 1002,
+          title: 'Show B',
+          type: 'tv',
+          release_date: '2026-02-20',
+          genres: ['Drama'],
+          service_id: 'service-2',
+          poster_url: null,
+          match_score: 60,
+          match_reason: 'Matches your Drama taste',
+        },
+      ]
+
+      // Combined content for both services
+      const mockContent = [...mockContentNetflix, ...mockContentDisney]
 
       mockCreateClient.mockResolvedValue({
         auth: {
@@ -128,11 +153,13 @@ describe('/api/calendar', () => {
           if (table === 'content') {
             return {
               select: vi.fn().mockReturnValue({
-                gte: vi.fn().mockReturnValue({
-                  lte: vi.fn().mockReturnValue({
-                    overlaps: vi.fn().mockResolvedValue({
-                      data: mockContent,
-                      error: null,
+                eq: vi.fn().mockReturnValue({
+                  gte: vi.fn().mockReturnValue({
+                    lte: vi.fn().mockReturnValue({
+                      in: vi.fn().mockResolvedValue({
+                        data: mockContent,
+                        error: null,
+                      }),
                     }),
                   }),
                 }),
@@ -224,11 +251,13 @@ describe('/api/calendar', () => {
           if (table === 'content') {
             return {
               select: vi.fn().mockReturnValue({
-                gte: vi.fn().mockReturnValue({
-                  lte: vi.fn().mockReturnValue({
-                    overlaps: vi.fn().mockResolvedValue({
-                      data: [],
-                      error: null,
+                eq: vi.fn().mockReturnValue({
+                  gte: vi.fn().mockReturnValue({
+                    lte: vi.fn().mockReturnValue({
+                      in: vi.fn().mockResolvedValue({
+                        data: [],
+                        error: null,
+                      }),
                     }),
                   }),
                 }),
@@ -257,7 +286,7 @@ describe('/api/calendar', () => {
         { id: 'sub-1', service_id: 'service-1', service: { name: 'Netflix' } },
       ]
 
-      // Content exists on both Netflix and Disney+
+      // New schema: content for user's subscribed service only
       const mockContent = [
         {
           id: 'content-1',
@@ -266,17 +295,12 @@ describe('/api/calendar', () => {
           type: 'movie',
           release_date: '2026-01-15',
           genres: ['Action'],
-          service_ids: ['service-1'],
+          service_id: 'service-1',
+          poster_url: null,
+          match_score: 75,
+          match_reason: 'Matches your Action taste',
         },
-        {
-          id: 'content-2',
-          tmdb_id: 1002,
-          title: 'Disney Movie',
-          type: 'movie',
-          release_date: '2026-01-20',
-          genres: ['Family'],
-          service_ids: ['service-2'], // User not subscribed
-        },
+        // Note: Disney Movie wouldn't be returned because query uses .in('service_id', [subscribedServiceIds])
       ]
 
       mockCreateClient.mockResolvedValue({
@@ -300,11 +324,13 @@ describe('/api/calendar', () => {
           if (table === 'content') {
             return {
               select: vi.fn().mockReturnValue({
-                gte: vi.fn().mockReturnValue({
-                  lte: vi.fn().mockReturnValue({
-                    overlaps: vi.fn().mockResolvedValue({
-                      data: mockContent,
-                      error: null,
+                eq: vi.fn().mockReturnValue({
+                  gte: vi.fn().mockReturnValue({
+                    lte: vi.fn().mockReturnValue({
+                      in: vi.fn().mockResolvedValue({
+                        data: mockContent,
+                        error: null,
+                      }),
                     }),
                   }),
                 }),

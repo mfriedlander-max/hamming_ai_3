@@ -67,14 +67,16 @@ export default async function HouseholdPage() {
   // If user is not in a household, show the setup component
   if (membershipError || !membership || !membership.household) {
     return (
-      <div className="p-8 max-w-2xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-foreground">Household</h1>
-          <p className="text-muted-foreground">
-            Create or join a household to share subscriptions with family members.
-          </p>
+      <div className="p-6 md:p-8">
+        <div className="max-w-2xl">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-foreground">Household</h1>
+            <p className="text-muted-foreground">
+              Create or join a household to share subscriptions with family members.
+            </p>
+          </div>
+          <HouseholdSetup onCreate={createHousehold} onJoin={joinHousehold} />
         </div>
-        <HouseholdSetup onCreate={createHousehold} onJoin={joinHousehold} />
       </div>
     )
   }
@@ -152,7 +154,7 @@ export default async function HouseholdPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-6 md:p-8">
       <HouseholdClient
         household={householdWithMembers}
         currentUserId={user.id}

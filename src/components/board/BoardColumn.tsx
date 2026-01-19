@@ -34,11 +34,11 @@ export function BoardColumn({
     <Card
       ref={setNodeRef}
       data-testid={`board-column-${id}`}
-      className={`board-column min-w-[85vw] md:min-w-[280px] flex-shrink-0 scroll-snap-align-start transition-colors ${
+      className={`board-column flex flex-col transition-colors ${
         isOver ? 'bg-accent/50' : ''
       }`}
     >
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-medium">{title}</CardTitle>
@@ -51,7 +51,7 @@ export function BoardColumn({
           </span>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 min-h-[200px]">
+      <CardContent className="space-y-3 flex-1 overflow-y-auto min-h-[120px]">
         {subscriptions.map((subscription) => (
           <DraggableCard
             key={subscription.id}
@@ -62,7 +62,7 @@ export function BoardColumn({
           />
         ))}
         {subscriptions.length === 0 && (
-          <div className="flex items-center justify-center h-[180px] text-sm text-muted-foreground border-2 border-dashed rounded-lg">
+          <div className="flex items-center justify-center h-full min-h-[100px] text-sm text-muted-foreground border-2 border-dashed rounded-lg">
             Drop subscriptions here
           </div>
         )}

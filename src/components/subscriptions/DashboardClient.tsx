@@ -193,27 +193,28 @@ export function DashboardClient({ initialSubscriptions, availableServices }: Das
   }, [toast])
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       {error && (
-        <div className="mb-4">
+        <div className="shrink-0 mb-4">
           <ErrorBanner message={error} onRetry={handleRetry} />
         </div>
       )}
 
-      <div className="mb-4 flex justify-end">
-        <Button onClick={() => setIsAddModalOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Subscription
-        </Button>
+      <div className="flex-1 min-h-0 overflow-auto">
+        <div className="flex justify-end mb-4">
+          <Button onClick={() => setIsAddModalOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Subscription
+          </Button>
+        </div>
+        <SubscriptionBoard
+          subscriptions={subscriptions}
+          onStatusChange={handleStatusChange}
+          onSetReminder={handleSetReminder}
+          onBoardColumnChange={handleBoardColumnChange}
+          onCancel={handleCancel}
+        />
       </div>
-
-      <SubscriptionBoard
-        subscriptions={subscriptions}
-        onStatusChange={handleStatusChange}
-        onSetReminder={handleSetReminder}
-        onBoardColumnChange={handleBoardColumnChange}
-        onCancel={handleCancel}
-      />
 
       <AddSubscriptionModal
         services={unsubscribedServices}

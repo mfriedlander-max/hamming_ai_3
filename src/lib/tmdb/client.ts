@@ -15,13 +15,11 @@ export function createTMDBClient(apiKey: string): TMDBClient {
     throw new Error('TMDB API key is required')
   }
 
-  const headers = {
-    Authorization: `Bearer ${apiKey}`,
-    'Content-Type': 'application/json',
-  }
-
   async function fetchFromTMDB<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${TMDB_BASE_URL}${endpoint}`, { headers })
+    // TMDB v3 API uses api_key query param, not Bearer token
+    const separator = endpoint.includes('?') ? '&' : '?'
+    const url = `${TMDB_BASE_URL}${endpoint}${separator}api_key=${apiKey}`
+    const response = await fetch(url)
 
     if (!response.ok) {
       throw new Error(`TMDB API error: ${response.status} ${response.statusText}`)

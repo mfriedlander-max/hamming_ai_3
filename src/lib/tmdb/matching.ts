@@ -97,6 +97,11 @@ export function matchContentToTaste(
     const { score, reason } = calculateMatchScore({ title, genres }, tasteProfile)
 
     if (score > 0) {
+      // Build poster URL from TMDB path
+      const posterUrl = item.poster_path
+        ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+        : undefined
+
       matched.push({
         id: `${type}-${item.id}`,
         tmdb_id: item.id,
@@ -104,6 +109,7 @@ export function matchContentToTaste(
         type,
         release_date: releaseDate,
         genres,
+        poster_url: posterUrl,
         match_score: score,
         match_reason: reason,
       })

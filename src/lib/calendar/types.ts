@@ -8,6 +8,8 @@ export interface ContentRelease {
   release_date: string // ISO date string
   poster_url: string | null
   genres: string[]
+  match_score: number // 0-100 taste match score
+  match_reason: string // e.g., "Matches your sci-fi taste"
   friend_watching?: boolean // Social integration: indicates if a friend has this in their queue
 }
 

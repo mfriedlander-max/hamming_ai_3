@@ -10,8 +10,8 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { BottomNav } from "./BottomNav";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/calendar", label: "Content Calendar", icon: Calendar },
+  { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/household", label: "Household", icon: UsersRound },
   { href: "/friends", label: "Friends", icon: Users },
   { href: "/reminders", label: "Reminders", icon: Bell },

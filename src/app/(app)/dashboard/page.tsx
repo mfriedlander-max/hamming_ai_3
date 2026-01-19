@@ -1,7 +1,5 @@
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { DashboardClient } from '@/components/subscriptions/DashboardClient'
-import { Button } from '@/components/ui/button'
 import type { SubscriptionWithService, Service, BoardColumn } from '@/components/subscriptions/types'
 
 export default async function DashboardPage() {
@@ -85,33 +83,30 @@ export default async function DashboardPage() {
     .reduce((sum, sub) => sum + sub.monthly_cost, 0)
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-start mb-8">
+    <div className="h-[calc(100vh-3.5rem)] md:h-screen flex flex-col p-6 md:p-8">
+      <div className="shrink-0 flex justify-between items-start mb-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground mb-2">My Subscriptions</h1>
           <p className="text-muted-foreground">
             Welcome back{profile?.name ? `, ${profile.name}` : ''}
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <Button variant="outline" asChild>
-            <Link href="/settings">Edit Preferences</Link>
-          </Button>
-          {typedSubscriptions.length > 0 && (
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">Monthly Spend</p>
-              <p className="text-2xl font-bold text-foreground">
-                ${totalMonthlyCost.toFixed(2)}
-              </p>
-            </div>
-          )}
-        </div>
+        {typedSubscriptions.length > 0 && (
+          <div className="text-right">
+            <p className="text-sm text-muted-foreground">Monthly Spend</p>
+            <p className="text-2xl font-bold text-foreground">
+              ${totalMonthlyCost.toFixed(2)}
+            </p>
+          </div>
+        )}
       </div>
 
-      <DashboardClient
-        initialSubscriptions={typedSubscriptions}
-        availableServices={typedServices}
-      />
+      <div className="flex-1 min-h-0">
+        <DashboardClient
+          initialSubscriptions={typedSubscriptions}
+          availableServices={typedServices}
+        />
+      </div>
     </div>
   )
 }

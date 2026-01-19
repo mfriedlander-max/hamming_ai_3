@@ -70,7 +70,7 @@ export async function POST() {
     // Get user's taste profile
     const { data: tasteProfile, error: tasteError } = await supabase
       .from('taste_profiles')
-      .select('favorite_genres, favorite_shows')
+      .select('genres, favorite_shows')
       .eq('user_id', user.id)
       .single()
 
@@ -120,18 +120,27 @@ export async function POST() {
         ])
 
         // Match content to user taste
+        // Map database column 'genres' to interface 'favorite_genres'
+        const tasteForMatching = {
+          favorite_genres: tasteProfile.genres || [],
+          favorite_shows: tasteProfile.favorite_shows || [],
+        }
+        console.log(`[SYNC DEBUG] ${serviceName}: TMDB returned ${moviesResponse.results.length} movies, ${tvResponse.results.length} TV shows`)
+        console.log(`[SYNC DEBUG] User taste profile:`, tasteForMatching)
+
         const matchedMovies = matchContentToTaste(
           moviesResponse.results,
           'movie',
-          tasteProfile
+          tasteForMatching
         )
         const matchedShows = matchContentToTaste(
           tvResponse.results,
           'tv',
-          tasteProfile
+          tasteForMatching
         )
 
         const allMatched = [...matchedMovies, ...matchedShows]
+        console.log(`[SYNC DEBUG] ${serviceName}: Matched ${matchedMovies.length} movies, ${matchedShows.length} TV shows (total: ${allMatched.length})`)
 
         // Delete old cached content for this service/user
         await supabase
@@ -150,6 +159,7 @@ export async function POST() {
             type: item.type,
             release_date: item.release_date || null,
             genres: item.genres,
+            poster_url: item.poster_url || null,
             match_score: item.match_score,
             match_reason: item.match_reason,
             cached_until: cacheExpiry.toISOString(),

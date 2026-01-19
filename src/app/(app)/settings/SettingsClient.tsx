@@ -36,7 +36,7 @@ export function SettingsClient({
   }
 
   return (
-    <div className="p-8">
+    <div className="p-6 md:p-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-foreground mb-2">Settings</h1>
         <p className="text-muted-foreground">

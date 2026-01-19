@@ -12,6 +12,8 @@ describe('ContentMarker', () => {
     release_date: '2026-01-15',
     poster_url: '/poster.jpg',
     genres: ['Action', 'Drama'],
+    match_score: 70,
+    match_reason: 'Matches your Action taste',
   }
 
   it('renders a marker element', () => {

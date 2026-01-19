@@ -33,10 +33,14 @@ SubCycle analyzes your taste preferences and upcoming content across streaming p
 - [x] UX-7: Edge Case Handling (vacation mode, queue health, content/price monitoring)
 - [x] UX-8: Social Integration (friend activity, watch together, spoiler alerts)
 - [x] UX-9: Polish & Dark Mode (confetti, haptics, shimmer skeletons, mobile bottom nav)
+- [x] Dashboard Layout: Fit-to-screen 2x2 Kanban grid, consistent page padding
+- [x] Nav Reorder: Calendar first in sidebar/bottom nav, dashboard button cleanup
+- [x] Bell Overlap Fix: Desktop right padding prevents notification bell overlap
+- [x] Real Data Fix: TMDB content sync and calendar data flow working
 
 ## Current Status
 
-**UX Overhaul Complete!** 978 tests passing. All 9 UX phases done. Full dark mode support across the entire app (sidebar, content, navigation, all components). Features include confetti celebrations on Apply All, mobile bottom navigation, shimmer skeleton animations, haptic feedback support, and enhanced drag previews. Instagram-level smoothness achieved.
+**Real Data Working!** 978 tests passing. All 9 UX phases done. TMDB content now syncs and displays in Content Calendar (82 items matched across Disney+, AMC+, Netflix). Full dark mode support. Dashboard fits viewport with 2x2 Kanban grid. Content Calendar first in navigation. Instagram-level smoothness achieved.
 
 ## Tech Stack
 

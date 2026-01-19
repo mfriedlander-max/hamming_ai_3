@@ -48,6 +48,8 @@ describe('calendar utils', () => {
         release_date: '2026-01-15',
         poster_url: '/poster1.jpg',
         genres: ['Action'],
+        match_score: 80,
+        match_reason: 'Matches your Action taste',
       },
       {
         id: 'content-2',
@@ -57,6 +59,8 @@ describe('calendar utils', () => {
         release_date: '2026-01-20',
         poster_url: '/poster2.jpg',
         genres: ['Drama'],
+        match_score: 65,
+        match_reason: 'Matches your Drama taste',
       },
     ]
 

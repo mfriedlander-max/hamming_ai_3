@@ -41,6 +41,8 @@ describe('ContentCalendar', () => {
                 release_date: '2026-01-15',
                 poster_url: null,
                 genres: ['Action'],
+                match_score: 80,
+                match_reason: 'Matches your Action taste',
               },
             ],
           },

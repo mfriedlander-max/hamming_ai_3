@@ -305,3 +305,23 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** ~60 files updated - layout.tsx, sidebar.tsx, BottomNav.tsx, switch.tsx, all page components, calendar-unified/*, subscriptions/*, settings/*, social/*, household/*, notifications/*, reminders/*
 **Summary:** Replaced hardcoded Tailwind colors (bg-gray-50, text-gray-900, etc.) with CSS variables (bg-background, text-foreground, text-muted-foreground, border-border, bg-muted, bg-accent, bg-card, bg-input). Fixed Switch component track/thumb visibility. Updated 2 tests. Dark mode now affects sidebar, content area, navigation, and all components. 978 tests passing.
 
+### dashboard-layout-fix (direct to dev, 2026-01-18)
+**Goal:** Dashboard fit-to-screen with 2x2 Kanban grid, consistent page padding
+**Files:** dashboard/page.tsx, DashboardClient.tsx, SubscriptionBoard.tsx, BoardColumn.tsx, calendar/page.tsx, friends/page.tsx, household/page.tsx, reminders/page.tsx, settings/SettingsClient.tsx, SubscriptionBoard.test.tsx
+**Summary:** Changed Kanban board from 4 horizontal columns with horizontal scroll to 2x2 CSS grid with vertical scroll. Dashboard page now fits viewport height using `h-[calc(100vh-3.5rem)] md:h-screen flex flex-col`. Standardized all page padding to `p-6 md:p-8` for consistent sidebar appearance. Updated test to check for grid classes instead of overflow-x-auto. 978 tests passing.
+
+### nav-reorder-and-dashboard-cleanup (direct to dev, 2026-01-18)
+**Goal:** Reorder navigation (Calendar first, Dashboard second), remove Edit Preferences button, reposition Add Subscription button
+**Files:** sidebar.tsx, BottomNav.tsx, dashboard/page.tsx, DashboardClient.tsx
+**Summary:** Reordered sidebar navItems: Calendar first, Dashboard second (rest unchanged). Reordered BottomNav: Calendar, Dashboard, Friends, Settings. Removed "Edit Preferences" button from dashboard header. Moved "Add Subscription" button inside scrollable board area to avoid notification bell overlap. 978 tests passing.
+
+### notification-bell-overlap-fix (direct to dev, 2026-01-18)
+**Goal:** Fix notification bell overlapping page content on desktop
+**Files:** layout.tsx
+**Summary:** Added `md:pr-16` to main element in app layout, creating 4rem right padding on desktop. This prevents page content from overlapping the fixed notification bell at `top-4 right-4`. Mobile unchanged (bell is in header bar). 978 tests passing.
+
+### real-data-fix (direct to dev, 2026-01-18)
+**Goal:** Fix TMDB content sync and calendar data flow so real content appears
+**Files:** lib/tmdb/client.ts, lib/calendar/types.ts, lib/tmdb/matching.ts, CalendarPageClient.tsx, route.ts (calendar), route.ts (sync), supabase/migrations/013_fix_content_table.sql, 9 test files
+**Summary:** Fixed TMDB client auth (changed from Bearer token to api_key query param for v3 API). Updated content table schema (added user_id, service_id as FK, match_score, match_reason, poster_url columns). Fixed calendar API response parsing (client was reading calendarData.services but API returns calendarData.months[].services[]). Added type transformation (tv→series, match_score→taste_match_score). Content now syncs successfully: 82 items matched across 3 services (Disney+ 22, AMC+ 26, Netflix 34). All 978 tests passing.
+

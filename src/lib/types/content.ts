@@ -7,6 +7,7 @@ export interface MatchedContent {
   type: 'movie' | 'tv'
   release_date: string
   genres: string[]
+  poster_url?: string // TMDB poster path
   match_score: number // 0-100
   match_reason: string // e.g., "Matches your sci-fi taste"
 }
