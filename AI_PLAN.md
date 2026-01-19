@@ -85,7 +85,7 @@ First feature branch should include `.gitignore` for the tech stack (e.g., `node
 
 ## Phases 7-14 Roadmap
 
-**Status:** Phases 1-13 complete (720 tests). All planned phases done.
+**Status:** Phases 1-13 complete + 9 UX phases + bug fixes (978 tests). Production-ready.
 
 ### Overview
 
@@ -324,4 +324,9 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Goal:** Fix TMDB content sync and calendar data flow so real content appears
 **Files:** lib/tmdb/client.ts, lib/calendar/types.ts, lib/tmdb/matching.ts, CalendarPageClient.tsx, route.ts (calendar), route.ts (sync), supabase/migrations/013_fix_content_table.sql, 9 test files
 **Summary:** Fixed TMDB client auth (changed from Bearer token to api_key query param for v3 API). Updated content table schema (added user_id, service_id as FK, match_score, match_reason, poster_url columns). Fixed calendar API response parsing (client was reading calendarData.services but API returns calendarData.months[].services[]). Added type transformation (tv→series, match_score→taste_match_score). Content now syncs successfully: 82 items matched across 3 services (Disney+ 22, AMC+ 26, Netflix 34). All 978 tests passing.
+
+### social-friends-bugs-fix (direct to dev, 2026-01-18)
+**Goal:** Fix Social/Friends page API errors and Calendar Add to Queue action
+**Files:** src/app/api/friends/route.ts, src/app/api/activity/route.ts, src/lib/social/types.ts, src/app/(app)/calendar/CalendarPageClient.tsx, src/lib/optimizer-v2/types.ts, src/components/social/FriendCard.tsx, src/components/social/FriendRequestCard.tsx, supabase/migrations/014_fix_watchlist_rls.sql, supabase/migrations/015_queue_items.sql, 3 test files
+**Summary:** Fixed 5 bugs via systematic debugging: (1) Friends API 500 - removed email from profile queries (email in auth.users, not profiles); (2) Activity API 500 - changed logo_path to logo_url; (3) Watchlists RLS recursion - migration 014 fixes circular policy; (4) Calendar Add to Queue 400 - fixed request format with full release object; (5) Queue Items 500 - migration 015 creates missing table. Updated FriendCard/FriendRequestCard to show "Unknown" fallback. All 978 tests passing. Migrations 014-015 need `supabase db push`.
 
