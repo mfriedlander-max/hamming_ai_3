@@ -2461,3 +2461,33 @@ Added `md:pr-16` to the `<main>` element in `src/app/(app)/layout.tsx`. This cre
 **Status:** Committed to dev
 
 ---
+
+## 2026-01-18: Services Column Name Fix
+
+**Branch:** `dev` (direct commit)
+
+**Problem:**
+Supabase services query returned 400 Bad Request:
+```
+GET .../services?select=id,name,base_price => [400]
+```
+
+**Root Cause:**
+Code queried for column `base_price` but database schema (001_initial_schema.sql) defines column as `default_price`.
+
+**Files Fixed:**
+- `src/app/(app)/calendar/CalendarPageClient.tsx` - type + query
+- `src/components/calendar-unified/QuickAddService.tsx` - type + usage
+- `src/components/calendar-unified/ContentCalendarPage.tsx` - type
+- `src/components/calendar-unified/EmptyState.tsx` - type
+- `src/components/calendar-unified/QuickAddService.test.tsx` - mock data
+
+**Verification:**
+- TypeCheck: PASS
+- Tests: 978/978 PASS
+- Services query: 200 ✓
+- Add to Queue: 201 Created ✓
+
+**Status:** Committed to dev
+
+---

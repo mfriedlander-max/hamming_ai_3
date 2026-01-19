@@ -330,3 +330,8 @@ Merged branch sections are moved here for reference. To edit a feature, create a
 **Files:** src/app/api/friends/route.ts, src/app/api/activity/route.ts, src/lib/social/types.ts, src/app/(app)/calendar/CalendarPageClient.tsx, src/lib/optimizer-v2/types.ts, src/components/social/FriendCard.tsx, src/components/social/FriendRequestCard.tsx, supabase/migrations/014_fix_watchlist_rls.sql, supabase/migrations/015_queue_items.sql, 3 test files
 **Summary:** Fixed 5 bugs via systematic debugging: (1) Friends API 500 - removed email from profile queries (email in auth.users, not profiles); (2) Activity API 500 - changed logo_path to logo_url; (3) Watchlists RLS recursion - migration 014 fixes circular policy; (4) Calendar Add to Queue 400 - fixed request format with full release object; (5) Queue Items 500 - migration 015 creates missing table. Updated FriendCard/FriendRequestCard to show "Unknown" fallback. All 978 tests passing. Migrations 014-015 need `supabase db push`.
 
+### services-column-fix (direct to dev, 2026-01-18)
+**Goal:** Fix Supabase services query 400 error
+**Files:** CalendarPageClient.tsx, QuickAddService.tsx, ContentCalendarPage.tsx, EmptyState.tsx, QuickAddService.test.tsx
+**Summary:** Code queried for `base_price` but database schema uses `default_price`. Fixed column name mismatch in 5 files. Services query now returns 200. Add to Queue now works (201 Created). All 978 tests passing.
+
