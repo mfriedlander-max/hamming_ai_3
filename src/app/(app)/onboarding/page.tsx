@@ -13,7 +13,16 @@ interface SelectedService {
 
 export default function OnboardingPage() {
   const router = useRouter()
+
+  // All hooks must be called at the top level, before any conditional returns
   const [isChecking, setIsChecking] = useState(true)
+  const [step, setStep] = useState(1)
+  const [userName, setUserName] = useState('')
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([])
+  const [favoriteShows, setFavoriteShows] = useState('')
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Check if user already completed onboarding
   useEffect(() => {
@@ -48,13 +57,6 @@ export default function OnboardingPage() {
       </div>
     )
   }
-  const [step, setStep] = useState(1)
-  const [userName, setUserName] = useState('')
-  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([])
-  const [favoriteShows, setFavoriteShows] = useState('')
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleComplete = async () => {
     setIsSubmitting(true)
