@@ -27,29 +27,9 @@ export async function GET(request: Request) {
   }
 
   if (!authError) {
-    // If next is specified, use it
-    if (next) {
-      return NextResponse.redirect(`${origin}${next}`);
-    }
-
-    // Otherwise, check if user has completed onboarding
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data: tasteProfile } = await supabase
-        .from("taste_profiles")
-        .select("id")
-        .eq("user_id", user.id)
-        .single();
-
-      // Redirect to calendar if onboarding complete, otherwise onboarding
-      const redirectTo = tasteProfile ? "/calendar" : "/onboarding";
-      return NextResponse.redirect(`${origin}${redirectTo}`);
-    }
-
-    return NextResponse.redirect(`${origin}/onboarding`);
+    // Redirect immediately - let the app handle routing based on onboarding status
+    const redirectTo = next || "/onboarding";
+    return NextResponse.redirect(`${origin}${redirectTo}`);
   }
 
   // Return to login page on error

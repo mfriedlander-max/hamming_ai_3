@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { WelcomeStep, ServiceSelector, TasteQuiz } from '@/components/onboarding'
+import { Loader2 } from 'lucide-react'
 
 interface SelectedService {
   service_id: string
@@ -11,6 +13,41 @@ interface SelectedService {
 
 export default function OnboardingPage() {
   const router = useRouter()
+  const [isChecking, setIsChecking] = useState(true)
+
+  // Check if user already completed onboarding
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (user) {
+        const { data: tasteProfile } = await supabase
+          .from('taste_profiles')
+          .select('id')
+          .eq('user_id', user.id)
+          .single()
+
+        if (tasteProfile) {
+          router.replace('/calendar')
+          return
+        }
+      }
+      setIsChecking(false)
+    }
+    checkOnboarding()
+  }, [router])
+
+  if (isChecking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
   const [step, setStep] = useState(1)
   const [userName, setUserName] = useState('')
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([])
