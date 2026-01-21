@@ -48,8 +48,8 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(path)
   );
 
-  // Define auth routes (login, signup)
-  const authPaths = ["/login", "/signup"];
+  // Define auth routes (login, signup, callback)
+  const authPaths = ["/login", "/signup", "/auth/callback"];
   const isAuthPath = authPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   );
