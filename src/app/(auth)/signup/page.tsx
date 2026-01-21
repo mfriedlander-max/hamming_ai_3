@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail } from "lucide-react";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showCheckEmail, setShowCheckEmail] = useState(false);
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -33,9 +35,12 @@ export default function SignupPage() {
     setLoading(true);
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
     if (error) {
@@ -44,10 +49,48 @@ export default function SignupPage() {
       return;
     }
 
-    // Redirect to onboarding after signup
+    // If session is null, email verification is required
+    if (!data.session) {
+      setShowCheckEmail(true);
+      setLoading(false);
+      return;
+    }
+
+    // Session exists - email verification not required, proceed to onboarding
     router.push("/onboarding");
     router.refresh();
   };
+
+  // Show "check your email" message after signup
+  if (showCheckEmail) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-muted px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1 text-center">
+            <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Mail className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
+            <CardDescription>
+              We sent a verification link to <span className="font-medium text-foreground">{email}</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center text-sm text-muted-foreground">
+            <p>Click the link in the email to verify your account and continue setting up.</p>
+            <p className="mt-4">
+              Didn&apos;t receive it?{" "}
+              <button
+                onClick={() => setShowCheckEmail(false)}
+                className="text-primary hover:underline"
+              >
+                Try again
+              </button>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted px-4">

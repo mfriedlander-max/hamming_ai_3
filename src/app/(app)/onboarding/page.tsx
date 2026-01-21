@@ -26,25 +26,30 @@ export default function OnboardingPage() {
 
   // Check if user already completed onboarding
   useEffect(() => {
-    const checkOnboarding = async () => {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
+    const supabase = createClient()
 
-      if (user) {
-        const { data: tasteProfile } = await supabase
-          .from('taste_profiles')
-          .select('id')
-          .eq('user_id', user.id)
-          .single()
+    // Use auth state listener for reliable session detection after redirect
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          const { data: tasteProfile } = await supabase
+            .from('taste_profiles')
+            .select('id')
+            .eq('user_id', session.user.id)
+            .single()
 
-        if (tasteProfile) {
-          router.replace('/calendar')
-          return
+          if (tasteProfile) {
+            router.replace('/calendar')
+            return
+          }
         }
+        setIsChecking(false)
       }
-      setIsChecking(false)
+    )
+
+    return () => {
+      subscription.unsubscribe()
     }
-    checkOnboarding()
   }, [router])
 
   if (isChecking) {
