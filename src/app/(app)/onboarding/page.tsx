@@ -1,10 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { WelcomeStep, ServiceSelector, TasteQuiz } from '@/components/onboarding'
-import { Loader2 } from 'lucide-react'
 
 interface SelectedService {
   service_id: string
@@ -12,10 +10,9 @@ interface SelectedService {
 }
 
 export default function OnboardingPage() {
+  // Middleware handles auth protection - if user reaches this page, they're authenticated
+  // No client-side auth check needed
   const router = useRouter()
-
-  // All hooks must be called at the top level, before any conditional returns
-  const [isChecking, setIsChecking] = useState(true)
   const [step, setStep] = useState(1)
   const [userName, setUserName] = useState('')
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([])
@@ -23,45 +20,6 @@ export default function OnboardingPage() {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  // Check if user already completed onboarding
-  useEffect(() => {
-    const supabase = createClient()
-
-    // Use auth state listener for reliable session detection after redirect
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          const { data: tasteProfile } = await supabase
-            .from('taste_profiles')
-            .select('id')
-            .eq('user_id', session.user.id)
-            .single()
-
-          if (tasteProfile) {
-            router.replace('/calendar')
-            return
-          }
-        }
-        setIsChecking(false)
-      }
-    )
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [router])
-
-  if (isChecking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    )
-  }
 
   const handleComplete = async () => {
     setIsSubmitting(true)
